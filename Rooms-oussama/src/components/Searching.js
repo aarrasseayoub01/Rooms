@@ -42,7 +42,7 @@ export default function Searching(props) {
     const searchedUsers = users.map(x=>{
         return(x.username.toLowerCase().includes(props.userId.toLowerCase()) //Rendre le recherche insensible au majuscules et miniscules
             ?<SearchedUser key={x._id} id={x._id} username={x.username} image={x.picture} />
-            :null )
+            :null)
         }
     )
 

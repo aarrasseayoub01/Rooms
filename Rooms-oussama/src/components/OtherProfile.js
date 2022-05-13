@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import Navbar from "./Navbar"
 import cover from "../images/post1.jpg"
-import { AiFillEdit } from "react-icons/ai"
+import { AiFillEdit, AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import RoomCard from "./RoomCard"
 import Post from "./Post"
 import { Posts, Rooms } from "../dummyData"
@@ -12,7 +12,15 @@ import AddPost from "./AddPost"
 export default function OtherProfile(props) {
     const [users, setUsers] = useState([]);
     const [posts, setPosts] = useState([]);
+    const {user}  = useContext(AuthContext);
 
+    function getUser(thisId){
+        for (let i=0;i<users.length;i++){
+            if(users[i]._id==thisId){
+                return users[i]
+            }
+        }
+    }
     //Detetmine le nom d'utilisateur depuis son idetifiant
     function userName(thisId) {
         for (let i=0;i<users.length;i++){
@@ -120,6 +128,34 @@ export default function OtherProfile(props) {
                 comments={x.comments}
                 />
     )})
+    const [isFollowed, setIsFollowed] = useState(user.following.includes(userName(props.userId)))
+    const [Followed, setFollowed] = useState(user.following.includes(userName(props.userId)) ? "Unfollow" : "Follow")
+    const handleFollow =  async () => {
+        const followingList = user.following;
+        const followersList = getUser(props.userId).followers;
+        if(!followingList.includes(userName(props.userId))){
+            followingList.push(userName(props.userId))
+        } else {
+            var index = followingList.indexOf(userName(props.userId))
+            followingList.splice(index,1)
+        }
+        if(!followersList.includes(user.username)){
+            followersList.push(user.username)
+        } else {
+            var index = followersList.indexOf(user.username)
+            followersList.splice(index,1)
+        }
+        setIsFollowed(prev=>!prev)
+        setFollowed(prev=>{
+            if(prev == "Unfollow"){
+                return "Follow"
+            } else {
+                return "Unfollow"
+            }
+        })
+        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, following: followingList})
+        await axios.put(`http://localhost:5000/api/user/${props.userId}`, {...getUser(props.userId), followers: followersList})
+    } 
     return(
         <div className="profile">
             <Navbar />
@@ -130,6 +166,13 @@ export default function OtherProfile(props) {
                 </div>
                 <div className="profile-name">
                     <h1>{userName(props.userId)}</h1>
+                    <div className="profile-add">
+                        {!isFollowed 
+                            ? <AiOutlinePlusCircle size={30} onClick={handleFollow}/>
+                            : <AiFillPlusCircle size={30} onClick={handleFollow}/>
+                        }
+                        <b onClick={handleFollow}>{Followed}</b>
+                    </div>
                 </div>
                 <div className="profile-desc">
                     <p>{userDesc(props.userId)}</p>
