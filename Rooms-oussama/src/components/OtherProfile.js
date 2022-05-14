@@ -131,6 +131,7 @@ export default function OtherProfile(props) {
     const handleFollow =  async () => {
         const followingList = user.following;
         const followersList = getUser(props.userId).followers;
+        console.log(followingList)
         if(!followingList.includes(userName(props.userId))){
             followingList.push(userName(props.userId))
         } else {

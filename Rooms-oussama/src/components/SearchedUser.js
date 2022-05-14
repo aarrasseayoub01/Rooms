@@ -23,25 +23,25 @@ export default function SearchedUser(props) {
 
 
     const getUser = async (thisId)=>{
-        const res = await axios.get("http://localhost:5000/api/user/"+thisId);
-        return res;
+        // const res = await axios.get("http://localhost:5000/api/user/"+thisId);
+        // return res;
 
-        // for (let i=0;i<users.length;i++){
-        //     if(users[i]._id==thisId){
-        //         return users[i]
-        //     }
-        // }
+        for (let i=0;i<users.length;i++){
+            if(users[i]._id==thisId){
+                return users[i]
+            }
+        }
     }
 
     //Detetmine le nom d'utilisateur depuis son idetifiant
     const userName = async (thisId) => {
-        const res = await axios.get("http://localhost:5000/api/user/"+thisId);
-        return res.username;
-        // for (let i=0;i<users.length;i++){
-        //     if(users[i]._id==thisId){
-        //         return(users[i].username)
-        //     }
-        // }
+        // const res = await axios.get("http://localhost:5000/api/user/"+thisId);
+        // return res.username;
+        for (let i=0;i<users.length;i++){
+            if(users[i]._id==thisId){
+                return(users[i].username)
+            }
+        }
     }
     // console.log(user.following.includes(userName(props.id)))
     
