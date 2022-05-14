@@ -25,6 +25,7 @@ export default function Feed() {
   }, [user._id]);
     //Envoyer les publications chacune a sa composante avec ses "props"
     const myPosts = posts.map(x=>{
+        Array.isArray(x)?x=x[0]:x=x
         return(
            <Post 
                 key={x._id}

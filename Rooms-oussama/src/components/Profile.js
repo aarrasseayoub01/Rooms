@@ -122,6 +122,8 @@ export default function Profile() {
         fetchPosts();
     }, [user._id, profPic, coverPic]);
     const myPosts = posts.map(x=>{
+        Array.isArray(x)?x=x[0]:x=x
+
         return(
            <Post 
                 key={x._id}
@@ -214,7 +216,7 @@ export default function Profile() {
                     <img className="profile-cover" src={"http://localhost:5000/images/" +user.cover} />
                     <img className="profile-pic" src={"http://localhost:5000/images/" +user.picture} />
                 </div>
-                <div className="profile-name">
+                <div className="profile-name1">
                     <h1>{user.username}</h1>
                 </div>
                 <div className="profile-desc">
