@@ -25,7 +25,8 @@ export default function Feed() {
   }, [user._id]);
     //Envoyer les publications chacune a sa composante avec ses "props"
     const myPosts = posts.map(x=>{
-        Array.isArray(x)?x=x[0]:x=x
+        if(!Array.isArray(x)){
+         
         return(
            <Post 
                 key={x._id}
@@ -40,7 +41,26 @@ export default function Feed() {
                 comments={x.comments}
                 post={x}
                 />
-    )})
+    )
+} else{
+  return (x.map(x=>{
+    return (
+    <Post 
+                key={x._id}
+                id={x._id}
+                desc={x.desc}
+                img={x.photo}
+                date={x.date}
+                userId={x.userId}
+                room={x.room}
+                like={x.likes}
+                disLike={x.dislikes}
+                comments={x.comments}
+                post={x}
+                />
+    )
+  }))
+}})
     return(
         <>
             <Navbar />
