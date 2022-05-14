@@ -65,7 +65,7 @@ export default function SearchedUser(props) {
             }
         })
         await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, following: followingList})
-        await axios.put(`http://localhost:5000/api/user/${props.id}`, {...getUser(props.userId), followers: followersList})
+        await axios.put(`http://localhost:5000/api/user/${props.id}`, {...getUser(props.id), followers: followersList})
     } 
     //Affiche les utlisateurs trouve avec le meme nom recherche
     return(
@@ -85,7 +85,7 @@ export default function SearchedUser(props) {
                                     ? <AiOutlinePlusCircle size={30} onClick={handleFollow}/>
                                     : <AiFillPlusCircle size={30} onClick={handleFollow}/>
                                 }
-                                <b>{Followed}</b>
+                                <b onClick={handleFollow}>{Followed}</b>
                             </div>
                         </>
                     }
