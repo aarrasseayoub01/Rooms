@@ -112,7 +112,8 @@ export default function Profile() {
         }
         changeCoverPic();
         const fetchPosts = async () => {
-        const res = await axios.get("http://localhost:5000/api/posts/timeline/" + user._id);
+        const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+        console.log(res.data)
         setPosts(
             res.data.sort((p1, p2) => {
               return new Date(p2.date) - new Date(p1.date);
