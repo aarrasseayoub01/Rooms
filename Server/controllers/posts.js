@@ -42,7 +42,7 @@ export const allPosts = async (req, res) => {
           return PostMessage.find({ userId: friendId });
         })
       );
-      const posts = userPosts.concat(friendPosts)
+      const posts = userPosts.concat(friendPosts.flat())
       res.status(200).json(posts);
     } catch (err) {
       res.status(500).json(err);
