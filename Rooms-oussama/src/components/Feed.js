@@ -8,13 +8,14 @@ import { AuthContext } from "../Context/authContext";
 import AddPost from "./AddPost";
 import { MdNotificationsActive } from "react-icons/md";
 import Notification from "./Notification";
+import { AiFillCloseCircle, AiFillMessage, AiOutlineSend } from "react-icons/ai";
+import Message from "./Message";
+import Chatbox from "./Chatbox";
 
 export default function Feed() {
-  const showStyle = {display: "flex", flexDirection: "column"}
-  const hideStyle = {display: "none"}
-  const [notifStyle, setNotifStyle] = useState(hideStyle);
   const [isNotifClicked, setIsNotifClicked] = useState(false);
-  const [isMsgClicked, setIsMsgifClicked] = useState(false);
+  const [isMsgClicked, setIsMsgClicked] = useState(false);
+  const [isChatClicked, setIsChatClicked] = useState(false);
   const [posts, setPosts] = useState([]);
   const [likeNotes, setLikeNotes] = useState([]);
   const [dislikeNotes, setDislikeNotes] = useState([]);
@@ -22,11 +23,19 @@ export default function Feed() {
   const { user } = useContext(AuthContext);
 
   function handleNotif() {
-    setIsNotifClicked(true)
-    setIsMsgifClicked(false)
-    setNotifStyle(prev=>(prev.display==="none" ? showStyle : hideStyle))
+    setIsNotifClicked(prev=>!prev)
+    setIsMsgClicked(false)
   }
-
+  function handleMessage() {
+    setIsNotifClicked(false)
+    setIsMsgClicked(prev=>!prev)
+  }
+  function handleChat() {
+    setIsChatClicked(true)
+  }
+  function ShutChat(){
+    setIsChatClicked(false)
+  }
   //Amener tous les publications du "backend"
   useEffect(() => {
     const fetchPosts = async () => {
@@ -144,16 +153,36 @@ export default function Feed() {
         )
       }))
     }})
+  const test = [<Chatbox ShutChat={ShutChat} />, <Chatbox ShutChat={ShutChat} />, <Chatbox ShutChat={ShutChat} />]
   return(
         <>
-            <Navbar handleNotif={handleNotif} />
+            <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
             {isNotifClicked &&
-            <AnimatePresence>
-            <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
-              <div style={notifStyle} className="notification">
-                <div className="notif-bell"><MdNotificationsActive /></div>
-                {notif2.length !==0 ? notif2 : <h5>How Empty!</h5>}
-              </div>
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="notification">
+                  <div className="notif-bell"><MdNotificationsActive /></div>
+                  {notif2.length !==0 ? notif2 : <h5>How Empty!</h5>}
+                </div>
+              </motion.dev>
+              </AnimatePresence>
+            }
+            {isMsgClicked &&
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="chat-message">
+                  <div className="notif-bell"><AiFillMessage /></div>
+                  <Message handleChat={handleChat}/>
+                </div>
+              </motion.dev>
+              </AnimatePresence>
+            }
+            {isChatClicked &&
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="chatboxes">
+                  {test.length <= 3 ? test : test.slice(0, 3)}
+                </div>
               </motion.dev>
               </AnimatePresence>
             }

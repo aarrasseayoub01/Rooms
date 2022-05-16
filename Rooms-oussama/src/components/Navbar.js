@@ -53,8 +53,8 @@ export default function Navbar(props) {
                 <li className="navbar-li"></li>
                 <li className="navbar-li">
                     <div className="navbar-notice">
-                        <AiFillMessage style={{cursor : "pointer"}} className="navbar-chat"/>
-                        <MdNotificationsActive onClick={()=>props.handleNotif()} style={{cursor : "pointer"}} className="navbar-notif" />
+                        <AiFillMessage onClick={props.handleMessage} style={{cursor : "pointer"}} className="navbar-chat"/>
+                        <MdNotificationsActive onClick={props.handleNotif} style={{cursor : "pointer"}} className="navbar-notif" />
                     </div>
                 </li>
                 <li className="dropdown">

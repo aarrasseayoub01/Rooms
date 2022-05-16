@@ -47,13 +47,12 @@ if(Array.isArray(props.x)){
     case "like":{  
     return(
         <div className="notification-body">
-                        <Link to={"../posts/"+props.x[1]}>
-
-            <img className="notificationimage" alt="Notification profile" src="https://i.ibb.co/J25RQCT/profile.png" />
-            <div className="notification-text">
-                <p><b>{props.x[0]}</b> has liked your Post</p>
-                <small>{dateTime(props.x[2])}</small>
-            </div>
+            <Link className="notification-body" to={"../posts/"+props.x[1]}>
+                <img className="notificationimage" alt="Notification profile" src="https://i.ibb.co/J25RQCT/profile.png" />
+                <div className="notification-text">
+                    <p><b>{props.x[0]}</b> has liked your Post</p>
+                    <small>{dateTime(props.x[2])}</small>
+                </div>
             </Link>
         </div>
     )
@@ -61,7 +60,7 @@ if(Array.isArray(props.x)){
     case "dislike": {
         return(
             <div className="notification-body">
-                <Link to={"../posts/"+props.x[1]}>
+                <Link className="notification-body" to={"../posts/"+props.x[1]}>
                 <img className="notificationimage" alt="Notification profile" src="https://i.ibb.co/J25RQCT/profile.png" />
                 <div className="notification-text">
                     <p><b>{props.x[0]}</b> has disliked your Post</p>
@@ -76,7 +75,7 @@ if(Array.isArray(props.x)){
 } else{
     return(
         <div className="notification-body">
-            <Link to={"../posts/"+props.x.postId}>
+            <Link className="notification-body" to={"../posts/"+props.x.postId}>
             <img className="notificationimage" alt="Notification profile" src="https://i.ibb.co/J25RQCT/profile.png" />
             <div className="notification-text">
                 <p><b>{props.x.username}</b> has commented on your Post</p>
