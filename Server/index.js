@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import postRoutes from './routes/posts.js';
 import userRoutes from './routes/user.js';
+import msgRoutes from './routes/message.js';
+import convRoutes from './routes/conversation.js';
 import dotenv from "dotenv"
 import multer from "multer"
 import path from "path";
@@ -39,6 +41,8 @@ app.use(cors());//Skip same-origin policy, il rend app capable d'appeler des API
   });
 app.use("/api/user", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/msg", msgRoutes)
+app.use("/api/conv", convRoutes)
 
 const CONNECTION_URL= 'mongodb://localhost:27017';
 // const CONNECTION_URL = process.env.MONGO_DB;

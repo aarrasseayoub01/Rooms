@@ -67,11 +67,10 @@ export default function Message(props) {
         }
         return dateStr
     }
-    console.log(msgs)
     const msgs1= msgs.map(x=>{
         return(
        <div className="message-bodyy">
-            <button onClick={()=>props.handleChat(x._id)} className="message-body">
+            <button onClick={()=>props.handleChat(x.username)} className="message-body">
                 <img className="notificationimage" alt="Notification profile" src="https://i.ibb.co/J25RQCT/profile.png" />
                 <div className="message-text">
                     <b className="message-sender">{x.username}</b>

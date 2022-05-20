@@ -159,7 +159,7 @@ export default function Feed() {
         )
       }))
     }})
-  const test = chatId.map(x=><Chatbox key={x} id={x} ShutChat={ShutChat} />)
+  const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   return(
         <>
             <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />

@@ -20,6 +20,14 @@ export default function Register() {
             const user = {username:username.current.value, email:email.current.value,password:password.current.value, picture:"https://i.ibb.co/J25RQCT/profile.png", cover:"https://i.ibb.co/MVjMppt/cover.jpg"}
             try{
                 await axios.post("http://localhost:5000/api/user/register",user);
+                const users = await axios.get("http://localhost:5000/api/user/allusers");
+
+                const a = await Promise.all(users.data.map(async function(x) {
+                    const res = await axios.post(`http://localhost:5000/api/conv/`, {senderId:user.username,receiverId:x.username});
+                    return res.data
+                }))
+
+                
                 navigate("/login");
 
             }catch(err){  
