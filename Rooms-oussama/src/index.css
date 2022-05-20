@@ -1080,6 +1080,9 @@ margin-left: 25px !important;
 }
 .chatbox-sender{
   margin: 1px auto 1px 5px;
+  width: max-content;
+  text-decoration: none;
+  color: #000000;
 }
 .add-message{
   display: flex;

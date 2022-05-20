@@ -245,7 +245,6 @@ export default function OtherProfile(props) {
         dispatch({ type: "LOGIN_SUCCESS", payload: {...user, following:followingList}});
         localStorage.setItem("user", JSON.stringify({...user, following:followingList}));
         await axios.put(`http://localhost:5000/api/user/${props.userId}`, {...getUser(props.userId), followers: followersList})
-        await axios.post(`http://localhost:5000/api/conv/`, {senderId:user._id,receiverId:props.userId})
     } 
     const test = chatId.map(x=><Chatbox key={x} id={x} ShutChat={ShutChat} />)
     return(

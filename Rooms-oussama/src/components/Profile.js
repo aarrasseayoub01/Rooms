@@ -43,19 +43,22 @@ export default function Profile() {
     // let subtitle;
     const [modalIsOpen, setIsOpen] = useState(false); //Modal pour le changement des donnees d'utilisateur
 
-    
+    //gerer la fenetre des notifications
     function handleNotif() {
       setIsNotifClicked(prev=>!prev)
       setIsMsgClicked(false)
     }
+    //gerer la fenetre des messages
     function handleMessage() {
       setIsNotifClicked(false)
       setIsMsgClicked(prev=>!prev)
     }
+    //faire apparaitre les fenetres de chat
     function handleChat(id) {
-      setChatId(prev=>[...prev, id])
+      setChatId(prev=>(!prev.includes(id) ? [...prev,id] : [...prev]))
       setIsChatClicked(true)
     }
+    //cacher les fenetres de chat
     function ShutChat(id){
       setChatId(prev=>{
         const prev2 = prev.filter(x=>x!=id)
@@ -146,7 +149,8 @@ export default function Profile() {
         const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
         setPosts(
             res.data.sort((p1, p2) => {
-              return new Date(p2.date) - new Date(p1.date);
+              // return new Date(p2.date) - new Date(p1.date);
+              return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
             })
         );
         };

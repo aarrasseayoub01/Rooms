@@ -67,6 +67,21 @@ export default function SearchedUser(props) {
         await axios.put(`http://localhost:5000/api/user/${props.id}`, {...getUser(props.id), followers: followersList})
        
     } 
+    function checkFriendship(id, List1, List2){
+        if(List1.includes(id)){
+            if(List2.includes(id)){
+                return "Friend"
+            } else {
+                return "Followed"
+            }
+        } else {
+            if(List2.includes(id)){
+                return "Follower"
+            } else {
+                return "Not friend"
+            }
+        }
+    }
     //Affiche les utlisateurs trouve avec le meme nom recherche
     return(
         <div >
@@ -78,7 +93,10 @@ export default function SearchedUser(props) {
                 }</Link>
                 <div className="user-propreties">
                     <Link to={"../"+props.id} className="link-username"><b className="searched-username">{props.username}</b></Link>
-                    <p>Friend</p>
+                    <p>{(user._id===props.id 
+                        ? "Your profile"
+                        : checkFriendship(props.id, user.following, user.followers)
+                        )}</p>
                     <small>23 mutual friends</small>
                 </div>
                 <div className="searched-flex">
