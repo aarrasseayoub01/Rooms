@@ -32,7 +32,7 @@ export default function Feed() {
     setIsMsgClicked(prev=>!prev)
   }
   function handleChat(id) {
-    setChatId(prev=>[...prev, id])
+    setChatId(prev=>(!prev.includes(id) ? [...prev,id] : [...prev]))
     setIsChatClicked(true)
   }
   function ShutChat(id){
