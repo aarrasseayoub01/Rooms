@@ -23,18 +23,22 @@ export default function PostPage(props) {
   const [commentNotes, setCommentNotes] = useState([]);
   const { user } = useContext(AuthContext);
 
+  //gerer la fenetre des notifications
   function handleNotif() {
     setIsNotifClicked(prev=>!prev)
     setIsMsgClicked(false)
   }
+  //gerer la fenetre des messages
   function handleMessage() {
     setIsNotifClicked(false)
     setIsMsgClicked(prev=>!prev)
   }
+  //faire apparaitre les fenetres de chat
   function handleChat(id) {
-    setChatId(prev=>[...prev, id])
+    setChatId(prev=>(!prev.includes(id) ? [...prev,id] : [...prev]))
     setIsChatClicked(true)
   }
+  //cacher les fenetres de chat
   function ShutChat(id){
     setChatId(prev=>{
       const prev2 = prev.filter(x=>x!=id)
@@ -135,8 +139,6 @@ export default function PostPage(props) {
                 <div className="chat-message">
                   <div className="notif-bell"><AiFillMessage /></div>
                   <Message id={1} handleChat={handleChat}/>
-                  <Message id={2} handleChat={handleChat}/>
-                  <Message id={3} handleChat={handleChat}/>
                 </div>
               </motion.dev>
               </AnimatePresence>
@@ -146,7 +148,6 @@ export default function PostPage(props) {
               <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
                 <div className="chatboxes">
                   {test.length <= 3 ? test : test.slice(0, 3)}
-                  {/* {test[chatId]} */}
                 </div>
               </motion.dev>
               </AnimatePresence>

@@ -23,18 +23,22 @@ export default function Feed() {
   const [commentNotes, setCommentNotes] = useState([]);
   const { user } = useContext(AuthContext);
 
+  //gerer la fenetre des notifications
   function handleNotif() {
     setIsNotifClicked(prev=>!prev)
     setIsMsgClicked(false)
   }
+  //gerer la fenetre des messages
   function handleMessage() {
     setIsNotifClicked(false)
     setIsMsgClicked(prev=>!prev)
   }
+  //faire apparaitre les fenetres de chat
   function handleChat(id) {
     setChatId(prev=>(!prev.includes(id) ? [...prev,id] : [...prev]))
     setIsChatClicked(true)
   }
+  //cacher les fenetres de chat
   function ShutChat(id){
     setChatId(prev=>{
       const prev2 = prev.filter(x=>x!=id)

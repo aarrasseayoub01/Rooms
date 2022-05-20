@@ -1,11 +1,45 @@
+import axios from "axios";
 import React, { useContext } from "react";
 import { AiFillCloseCircle, AiOutlineSend } from "react-icons/ai";
+import { useState, useEffect } from "react";
 import { AuthContext } from "../Context/authContext";
 import ChatMessage from "./ChatMessage";
+import { Link } from "react-router-dom";
 
 
 export default function Chatbox(props) {
     const { user } = useContext(AuthContext); 
+    const [users, setUsers] = useState([]);
+
+    //Amener tous les utilisateurs
+    useEffect(() => {
+        const fetchUsers = async () => {
+        const res = await axios.get("http://localhost:5000/api/user/allusers");
+        setUsers(
+            res.data.sort((p1, p2) => {
+              return new Date(p2.createdAt) - new Date(p1.createdAt);
+            })
+        );
+        };
+        fetchUsers();
+    }, []);
+
+    //Detetmine le nom d'utilisateur depuis son idetifiant
+    function userName(thisId) {
+        for (let i=0;i<users.length;i++){
+            if(users[i]._id===thisId){
+                return(users[i].username)
+            }
+        }
+    }
+    //Detetmine la photo de profil d'utilisateur depuis son idetifiant
+    function userImg(thisId) {
+        for (let i=0;i<users.length;i++){
+            if(users[i]._id===thisId){
+                return(users[i].picture)
+            }
+        }
+    }
 
     const dateTime = (date1) => {
         const d1 = Date.now();
@@ -45,7 +79,23 @@ export default function Chatbox(props) {
     return(
         <div className="chatbox">
             <div className="chatbox-header">
-                <h3 className="chatbox-sender">{props.id}</h3>
+                <Link to={"/"+props.id}>
+                {userImg(props.id)==="https://i.ibb.co/J25RQCT/profile.png" 
+                    ? <img 
+                        width="30px" 
+                        className="profileimage" 
+                        alt="chat profile" 
+                        src={userImg(props.id)} 
+                    />
+                    : <img 
+                        width="30px" 
+                        className="profileimage" 
+                        alt="chat profile" 
+                        src={"http://localhost:5000/images/"+userImg(props.id)} 
+                    />  
+                }
+                </Link>
+                <Link className="chatbox-sender" to={"/"+props.id}><h3 className="chatbox-sender">{userName(props.id)}</h3></Link>
                 <AiFillCloseCircle onClick={()=>props.ShutChat(props.id)} size={20} style={{cursor:"pointer"}}/>
             </div>
             <div className="chatbox-message">

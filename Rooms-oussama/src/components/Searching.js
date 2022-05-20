@@ -7,29 +7,44 @@ import Navbar from "./Navbar";
 import SearchedUser from "./SearchedUser";
 import { MdNotificationsActive } from "react-icons/md";
 import Notification from "./Notification";
+import { AiFillMessage } from "react-icons/ai";
+import Message from "./Message";
+import Chatbox from "./Chatbox";
 
 export default function Searching(props) {
-    const showStyle = {display: "flex", flexDirection: "column"}
-    const hideStyle = {display: "none"}
-    const [notifStyle, setNotifStyle] = useState(hideStyle);
     const [isNotifClicked, setIsNotifClicked] = useState(false);
-    const [isMsgClicked, setIsMsgifClicked] = useState(false);
+    const [isMsgClicked, setIsMsgClicked] = useState(false);
+    const [isChatClicked, setIsChatClicked] = useState(false);
+    const [chatId, setChatId] = useState([]);
     const [likeNotes, setLikeNotes] = useState([]);
-  const [dislikeNotes, setDislikeNotes] = useState([]);
-  const [commentNotes, setCommentNotes] = useState([]);
+    const [dislikeNotes, setDislikeNotes] = useState([]);
+    const [commentNotes, setCommentNotes] = useState([]);
     const [users, setUsers] = useState([]);
     const {user}  = useContext(AuthContext);
 
-    
+    //gerer la fenetre des notifications
     function handleNotif() {
-        setIsNotifClicked(true)
-        setIsMsgifClicked(false)
-        setNotifStyle(prev=>(prev.display==="none" ? showStyle : hideStyle))
+      setIsNotifClicked(prev=>!prev)
+      setIsMsgClicked(false)
     }
-
-
-   
-
+    //gerer la fenetre des messages
+    function handleMessage() {
+      setIsNotifClicked(false)
+      setIsMsgClicked(prev=>!prev)
+    }
+    //faire apparaitre les fenetres de chat
+    function handleChat(id) {
+      setChatId(prev=>(!prev.includes(id) ? [...prev,id] : [...prev]))
+      setIsChatClicked(true)
+    }
+    //cacher les fenetres de chat
+    function ShutChat(id){
+      setChatId(prev=>{
+        const prev2 = prev.filter(x=>x!=id)
+        return prev2
+      })
+      if(chatId.length === 0) setIsChatClicked(false)
+    }
 
     //Amener tous les utilisateurs
     useEffect(() => {
@@ -113,15 +128,38 @@ export default function Searching(props) {
             </AnimatePresence>):null)
         }
     )
-
+    const test = chatId.map(x=><Chatbox key={x} id={x} ShutChat={ShutChat} />)
     return(
         <>
-            <Navbar handleNotif={handleNotif}/>
+            <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
             {isNotifClicked &&
-              <div style={notifStyle} className="notification">
+            <AnimatePresence>
+            <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+              <div className="notification">
                 <div className="notif-bell"><MdNotificationsActive /></div>
                 {notif2.length !==0 ? notif2 : <h5>How Empty!</h5>}
               </div>
+              </motion.dev>
+              </AnimatePresence>
+            }
+            {isMsgClicked &&
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="chat-message">
+                  <div className="notif-bell"><AiFillMessage /></div>
+                  <Message id={1} handleChat={handleChat}/>
+                </div>
+              </motion.dev>
+              </AnimatePresence>
+            }
+            {isChatClicked &&
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="chatboxes">
+                  {test.length <= 3 ? test : test.slice(0, 3)}
+                </div>
+              </motion.dev>
+              </AnimatePresence>
             }
             <div className="post">
                 <h2 className="search-title">People</h2>

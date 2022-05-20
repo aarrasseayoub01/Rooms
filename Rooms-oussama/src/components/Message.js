@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/authContext";
 import axios from "axios"
 import { setAppElement } from "react-modal";
+import { Link } from "react-router-dom";
 
 
 export default function Message(props) {
@@ -72,7 +73,20 @@ export default function Message(props) {
         return(
        <div className="message-bodyy">
             <button onClick={()=>props.handleChat(x._id)} className="message-body">
-                <img className="notificationimage" alt="Notification profile" src="https://i.ibb.co/J25RQCT/profile.png" />
+                {x.picture==="https://i.ibb.co/J25RQCT/profile.png" 
+                    ? <img 
+                        width="30px" 
+                        className="profileimage" 
+                        alt="chat profile" 
+                        src={x.picture} 
+                    />
+                    : <img 
+                        width="30px" 
+                        className="profileimage" 
+                        alt="chat profile" 
+                        src={"http://localhost:5000/images/"+x.picture} 
+                    />  
+                }
                 <div className="message-text">
                     <b className="message-sender">{x.username}</b>
                     <span className="message-content"><small>HAHAHA</small></span>
