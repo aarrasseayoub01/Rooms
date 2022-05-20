@@ -3,7 +3,7 @@ import {motion, AnimatePresence} from 'framer-motion'
 
 import Navbar from "./Navbar"
 // import cover from "../images/post1.jpg"
-import { AiFillEdit, AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { AiFillEdit, AiFillMessage, AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import RoomCard from "./RoomCard"
 import Post from "./Post"
 import { Rooms } from "../dummyData"
@@ -11,26 +11,41 @@ import axios from "axios"
 import { AuthContext } from "../Context/authContext"
 import { MdNotificationsActive } from "react-icons/md"
 import Notification from "./Notification"
+import Chatbox from "./Chatbox"
+import Message from "./Message"
 // import AddPost from "./AddPost"
 
 export default function OtherProfile(props) {
-    const showStyle = {display: "flex", flexDirection: "column"}
-    const hideStyle = {display: "none"}
-    const [notifStyle, setNotifStyle] = useState(hideStyle);
     const [isNotifClicked, setIsNotifClicked] = useState(false);
-    const [isMsgClicked, setIsMsgifClicked] = useState(false);
+    const [isMsgClicked, setIsMsgClicked] = useState(false);
+    const [isChatClicked, setIsChatClicked] = useState(false);
+    const [chatId, setChatId] = useState([]);
     const [users, setUsers] = useState([]);
     const [posts, setPosts] = useState([]);
     const [likeNotes, setLikeNotes] = useState([]);
-  const [dislikeNotes, setDislikeNotes] = useState([]);
-  const [commentNotes, setCommentNotes] = useState([]);
+    const [dislikeNotes, setDislikeNotes] = useState([]);
+    const [commentNotes, setCommentNotes] = useState([]);
     const {user, dispatch}  = useContext(AuthContext);
     
     function handleNotif() {
-        setIsNotifClicked(true)
-        setIsMsgifClicked(false)
-        setNotifStyle(prev=>(prev.display==="none" ? showStyle : hideStyle))
-    }
+        setIsNotifClicked(prev=>!prev)
+        setIsMsgClicked(false)
+      }
+      function handleMessage() {
+        setIsNotifClicked(false)
+        setIsMsgClicked(prev=>!prev)
+      }
+      function handleChat(id) {
+        setChatId(prev=>[...prev, id])
+        setIsChatClicked(true)
+      }
+      function ShutChat(id){
+        setChatId(prev=>{
+          const prev2 = prev.filter(x=>x!=id)
+          return prev2
+        })
+        if(chatId.length === 0) setIsChatClicked(false)
+      }
 
     function getUser(thisId){
         for (let i=0;i<users.length;i++){
@@ -231,14 +246,41 @@ export default function OtherProfile(props) {
         localStorage.setItem("user", JSON.stringify({...user, following:followingList}));
         await axios.put(`http://localhost:5000/api/user/${props.userId}`, {...getUser(props.userId), followers: followersList})
     } 
+    const test = chatId.map(x=><Chatbox key={x} id={x} ShutChat={ShutChat} />)
     return(
 <>
-            <Navbar handleNotif={handleNotif}/>
+            <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
             {isNotifClicked &&
-              <div style={notifStyle} className="notification">
-                <div className="notif-bell"><MdNotificationsActive /></div>
-                {notif2.length !==0 ? notif2 : <h5>How Empty!</h5>}
-              </div>
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="notification">
+                  <div className="notif-bell"><MdNotificationsActive /></div>
+                  {notif2.length !==0 ? notif2 : <h5>How Empty!</h5>}
+                </div>
+              </motion.dev>
+              </AnimatePresence>
+            }
+            {isMsgClicked &&
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="chat-message">
+                  <div className="notif-bell"><AiFillMessage /></div>
+                  <Message id={1} handleChat={handleChat}/>
+                  <Message id={2} handleChat={handleChat}/>
+                  <Message id={3} handleChat={handleChat}/>
+                </div>
+              </motion.dev>
+              </AnimatePresence>
+            }
+            {isChatClicked &&
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="chatboxes">
+                  {test.length <= 3 ? test : test.slice(0, 3)}
+                  {/* {test[chatId]} */}
+                </div>
+              </motion.dev>
+              </AnimatePresence>
             }
             <AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>

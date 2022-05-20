@@ -8,7 +8,7 @@ import { AuthContext } from "../Context/authContext";
 import AddComment from "./AddComment";
 import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import styled from "styled-components";
 
@@ -33,6 +33,7 @@ export default function Post(props) {
     const [deleted, setDeleted] = useState(false)
     const {user} = useContext(AuthContext);
     const desc = useRef();
+    const history = useNavigate()
     
     // let subtitle;
     const [modalIsOpen, setIsOpen] = useState(false); //Modal pour le changement des donnees d'utilisateur
@@ -433,7 +434,10 @@ const dateTime = (date1) => {
             <div>
                 <div style={postStyle}>
                 <div className="orig-post">
-                    <Link className="post-username" to={"../posts/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>
+                    {!props.singlepost 
+                        ? <Link className="post-username" to={"../posts/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>
+                        : <small onClick={() => history(-1)} className="orig-post-btn">Return</small>
+                    }
                 </div>
                 <div className="post-grid">
                     <Link className="comment-username" to={"../"+props.userId}>

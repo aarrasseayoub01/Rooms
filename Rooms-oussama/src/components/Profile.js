@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import {motion, AnimatePresence} from 'framer-motion'
 
 import Navbar from "./Navbar"
-import { AiFillEdit, AiOutlineClose } from "react-icons/ai"
+import { AiFillEdit, AiFillMessage, AiOutlineClose } from "react-icons/ai"
 import RoomCard from "./RoomCard"
 import Post from "./Post"
 import { Rooms } from "../dummyData"
@@ -15,15 +15,16 @@ import { BsCardImage } from "react-icons/bs"
 import styled from "styled-components";
 import { MdNotificationsActive } from "react-icons/md"
 import Notification from "./Notification"
+import Message from "./Message"
+import Chatbox from "./Chatbox"
 
 //Presque le meme que "Feed.js"
 
 export default function Profile() {
-    const showStyle = {display: "flex", flexDirection: "column"}
-    const hideStyle = {display: "none"}
-    const [notifStyle, setNotifStyle] = useState(hideStyle);
     const [isNotifClicked, setIsNotifClicked] = useState(false);
-    const [isMsgClicked, setIsMsgifClicked] = useState(false);
+    const [isMsgClicked, setIsMsgClicked] = useState(false);
+    const [isChatClicked, setIsChatClicked] = useState(false);
+    const [chatId, setChatId] = useState([]);
     const [posts, setPosts] = useState([]);
     const { user, dispatch } = useContext(AuthContext);
     const [profPic, setProfPic] = useState(null);
@@ -44,9 +45,23 @@ export default function Profile() {
 
     
     function handleNotif() {
-        setIsNotifClicked(true)
-        setIsMsgifClicked(false)
-        setNotifStyle(prev=>(prev.display==="none" ? showStyle : hideStyle))
+      setIsNotifClicked(prev=>!prev)
+      setIsMsgClicked(false)
+    }
+    function handleMessage() {
+      setIsNotifClicked(false)
+      setIsMsgClicked(prev=>!prev)
+    }
+    function handleChat(id) {
+      setChatId(prev=>[...prev, id])
+      setIsChatClicked(true)
+    }
+    function ShutChat(id){
+      setChatId(prev=>{
+        const prev2 = prev.filter(x=>x!=id)
+        return prev2
+      })
+      if(chatId.length === 0) setIsChatClicked(false)
     }
     function openModal() {
         setIsOpen(true); //Ouvrir le Modal
@@ -225,18 +240,46 @@ export default function Profile() {
                 />
     )})
 
-    return(
+  const test = chatId.map(x=><Chatbox key={x} id={x} ShutChat={ShutChat} />)
+  return(
         <>
-        <Navbar handleNotif={handleNotif}/>
+        {/* <Navbar handleNotif={handleNotif}/> */}
+        <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
         {isNotifClicked &&
-              <div style={notifStyle} className="notification">
-                <div className="notif-bell"><MdNotificationsActive /></div>
-                {notif2}
-              </div>
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="notification">
+                  <div className="notif-bell"><MdNotificationsActive /></div>
+                  {notif2.length !==0 ? notif2 : <h5>How Empty!</h5>}
+                </div>
+              </motion.dev>
+              </AnimatePresence>
+            }
+            {isMsgClicked &&
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="chat-message">
+                  <div className="notif-bell"><AiFillMessage /></div>
+                  <Message id={1} handleChat={handleChat}/>
+                  <Message id={2} handleChat={handleChat}/>
+                  <Message id={3} handleChat={handleChat}/>
+                </div>
+              </motion.dev>
+              </AnimatePresence>
+            }
+            {isChatClicked &&
+              <AnimatePresence>
+              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <div className="chatboxes">
+                  {test.length <= 3 ? test : test.slice(0, 3)}
+                  {/* {test[chatId]} */}
+                </div>
+              </motion.dev>
+              </AnimatePresence>
             }
         <AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
-        <div className="profile">
+            <div className="profile">
             
             
             <Modal
