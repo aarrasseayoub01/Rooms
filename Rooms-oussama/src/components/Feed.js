@@ -164,35 +164,26 @@ export default function Feed() {
         <>
             <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
             {isNotifClicked &&
-              <AnimatePresence>
-              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+              
+             
                 <div className="notification">
                   <div className="notif-bell"><MdNotificationsActive /></div>
                   {notif2.length !==0 ? notif2 : <h5>How Empty!</h5>}
                 </div>
-              </motion.dev>
-              </AnimatePresence>
+              
             }
             {isMsgClicked &&
-              <AnimatePresence>
-              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
                 <div className="chat-message">
                   <div className="notif-bell"><AiFillMessage /></div>
-                  <Message id={1} handleChat={handleChat}/>
-                  <Message id={2} handleChat={handleChat}/>
-                  <Message id={3} handleChat={handleChat}/>
+                  <Message handleChat={handleChat}/>
                 </div>
-              </motion.dev>
-              </AnimatePresence>
             }
             {isChatClicked &&
-              <AnimatePresence>
-              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+              
                 <div className="chatboxes">
                   {test.length <= 3 ? test : test.slice(0, 3)}
                 </div>
-              </motion.dev>
-              </AnimatePresence>
+              
             }
             <AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>

@@ -1,9 +1,36 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/authContext";
+import axios from "axios"
+import { setAppElement } from "react-modal";
 
 
 export default function Message(props) {
+    const [msgs, setMsgs] = useState([])
     const { user } = useContext(AuthContext);
+
+
+    // const newAssetArray = await Promise.all(dummyAssets.map(async function(asset) {
+    //     const response = await axios.get(currrentPrice(asset.asset_id));
+    //     const cp = response.data.market_data.current_price.eur;
+    //     const value = Number(cp) * Number(asset.amount);
+    //     return { ...asset, value: +value };
+    // }));
+    // console.log(newAssetArray);
+    // setAssets(newAssetArray);
+
+
+    useEffect( () => {
+        const fetchMsgs = async () => {try {
+            const msg = await Promise.all(user.following.map(async function(x) {
+            const res = await axios.get("http://localhost:5000/api/user/"+x);
+            return res.data
+        }))
+    setMsgs(msg)
+    } catch (e) {
+        console.log(e);
+    }}
+        fetchMsgs();
+    }, [user])
 
     const dateTime = (date1) => {
         const d1 = Date.now();
@@ -40,16 +67,24 @@ export default function Message(props) {
         }
         return dateStr
     }
-    return(
-        <div className="message-bodyy">
-            <button onClick={()=>props.handleChat(props.id)} className="message-body">
+    console.log(msgs)
+    const msgs1= msgs.map(x=>{
+        return(
+       <div className="message-bodyy">
+            <button onClick={()=>props.handleChat(x._id)} className="message-body">
                 <img className="notificationimage" alt="Notification profile" src="https://i.ibb.co/J25RQCT/profile.png" />
                 <div className="message-text">
-                    <b className="message-sender">{user.username}</b>
+                    <b className="message-sender">{x.username}</b>
                     <span className="message-content"><small>HAHAHA</small></span>
                 </div>
                 <h5 className="msg-date">8 min ago</h5>
             </button>
         </div>
+        )
+    })
+    return(
+       <>
+       {msgs1}
+       </>
     )
 }
