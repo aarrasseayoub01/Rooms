@@ -261,16 +261,11 @@ export default function OtherProfile(props) {
               </AnimatePresence>
             }
             {isMsgClicked &&
-              <AnimatePresence>
-              <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
                 <div className="chat-message">
                   <div className="notif-bell"><AiFillMessage /></div>
-                  <Message id={1} handleChat={handleChat}/>
-                  <Message id={2} handleChat={handleChat}/>
-                  <Message id={3} handleChat={handleChat}/>
+                  <Message handleChat={handleChat}/>
+
                 </div>
-              </motion.dev>
-              </AnimatePresence>
             }
             {isChatClicked &&
               <AnimatePresence>
