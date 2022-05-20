@@ -13,7 +13,7 @@ export default function Message(props) {
         var dateStr = "";
         if (diff >= (1000*3600*24*365)){
             date = diff/(1000 * 3600 * 24 * 365)
-            dateStr = Math.floor(date).toString() + " y"
+            dateStr = Math.floor(date).toString() + " y" 
         } else {
             if(diff >= (1000*3600*24*30)){
                 date = diff/(1000*3600*24*30)
@@ -42,7 +42,7 @@ export default function Message(props) {
     }
     return(
         <div className="message-bodyy">
-            <button onClick={props.handleChat} className="message-body">
+            <button onClick={()=>props.handleChat(props.id)} className="message-body">
                 <img className="notificationimage" alt="Notification profile" src="https://i.ibb.co/J25RQCT/profile.png" />
                 <div className="message-text">
                     <b className="message-sender">{user.username}</b>

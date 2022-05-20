@@ -5,7 +5,7 @@ import ChatMessage from "./ChatMessage";
 
 
 export default function Chatbox(props) {
-    const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext); 
 
     const dateTime = (date1) => {
         const d1 = Date.now();
@@ -45,8 +45,8 @@ export default function Chatbox(props) {
     return(
         <div className="chatbox">
             <div className="chatbox-header">
-                <h3 className="chatbox-sender">{user.username}</h3>
-                <AiFillCloseCircle onClick={()=>props.ShutChat()} size={20} style={{cursor:"pointer"}}/>
+                <h3 className="chatbox-sender">{props.id}</h3>
+                <AiFillCloseCircle onClick={()=>props.ShutChat(props.id)} size={20} style={{cursor:"pointer"}}/>
             </div>
             <div className="chatbox-message">
                 <ChatMessage sent={true} />
