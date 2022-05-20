@@ -146,7 +146,8 @@ export default function Profile() {
         const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
         setPosts(
             res.data.sort((p1, p2) => {
-              return new Date(p2.date) - new Date(p1.date);
+              // return new Date(p2.date) - new Date(p1.date);
+              return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
             })
         );
         };

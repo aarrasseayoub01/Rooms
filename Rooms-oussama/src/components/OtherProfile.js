@@ -93,7 +93,8 @@ export default function OtherProfile(props) {
         const res = await axios.get("http://localhost:5000/api/user/allusers");
         setUsers(
             res.data.sort((p1, p2) => {
-              return new Date(p2.createdAt) - new Date(p1.createdAt);
+              // return new Date(p2.createdAt) - new Date(p1.createdAt);
+              return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
             })
         );
         };

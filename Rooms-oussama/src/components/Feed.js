@@ -48,7 +48,7 @@ export default function Feed() {
       const res = await axios.get("http://localhost:5000/api/posts/timeline/" + user._id);
       setPosts(
         res.data.sort((p1, p2) => {
-          return new Date(p2.date) - new Date(p1.date);
+          return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
         })
       );
     };
@@ -190,7 +190,6 @@ export default function Feed() {
               <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
                 <div className="chatboxes">
                   {test.length <= 3 ? test : test.slice(0, 3)}
-                  {/* {test[chatId]} */}
                 </div>
               </motion.dev>
               </AnimatePresence>
