@@ -1110,6 +1110,7 @@ margin-left: 25px !important;
   word-wrap: break-word;
   overflow: auto;
   box-sizing: border-box;
+  width: max-content;
   max-width: 70%;
 }
 .user-message{

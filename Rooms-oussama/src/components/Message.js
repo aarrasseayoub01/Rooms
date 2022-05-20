@@ -68,7 +68,6 @@ export default function Message(props) {
         }
         return dateStr
     }
-    console.log(msgs)
     const msgs1= msgs.map(x=>{
         return(
        <div className="message-bodyy">
