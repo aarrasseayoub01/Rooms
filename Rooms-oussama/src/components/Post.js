@@ -31,6 +31,7 @@ export default function Post(props) {
     const [likeState, setLikeState] = useState(props.post.likes)
     const [dislikeState, setDislikeState] = useState(props.post.dislikes)
     const [deleted, setDeleted] = useState(false)
+
     const {user} = useContext(AuthContext);
     const desc = useRef();
     const history = useNavigate()
@@ -38,6 +39,7 @@ export default function Post(props) {
     // let subtitle;
     const [modalIsOpen, setIsOpen] = useState(false); //Modal pour le changement des donnees d'utilisateur
 
+    
 
     function openModal() {
         setIsOpen(true); //Ouvrir le Modal
@@ -120,7 +122,6 @@ const dateTime = (date1) => {
             }
         }
     }
-
     //Amener tous les utilisateurs
     useEffect(() => {
         const fetchUsers = async () => {
@@ -572,7 +573,7 @@ const dateTime = (date1) => {
                 {comment && 
                 <div className="comment">
                     <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div>
-                    <AddComment post={props.post} comments={props.comments}/>
+                    <AddComment post={props.post} comments={props.comments} handleA={props.handleA}/>
                     {props.comments.length!==0 && 
                         comments
                     }

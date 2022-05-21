@@ -21,8 +21,12 @@ export default function Feed() {
   const [likeNotes, setLikeNotes] = useState([]);
   const [dislikeNotes, setDislikeNotes] = useState([]);
   const [commentNotes, setCommentNotes] = useState([]);
-  const { user } = useContext(AuthContext);
+  const [a, setA]=useState(true)
 
+  const { user } = useContext(AuthContext);
+  function handleA() {
+    setA(prev=>!prev)
+}
   //gerer la fenetre des notifications
   function handleNotif() {
     setIsNotifClicked(prev=>!prev)
@@ -121,7 +125,7 @@ export default function Feed() {
           />
     )
   })
-
+  
   //Envoyer les publications chacune a sa composante avec ses "props"
   const myPosts = posts.map(x=>{
     if(!Array.isArray(x)){    
@@ -142,6 +146,8 @@ export default function Feed() {
               sharer={x.sharer}
               shareDesc={x.shareDesc}
               shareDate={x.shareDate}
+              handleA={handleA}
+
           />
       )
     } else {
@@ -159,6 +165,8 @@ export default function Feed() {
                 disLike={x.dislikes}
                 comments={x.comments}
                 post={x}
+                handleA={handleA}
+                
             />
         )
       }))
