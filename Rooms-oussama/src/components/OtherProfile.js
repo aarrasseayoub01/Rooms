@@ -246,7 +246,7 @@ export default function OtherProfile(props) {
         localStorage.setItem("user", JSON.stringify({...user, following:followingList}));
         await axios.put(`http://localhost:5000/api/user/${props.userId}`, {...getUser(props.userId), followers: followersList})
     } 
-    const test = chatId.map(x=><Chatbox key={x} id={x} ShutChat={ShutChat} />)
+    const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
     return(
 <>
             <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
