@@ -8,6 +8,7 @@ import { AuthContext } from "./Context/authContext";
 import OtherProfile from "./components/OtherProfile"
 import Searching from "./components/Searching"
 import PostPage from "./components/PostPage"
+import Room from "./components/Room"
 
 
 export default function App() {
@@ -53,6 +54,9 @@ export default function App() {
               : <Login />} />
           <Route path="/posts/:id" element={user
               ? <HandlePost />
+              : <Login />} />
+          <Route path="/room" element={user
+              ? <Room />
               : <Login />} />
         {/* </Route> */}
       </Routes>

@@ -6,16 +6,18 @@ import Post from "./Post";
 import axios from "axios"
 import { AuthContext } from "../Context/authContext";
 import AddPost from "./AddPost";
-import { MdNotificationsActive } from "react-icons/md";
+import { MdAdd, MdNotificationsActive } from "react-icons/md";
 import Notification from "./Notification";
-import { AiFillCloseCircle, AiFillMessage, AiOutlineSend } from "react-icons/ai";
+import { AiFillMessage } from "react-icons/ai";
 import Message from "./Message";
 import Chatbox from "./Chatbox";
+import { Link } from "react-router-dom";
 
 export default function Feed() {
   const [isNotifClicked, setIsNotifClicked] = useState(false);
   const [isMsgClicked, setIsMsgClicked] = useState(false);
   const [isChatClicked, setIsChatClicked] = useState(false);
+  const [isRoomClicked, setIsRoomClicked] = useState(false);
   const [chatId, setChatId] = useState([]);
   const [posts, setPosts] = useState([]);
   const [likeNotes, setLikeNotes] = useState([]);
@@ -49,6 +51,10 @@ export default function Feed() {
       return prev2
     })
     if(chatId.length === 0) setIsChatClicked(false)
+  }
+  //Faire apparaitre les Rooms
+  function openRoom(){
+    setIsRoomClicked(prev=>!prev)
   }
   //Amener tous les publications du "backend"
   useEffect(() => {
@@ -199,9 +205,35 @@ export default function Feed() {
             }
             <AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
-            <div className="feed">
-                <AddPost /> 
-                {myPosts.length!==0 && myPosts }
+            <div className="feed-page">
+                <div className="feed-rooms">
+                  <div onClick={openRoom} className="rooms-banner">
+                    <h3>Rooms</h3>
+                  </div>
+                  {isRoomClicked &&
+                    <div className="room-hide">
+                      <div className="add-rooms">
+                        <div className="add-rooms-button">
+                          <MdAdd />
+                          <h5>Add a Room</h5>
+                        </div>
+                      </div>
+                      <div className="my-rooms">
+                        <Link className="my-rooms" to="../room">
+                          <div className="mini-room">
+                            <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" />
+                            <h5>Room1</h5>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  }
+                </div>
+                <div className="feed">
+                  <AddPost /> 
+                  {myPosts.length!==0 && myPosts }
+                </div>
+                <div className="feed-fit"></div>
             </div>
             </motion.dev>
             </AnimatePresence>
