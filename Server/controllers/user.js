@@ -23,7 +23,6 @@ export const register = async (req, res) => {
         const currentUserName = await User.findOne({username: newUser.username} ) 
         if(!currentUserEmail && !currentUserName) {
           const cuser = await newUser.save();  
-          console.log(user.picture);
           res.status(201).json(cuser);
         } else {
           res.status(404).json({status:false})
