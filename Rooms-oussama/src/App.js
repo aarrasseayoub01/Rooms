@@ -9,6 +9,7 @@ import OtherProfile from "./components/OtherProfile"
 import Searching from "./components/Searching"
 import PostPage from "./components/PostPage"
 import Room from "./components/Room"
+import AddRoom from "./components/AddRoom"
 
 
 export default function App() {
@@ -57,6 +58,9 @@ export default function App() {
               : <Login />} />
           <Route path="/room" element={user
               ? <Room />
+              : <Login />} />
+          <Route path="/newroom" element={user
+              ? <AddRoom />
               : <Login />} />
         {/* </Route> */}
       </Routes>

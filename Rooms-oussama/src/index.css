@@ -753,6 +753,8 @@ code {
   height: 30px;
   background-color: #B2FFDA;
   border-radius: 10px;
+  color: black;
+  text-decoration: none;
   cursor: pointer;
 }
 .my-rooms{
@@ -772,8 +774,6 @@ code {
   height: 50px;
   border: 1px solid black;
   color: #000000;
-}
-.mini-room h5{
   text-decoration: none;
 }
 .mini-room:hover{
@@ -859,6 +859,17 @@ code {
   .rooms{
     display: none;
   }
+  .feed-rooms{
+    max-width: 120px;
+  }
+  .rooms-banner{
+    max-width: 120px;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .feed-rooms{
+    display: none;
+  }
 }
 @media only screen and (max-width: 630px) {
   .searchimage{
@@ -878,6 +889,9 @@ code {
   }
   .profile-card{
     width: 300px;
+  }
+  .profile-room-grid{
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   }
 }
 .navbar-notice{
@@ -1259,4 +1273,49 @@ margin-left: 25px !important;
   overflow: auto;
   box-sizing: border-box;
   max-width: 70%;
+}
+.add-room-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #a7f5cf;
+  border-radius: 35px;
+}
+.add-room{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.room-radio{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 250px;
+}
+.room-radio-row{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+.radio-width{
+  max-width: 30px;
+}
+.room-admin-make{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+.room-admins{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
 }

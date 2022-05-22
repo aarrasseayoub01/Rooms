@@ -214,16 +214,16 @@ export default function Feed() {
                     <div className="room-hide">
                       <div className="add-rooms">
                         <div className="add-rooms-button">
-                          <MdAdd />
-                          <h5>Add a Room</h5>
+                          <Link to="../newroom" className="add-rooms-button">
+                            <MdAdd />
+                            <h5>Add a Room</h5>
+                          </Link>
                         </div>
                       </div>
                       <div className="my-rooms">
-                        <Link className="my-rooms" to="../room">
-                          <div className="mini-room">
-                            <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" />
-                            <h5>Room1</h5>
-                          </div>
+                        <Link className="mini-room" to="../room">
+                          <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" />
+                          <h5>Room1</h5>
                         </Link>
                       </div>
                     </div>

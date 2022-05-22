@@ -301,19 +301,7 @@ export default function Room() {
                     </div>
                     <div className="modal-form"> 
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Profile :</h3>
-                            {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                                ? <img className="profileimage" src={user.picture} alt="Profile image"/>
-                                : <img className="profileimage" src={"http://localhost:5000/images/" + (profPic1!==""?profPic1:user.picture)} alt="Profile image"/>
-                            }
-                            <label>
-                                <BsCardImage className="upload-image"/>
-                                <input type="file" style={{display: "none"}} name="myImage" onChange={(e) => setProfPic(e.target.files[0])}/>
-                            </label>
-                        </div>
-                        <div className="flex-row">
                             <h3 style={{width: "200px"}}>Cover :</h3>
-                            {/* <img src={"http://localhost:5000/images/" +(coverPic1!==""?coverPic1:user.cover)} alt="Cover Image" width="100px" /> */}
                             {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
                                 ? <img src={user.cover} width="100px" alt="Cover image"/>
                                 : <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:user.cover)} width="100px" alt="Cover image"/>
@@ -327,16 +315,8 @@ export default function Room() {
                     <h2>Edit Profile</h2>
                     <form className="modal-form">
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Username :</h3>
+                            <h3 style={{width: "250px"}}>Room Name :</h3>
                             <input className="login-input" placeholder={user.username} ref={userName} />
-                        </div>
-                        <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Email :</h3>
-                            <input className="login-input" placeholder={user.email} ref={email} />
-                        </div>
-                        <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Password :</h3>
-                            <input className="login-input" type="password" placeholder="Password" ref={password} />
                         </div>
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Description :</h3>
