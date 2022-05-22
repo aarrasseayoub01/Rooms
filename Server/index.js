@@ -6,7 +6,8 @@ import postRoutes from './routes/posts.js';
 import userRoutes from './routes/user.js';
 import msgRoutes from './routes/message.js';
 import convRoutes from './routes/conversation.js';
-import dotenv from "dotenv"
+import roomRoutes from './routes/room.js';
+import roomPostRoutes from './routes/roomPosts.js';
 import multer from "multer"
 import path from "path";
 import {fileURLToPath} from 'url';
@@ -43,6 +44,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/msg", msgRoutes)
 app.use("/api/conv", convRoutes)
+app.use("/api/room", roomRoutes)
+app.use("/api/roompost", roomPostRoutes)
 
 const CONNECTION_URL= 'mongodb://localhost:27017';
 // const CONNECTION_URL = process.env.MONGO_DB;
