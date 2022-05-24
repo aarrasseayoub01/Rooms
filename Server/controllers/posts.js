@@ -61,8 +61,7 @@ export const myPost = async (req, res) => {
           return PostMessage.find({ sharer: friendId, userId:{ $nin: fPost1} });
         })
       );
-      console.log(friendPosts)
-      console.log(friendPosts1)
+      
       const posts = userPosts.concat(friendPosts.flat())
       const posts1= posts.concat(friendPosts1.flat())
       const posts2= posts1.concat(userPosts1)
@@ -100,7 +99,6 @@ export const myPost = async (req, res) => {
     try {
       const post = await PostMessage.findById(req.params.id);
       if (post.userId === req.body.userId) {
-        console.log("after")
         await post.deleteOne();
         res.status(200).json("the post has been deleted");
       } else {

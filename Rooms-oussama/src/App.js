@@ -37,6 +37,12 @@ export default function App() {
       <PostPage id={id} />
     )
   }
+  function HandleRoom() {
+    let { id } = useParams();
+    return(
+      <Room id={id} />
+    )
+  }
 
     return(
     <BrowserRouter>
@@ -55,8 +61,8 @@ export default function App() {
           <Route path="/posts/:id" element={user
               ? <HandlePost />
               : <Login />} />
-          <Route path="/room" element={user
-              ? <Room />
+          <Route path="/room/:id" element={user
+              ? <HandleRoom />
               : <Login />} />
         {/* </Route> */}
       </Routes>

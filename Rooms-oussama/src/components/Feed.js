@@ -24,6 +24,7 @@ export default function Feed() {
   const [dislikeNotes, setDislikeNotes] = useState([]);
   const [commentNotes, setCommentNotes] = useState([]);
   const [a, setA]=useState(true)
+  const [rooms, setRooms] = useState([])
 
   const { user } = useContext(AuthContext);
   function handleA() {
@@ -56,6 +57,13 @@ export default function Feed() {
   function openRoom(){
     setIsRoomClicked(prev=>!prev)
   }
+
+  const addRoom = async () => {
+    const room = await axios.post("http://localhost:5000/api/room/",{userId:user._id, picture:"https://i.ibb.co/J25RQCT/profile.png", cover:"https://i.ibb.co/MVjMppt/cover.jpg", title: "New Room", desc:"Do what you gotta do", type:"page"})
+    const res = await axios.get("http://localhost:5000/api/room/a/"+user._id)
+      setRooms(res.data)
+    // setRooms(prev=>[...prev, {userId:user._id, picture:"https://i.ibb.co/J25RQCT/profile.png", cover:"https://i.ibb.co/MVjMppt/cover.jpg", title: "New Room", desc:"Do what you gotta do", type:"page"}])
+  }
   //Amener tous les publications du "backend"
   useEffect(() => {
     const fetchPosts = async () => {
@@ -67,6 +75,11 @@ export default function Feed() {
       );
     };
     fetchPosts();
+    const fetchRooms = async () => {
+      const res = await axios.get("http://localhost:5000/api/room/a/"+user._id)
+      setRooms(res.data)
+    }
+    fetchRooms();
     const fetchLikes = async () => {
       const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
       const likeNotif = []
@@ -178,6 +191,24 @@ export default function Feed() {
       }))
     }})
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
+  const roomList = rooms.map(room=> {
+    console.log(room)
+    if(room!==[]){
+    return(
+                      <div className="my-rooms" key={room._id}>
+                        <Link className="my-rooms" to={"../room/"+room._id}>
+                          <div className="mini-room">
+                            <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" />
+                            <h5>{room.title}</h5>
+                          </div>
+                        </Link>
+                      </div>
+    )
+  } else {
+    return null
+  }
+}
+    )
   return(
         <>
             <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
@@ -213,19 +244,12 @@ export default function Feed() {
                   {isRoomClicked &&
                     <div className="room-hide">
                       <div className="add-rooms">
-                        <div className="add-rooms-button">
+                        <div className="add-rooms-button" onClick={addRoom}>
                           <MdAdd />
                           <h5>Add a Room</h5>
                         </div>
                       </div>
-                      <div className="my-rooms">
-                        <Link className="my-rooms" to="../room">
-                          <div className="mini-room">
-                            <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" />
-                            <h5>Room1</h5>
-                          </div>
-                        </Link>
-                      </div>
+                      {roomList}
                     </div>
                   }
                 </div>

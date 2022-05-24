@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 //Creation du tableau de User
 const roomSchema = new mongoose.Schema({
-    Title: String,
+    title: String,
     userId: String,
     desc: String,
     picture: String,

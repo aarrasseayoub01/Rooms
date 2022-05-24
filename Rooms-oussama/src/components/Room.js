@@ -21,7 +21,7 @@ import RoomerCard from "./RoomerCard"
 
 //Presque le meme que "Feed.js"
 
-export default function Room() {
+export default function Room(props) {
     const [isNotifClicked, setIsNotifClicked] = useState(false);
     const [isMsgClicked, setIsMsgClicked] = useState(false);
     const [isChatClicked, setIsChatClicked] = useState(false);
@@ -35,6 +35,7 @@ export default function Room() {
     const [likeNotes, setLikeNotes] = useState([]);
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
+    const [room, setRoom] = useState({})
     const userName = useRef();
     const email = useRef();
     const password = useRef();
@@ -114,6 +115,11 @@ export default function Room() {
     }
     //Manipuler le changement des photo de profil ou de couverture
     useEffect(() => {
+        const fetchRoom = async () => {
+          const res = await axios.get("http://localhost:5000/api/room/"+props.id)
+          setRoom(res.data)
+        }
+        fetchRoom();
         const changeProfPic = async () => {
         if (profPic) {
             const data = new FormData();
@@ -351,16 +357,16 @@ export default function Room() {
             
             <div className="profile-card">
                 <div className="profile-images">
-                    {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                        ? <img className="profile-cover" src={user.cover} alt="Cover image"/>
-                        : <img className="profile-cover" src={"http://localhost:5000/images/" + user.cover} alt="Cover image"/>
+                    {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
+                        ? <img className="profile-cover" src={room.cover} alt="Cover image"/>
+                        : <img className="profile-cover" src={"http://localhost:5000/images/" + room.cover} alt="Cover image"/>
                     }
                 </div>
                 <div className="profile-name1">
-                    <h1>{user.username}</h1>
+                    <h1>{room.title}</h1>
                 </div>
                 <div className="profile-desc">
-                    {user.desc 
+                    {room.desc 
                         ? <div className="edit-desc">
                             <p>{user.desc}</p>
                           </div>
@@ -379,8 +385,8 @@ export default function Room() {
                     <div className="room-admin">
                         <div className="room-admin-card"><h3>Admin</h3></div>
                         <RoomerCard 
-                            img="https://i.ibb.co/MVjMppt/cover.jpg"
-                            title="HAHAHA"
+                            img={room.picture}
+                            title={room.userId}
                         />
                     </div>
                     <div className="room-followers">
@@ -444,7 +450,7 @@ export default function Room() {
                     </div>
                 </div>
             </div>
-            {(user.username === "admin") &&
+            {(room.userId === user._id) &&
             <AddPost />}
             {myPosts}
         </div>
