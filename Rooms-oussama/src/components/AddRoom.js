@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {motion, AnimatePresence} from 'framer-motion'
 import Navbar from "./Navbar";
 import Post from "./Post";
@@ -23,6 +23,9 @@ export default function AddRoom() {
   const [likeNotes, setLikeNotes] = useState([]);
   const [dislikeNotes, setDislikeNotes] = useState([]);
   const [commentNotes, setCommentNotes] = useState([]);
+  const [file,setFile]=useState()
+  const title = useRef()
+  const desc = useRef()
   const { user } = useContext(AuthContext);
 
   //gerer la fenetre des notifications
@@ -56,12 +59,15 @@ export default function AddRoom() {
     const {value, type, checked} = event.target
     setRadioCheck(prev=>(prev==="page" ? "group" : "page"))
   }
+  const handleSubmit = async () => {
+    const room = await axios.post("http://localhost:5000/api/room/",{userId:user._id, cover:coverPic, title: title.current.value, desc:desc.current.value, type:radioCheck})
+
+  }
   //Ajouter un autre admin
   const [addAdmin,setAddAdmin] = useState([<input className="login-input" value={user.username} />]);
   const [input, setInput] = useState([""]);
   function handleInputChange(index2, event){
     setInput(input.map((item, index)=>{
-      console.log(event.target.value)
       if(index===index2){
         return event.target.value;
       } else {
@@ -154,6 +160,20 @@ export default function AddRoom() {
           />
     )
   })
+  const handleUpload = async (e) => {
+    const pic=e.target.files[0]; //Initialiser "pic" avec l'image telecharger depuis la machine
+    setFile(e.target.files[0])
+    const data = new FormData(); //Initialiser "data" par une Forme de donnes
+    const fileName = Date.now() + pic.name; //Initialiser "fileName" par le nom de fichier telecharge
+    data.append("name", fileName);
+    data.append("file", pic);
+    //Ajouter les informations de fichier telecharge a notre "data"
+    try {
+        await axios.post("http://localhost:5000/api/upload", data);
+        //envoyer la donnee vers le "backend" avec "axios" dans le champs "upload"
+      } catch (err) {}
+      setCoverPic(fileName)
+}
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   return(
         <>
@@ -197,10 +217,10 @@ export default function AddRoom() {
                     <div className="modal-form">
                         <div className="flex-row">
                             <h3 style={{width: "200px"}}>Cover :</h3>
-                            <img src={user.cover} width="100px" alt="Cover image"/>
+                            {coverPic !== null && <img src={"http://localhost:5000/images/" +coverPic} width="100px" alt="Cover image"/>}
                             <label>
                                 <BsCardImage className="upload-image"/>
-                                <input type="file" style={{display: "none"}} name="myImage" onChange={(e) => setCoverPic(e.target.files[0])}/>
+                                <input type="file" style={{display: "none"}} name="myImage" onChange={(e) =>  handleUpload(e)}/>
                             </label>
                         </div>
                     </div>
@@ -208,7 +228,7 @@ export default function AddRoom() {
                     <form className="modal-form">
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Room Name :</h3>
-                            <input className="login-input" placeholder="Enter a Name for the Room" />
+                            <input className="login-input" placeholder="Enter a Name for the Room" ref={title}/>
                         </div>
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Admin :</h3>
@@ -254,9 +274,9 @@ export default function AddRoom() {
                         </div>
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Description :</h3>
-                            <input className="login-textarea" type="textarea" placeholder="Description"/>
+                            <input className="login-textarea" type="textarea" placeholder="Description" ref={desc}/>
                         </div>
-                        <input style={{backgroundColor:"white", cursor: "pointer"}} type="submit" value="Add Room" className="add-submit"/>
+                        <input style={{backgroundColor:"white", cursor: "pointer"}} type="submit" value="Add Room" className="add-submit" onClick={handleSubmit}/>
                     </form>
                 </div>
             </div>

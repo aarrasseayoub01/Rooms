@@ -4,7 +4,7 @@ import axios from "axios"
 import { AuthContext } from "../Context/authContext";
 
 
-export default function AddPost() {
+export default function AddPost(props) {
     const desc = useRef()
     const {user} = useContext(AuthContext)
     const [file, setFile] = useState(null); //Mettre un objet null vide dans le "state"
@@ -31,12 +31,17 @@ export default function AddPost() {
             e.preventDefault();
         }
         if(desc.current.value !== "" || picture !== ""){
-            const post = {desc:desc.current.value, userId:user._id, date: new Date()}
+            let post = {}
+            if(props.a==="a"){
+             post = {desc:desc.current.value, userId:user._id,room:props.room, date: new Date()}
+            } else{
+                 post = {desc:desc.current.value, userId:user._id, date: new Date()}
+            }
             if (picture!=="") {
                 post.photo = picture;
             }
             try{
-                await axios.post("http://localhost:5000/api/posts",post);
+                props.a==="a"?await axios.post("http://localhost:5000/api/roompost",post):await axios.post("http://localhost:5000/api/posts",post)
                 //Envoyer le poste vers le "backend", et recharger la page pour que le poste s'affiche
             }catch(err){
                     console.log(err) //En cas d'erreur    
