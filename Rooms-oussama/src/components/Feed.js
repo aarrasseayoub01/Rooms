@@ -23,13 +23,13 @@ export default function Feed() {
   const [likeNotes, setLikeNotes] = useState([]);
   const [dislikeNotes, setDislikeNotes] = useState([]);
   const [commentNotes, setCommentNotes] = useState([]);
-  const [a, setA]=useState(true)
+  // const [a, setA]=useState(true)
   const [rooms, setRooms] = useState([])
 
   const { user } = useContext(AuthContext);
-  function handleA() {
-    setA(prev=>!prev)
-  }
+  // function handleA() {
+  //   setA(prev=>!prev)
+  // }
   //gerer la fenetre des notifications
   function handleNotif() {
     setIsNotifClicked(prev=>!prev)
@@ -48,7 +48,7 @@ export default function Feed() {
   //cacher les fenetres de chat
   function ShutChat(id){
     setChatId(prev=>{
-      const prev2 = prev.filter(x=>x!=id)
+      const prev2 = prev.filter(x=>x!==id)
       return prev2
     })
     if(chatId.length === 0) setIsChatClicked(false)
@@ -163,7 +163,7 @@ export default function Feed() {
               sharer={x.sharer}
               shareDesc={x.shareDesc}
               shareDate={x.shareDate}
-              handleA={handleA}
+              // handleA={handleA}
 
           />
       )
@@ -182,7 +182,7 @@ export default function Feed() {
                 disLike={x.dislikes}
                 comments={x.comments}
                 post={x}
-                handleA={handleA}
+                // handleA={handleA}
                 
             />
         )
@@ -195,7 +195,7 @@ export default function Feed() {
         <div className="my-rooms" key={room._id}>
           <Link className="my-rooms" to={"../room/"+room._id}>
             <div className="mini-room">
-              <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" />
+              <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" alt="" />
               <h5>{room.title}</h5>
             </div>
           </Link>

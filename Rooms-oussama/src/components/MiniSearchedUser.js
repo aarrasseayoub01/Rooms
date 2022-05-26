@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../Context/authContext";
-import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import axios from "axios";
 
 export default function MiniSearchedUser(props) {
@@ -44,29 +43,6 @@ export default function MiniSearchedUser(props) {
     //     }
     // }
     
-    const handleFollow =  async () => {
-        const followingList = user.following;
-        const followersList = getUser(props.id).followers;
-        
-        if(!followingList.includes(props.id)){
-            followingList.push(props.id)
-        } else {
-            var index = followingList.indexOf(props.id)
-            followingList.splice(index,1)
-        }
-        if(!followersList.includes(user._id)){
-            followersList.push(user._id)
-        } else {
-            var index2 = followersList.indexOf(user._id)
-            followersList.splice(index2,1)
-        }
-        
-        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, following: followingList})
-        dispatch({ type: "LOGIN_SUCCESS", payload: {...user, following:followingList}});
-        localStorage.setItem("user", JSON.stringify({...user, following:followingList}));
-        await axios.put(`http://localhost:5000/api/user/${props.id}`, {...getUser(props.id), followers: followersList})
-       
-    } 
     function checkFriendship(id, List1, List2){
         if(List1.includes(id)){
             if(List2.includes(id)){

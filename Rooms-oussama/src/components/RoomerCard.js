@@ -19,8 +19,8 @@ export default function RoomerCard(props) {
         <div className="roomer-card">
             <div>
                 {photo === "https://i.ibb.co/J25RQCT/profile.png"
-                    ? <img className="room-cursor room-card-img" src={photo}/>
-                    : <img className="room-cursor room-card-img" src={"http://localhost:5000/images/" + photo }/>
+                    ? <img className="room-cursor room-card-img" alt="" src={photo}/>
+                    : <img className="room-cursor room-card-img" alt="" src={"http://localhost:5000/images/" + photo }/>
                 }
             </div>
             <div className="room-card-text">

@@ -5,11 +5,10 @@ import Post from "./Post";
 // import { postCall } from "../apiCalls";
 import axios from "axios"
 import { AuthContext } from "../Context/authContext";
-import AddPost from "./AddPost";
-import { MdAdd, MdDelete, MdNotificationsActive } from "react-icons/md";
+import { MdNotificationsActive } from "react-icons/md";
 import Notification from "./Notification";
 import Message from "./Message";
-import { AiFillMessage, AiFillQuestionCircle, AiOutlineMinus, AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
+import { AiFillMessage, AiOutlineClose } from "react-icons/ai";
 import Chatbox from "./Chatbox";
 import { BsCardImage } from "react-icons/bs";
 import MiniSearchedAdmin from "./MiniSearchedAdmin";
@@ -47,7 +46,7 @@ export default function AddRoom() {
   //cacher les fenetres de chat
   function ShutChat(id){
     setChatId(prev=>{
-      const prev2 = prev.filter(x=>x!=id)
+      const prev2 = prev.filter(x=>x!==id)
       return prev2
     })
     if(chatId.length === 0) setIsChatClicked(false)
@@ -69,11 +68,11 @@ export default function AddRoom() {
   const [radioCheck, setRadioCheck] = useState("page");
 
   function handleChange(event) {
-    const {value, type, checked} = event.target
+    // const {value, type, checked} = event.target
     setRadioCheck(prev=>(prev==="page" ? "group" : "page"))
   }
   const handleSubmit = async () => {
-    const room = await axios.post("http://localhost:5000/api/room/",{userId:user._id, cover:coverPic, title: title.current.value, desc:desc.current.value, type:radioCheck})
+  const room = await axios.post("http://localhost:5000/api/room/",{userId:user._id, cover:coverPic, title: title.current.value, desc:desc.current.value, type:radioCheck})
 
   }
   //Ajouter un autre admin

@@ -5,7 +5,6 @@ import { MdNotificationsActive } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Context/authContext";
-import SearchedUser from "./SearchedUser";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import MiniSearchedUser from "./MiniSearchedUser";
@@ -29,7 +28,7 @@ export default function Navbar(props) {
   //Afficher le button de recherche seulement si il y a de texte dans le barre de recherche
   function handleShow(e){
     setThisValue(e)
-    if (e.length!=0){
+    if (e.length!==0){
       setStyle(showStyle)
     } else {
       setStyle(hideStyle)
@@ -67,7 +66,7 @@ export default function Navbar(props) {
             <ul className="navbar-list">
                 <Link to="../">
                   <li className="navbar-li">
-                    <img className="navbar-logo" src={logo} />
+                    <img className="navbar-logo" src={logo} alt="" />
                   </li>
                 </Link>
                 <li className="navbar-searched">
@@ -90,8 +89,8 @@ export default function Navbar(props) {
                     <Link  className="link-username" to="../Profile">
                       <div className="navbar-link">
                         {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                            ? <img className="navbar-profileimage" src={user.picture} />
-                            : <img className="navbar-profileimage" src={"http://localhost:5000/images/" + user.picture} />
+                            ? <img className="navbar-profileimage" src={user.picture} alt="" />
+                            : <img className="navbar-profileimage" src={"http://localhost:5000/images/" + user.picture} alt="" />
                         }
                         <p className="navbar-name">{user.username}</p>
                       </div>

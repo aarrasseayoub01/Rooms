@@ -1,6 +1,5 @@
 import axios from "axios";
 import {React, useState, useEffect } from "react";
-import dummy from "../images/post3.jpg"
 
 export default function RoomCard(props) {
     const [title, setTitle] = useState("")
@@ -16,7 +15,7 @@ export default function RoomCard(props) {
     return(
         <div className="room-card">
             <div>
-                <img className="room-cursor room-card-img" src={"http://localhost:5000/images/" + props.img} />
+                <img className="room-cursor room-card-img" src={"http://localhost:5000/images/" + props.img} alt="" />
             </div>
             <div className="room-card-text">
                 <h3 className="room-cursor" style={{padding: "0px"}}>{title}</h3>

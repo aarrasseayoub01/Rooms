@@ -189,6 +189,8 @@ const dateTime = (date1) => {
           
         }
     }
+    console.log(props)
+    console.log(props.userId)
     const downvote = async () => {
         if(!isLiked){
             if(!isDisliked) {
@@ -375,11 +377,11 @@ const dateTime = (date1) => {
                         }
                     </Link>
                     <div className="post-room-name">
-                        <Link className="post-username" to={"../"+props.userId}> <b>{userName(props.userId)}</b></Link>
+                        <Link className="post-username" to={"../"+props.userId}> <b>{userName(props.userId)+"hh"}</b></Link>
                         {/* <h5><b>{props.room} -</b> <small>{userName(props.userId)}</small></h5> */}
                         <p><small>{dateTime(props.date)}</small></p>
                     </div>
-                    {room.userId.includes(props.userId) && 
+                    {props.room.userId.includes(props.userId) && 
                         <div className="post-edit">
                                 <>
                                     <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
