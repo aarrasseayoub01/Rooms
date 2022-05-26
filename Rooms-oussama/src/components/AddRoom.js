@@ -9,9 +9,10 @@ import AddPost from "./AddPost";
 import { MdAdd, MdDelete, MdNotificationsActive } from "react-icons/md";
 import Notification from "./Notification";
 import Message from "./Message";
-import { AiFillMessage, AiFillQuestionCircle, AiOutlineMinus } from "react-icons/ai";
+import { AiFillMessage, AiFillQuestionCircle, AiOutlineMinus, AiOutlineSearch } from "react-icons/ai";
 import Chatbox from "./Chatbox";
 import { BsCardImage } from "react-icons/bs";
+import MiniSearchedAdmin from "./MiniSearchedAdmin";
 
 export default function AddRoom() {
   const [isNotifClicked, setIsNotifClicked] = useState(false);
@@ -49,6 +50,18 @@ export default function AddRoom() {
     if(chatId.length === 0) setIsChatClicked(false)
   }
 
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+    const res = await axios.get("http://localhost:5000/api/user/allusers");
+    setUsers(
+        res.data.sort((p1, p2) => {
+          return new Date(p2.createdAt) - new Date(p1.createdAt);
+        })
+    )};
+    fetchUsers();
+    }, [])
+
   //radio
   const [radioCheck, setRadioCheck] = useState("page");
 
@@ -58,29 +71,11 @@ export default function AddRoom() {
   }
   //Ajouter un autre admin
   const [addAdmin,setAddAdmin] = useState([<input className="login-input" value={user.username} />]);
-  const [input, setInput] = useState([""]);
-  function handleInputChange(index2, event){
-    setInput(input.map((item, index)=>{
-      console.log(event.target.value)
-      if(index===index2){
-        return event.target.value;
-      } else {
-        return item;
-      }
-    }))
-  }
-  function handleDeleteAdmin(index2){
-    setInput(input.filter((item, index)=>index!==index2))
-    setAddAdmin(addAdmin.filter((item, index)=>index!==index2))
-  }
-  function handleAddAdmin() {
-    setInput(prev=>[...prev, ""])
-    setAddAdmin(prevArray=>[...prevArray, (
-      <div className="room-admins">
-        <input className="login-input" placeholder="User Name" onChange={(event)=>handleInputChange(prevArray.length, event)} value={input[prevArray.length]} />
-        <AiOutlineMinus style={{cursor : "pointer"}} onClick={()=>handleDeleteAdmin(prevArray.length)} />
-      </div>
-    )])
+  const [admins, setAdmins] = useState([user.username]);
+  const [input, setInput] = useState("");
+
+  function handleInputChange(e){
+    setInput(e)
   }
 
   //Amener tous les publications du "backend"
@@ -154,6 +149,25 @@ export default function AddRoom() {
           />
     )
   })
+  function handleSetName(username){
+    (username!==user.username && !admins.includes(username)) && (
+      setAddAdmin(prev=>[...prev, <input className="login-input" value={username} />])
+    )
+    setAdmins(prev=>{
+      !prev.includes(username) && prev.push(username);
+      return prev;
+    })
+    setInput("");
+  }
+  const searchedAdmin = users.map(x=>{
+    return(input!=="" && x.username.toLowerCase().includes(input.toLowerCase()) //Rendre le recherche insensible au majuscules et miniscules
+        ?(<AnimatePresence>
+        <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+            <MiniSearchedAdmin handleSetName={handleSetName} style={{overflowY :"scroll"}} key={x._id} id={x._id} username={x.username} image={x.picture} />
+            </motion.dev>
+        </AnimatePresence>):null)
+    }
+  )
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   return(
         <>
@@ -208,22 +222,19 @@ export default function AddRoom() {
                     <form className="modal-form">
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Room Name :</h3>
-                            <input className="login-input" placeholder="Enter a Name for the Room" />
+                            <input className="login-textarea" placeholder="Enter a Name for the Room" />
                         </div>
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Admin :</h3>
-                            <div className="room-admins">
                               <div className="room-admin-make">
-                                {radioCheck==="group" 
-                                  ? addAdmin
-                                  : <input className="login-input" value={user.username} />
-                                }
-                              </div>
-                              {radioCheck==="group" 
-                                ? <MdAdd size={30} onClick={handleAddAdmin} style={{cursor: "pointer"}} />
-                                : <AiFillQuestionCircle size={30}/>
-                              }
-                            </div>
+                                {addAdmin}
+                                <div className="room-admins">
+                                  <div className="room-admins" style={{flexDirection: "column"}}>
+                                    <input className="login-input" placeholder="User Name" onChange={(e)=>handleInputChange(e.target.value)} value={input} />
+                                    {searchedAdmin}
+                                  </div>
+                                </div>
+                             </div>
                         </div>
                         <div className="flex-row">
                             <h3 style={{width: "200px"}}>Type :</h3>
