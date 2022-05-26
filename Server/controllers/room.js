@@ -10,7 +10,6 @@ export const create = async (req, res) => {
      const newRoom = new  Room({
          title:room.title,
          desc:room.desc,
-         picture:room.picture,
          cover:room.cover,
          userId:room.userId,
          type:room.type,

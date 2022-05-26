@@ -59,10 +59,8 @@ export default function Feed() {
   }
 
   const addRoom = async () => {
-    const room = await axios.post("http://localhost:5000/api/room/",{userId:user._id, picture:"https://i.ibb.co/J25RQCT/profile.png", cover:"https://i.ibb.co/MVjMppt/cover.jpg", title: "New Room", desc:"Do what you gotta do", type:"page"})
     const res = await axios.get("http://localhost:5000/api/room/a/"+user._id)
       setRooms(res.data)
-    // setRooms(prev=>[...prev, {userId:user._id, picture:"https://i.ibb.co/J25RQCT/profile.png", cover:"https://i.ibb.co/MVjMppt/cover.jpg", title: "New Room", desc:"Do what you gotta do", type:"page"}])
   }
   //Amener tous les publications du "backend"
   useEffect(() => {
@@ -192,7 +190,6 @@ export default function Feed() {
     }})
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   const roomList = rooms.map(room=> {
-    console.log(room)
     if(room!==[]){
     return(
                       <div className="my-rooms" key={room._id}>
@@ -243,12 +240,15 @@ export default function Feed() {
                   </div>
                   {isRoomClicked &&
                     <div className="room-hide">
-                      <div className="add-rooms">
-                        <div className="add-rooms-button" onClick={addRoom}>
+                      <Link to="./newroom">
+                      <div className="add-rooms" onClick={addRoom}>
+                        <div className="add-rooms-button">
                           <MdAdd />
                           <h5>Add a Room</h5>
                         </div>
+                        
                       </div>
+                      </Link>
                       {roomList}
                     </div>
                   }

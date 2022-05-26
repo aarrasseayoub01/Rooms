@@ -4,7 +4,6 @@ const roomSchema = new mongoose.Schema({
     title: String,
     userId: String,
     desc: String,
-    picture: String,
     cover: String,
     followers: {
         type: Array,

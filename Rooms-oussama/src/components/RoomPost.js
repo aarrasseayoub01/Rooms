@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck} from "react-icons/ai"
 import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
-import { FiShare } from "react-icons/fi"
 import Comment from "./Comment";
 import { AuthContext } from "../Context/authContext";
 import AddComment from "./AddComment";
@@ -14,7 +13,7 @@ import styled from "styled-components";
 
 
 
-export default function Post(props) {
+export default function RoomPost(props) {
     const showStyle = {display: "flex"}
     const hideStyle = {display: "none"}
     const [users, setUsers] = useState([]);
@@ -25,9 +24,7 @@ export default function Post(props) {
     const [isEdit, setIsEdit] = useState(false);
     const [style, setStyle] = useState(hideStyle);
     const [descValue,setDescValue] = useState(props.desc);
-    const [sharerDescValue,setSharerDescValue] = useState(props.shareDesc);
     const [description,setDescription] = useState(props.desc);
-    const [sharerDescription,setSharerDescription] = useState(props.shareDesc);
     const [likeState, setLikeState] = useState(props.post.likes)
     const [dislikeState, setDislikeState] = useState(props.post.dislikes)
     const [deleted, setDeleted] = useState(false)
@@ -219,7 +216,7 @@ const dateTime = (date1) => {
                 dislikes=dislikes.filter(function(item) {
                     return item[0] !== user.username
                 })
-                await axios.put("http://localhost:5000/api/posts/" + props.id,{...props.post, dislikes:dislikes, likes:likeState} );
+                await axios.put("http://localhost:5000/api/roompost/" + props.id,{...props.post, dislikes:dislikes, likes:likeState} );
                 //Envoyer dans le "backend" une publication dans laquelles l'etat de "like" sont modifees
             }
         }else{
@@ -240,7 +237,7 @@ const dateTime = (date1) => {
             likes=likes.filter(function(item) {
                 return item[0] !== user.username
             })
-        await axios.put("http://localhost:5000/api/posts/" + props.id,{...props.post, likes:likes,dislikes:dislikes} );
+        await axios.put("http://localhost:5000/api/roompost/" + props.id,{...props.post, likes:likes,dislikes:dislikes} );
         //Envoyer dans le "backend" une publication dans laquelles l'etat de "like" sont modifees
         }
     }
@@ -269,9 +266,7 @@ const dateTime = (date1) => {
         if(user._id===props.userId){
         setDescValue(event.target.value) //Rendre la valeur de "input" incontrolle
         } 
-        if(user._id===props.sharer){
-        setSharerDescValue(event.target.value) //Rendre la valeur de "input" incontrolle
-        }
+        
     }
     const handleCheck = async () => {
         
@@ -280,43 +275,21 @@ const dateTime = (date1) => {
         if(user._id===props.userId){
             setDescription(descValue)
             await axios.put(
-                `http://localhost:5000/api/posts/${props.id}`,
+                `http://localhost:5000/api/roompost/${props.id}`,
                 {...props.post, desc: descValue}
             )
-        } else{
-            if(user._id===props.sharer){
-                setSharerDescription(sharerDescValue)
-                await axios.put(
-                    `http://localhost:5000/api/posts/${props.id}`,
-                    {...props.post, shareDesc: sharerDescValue}
-                )
-            }
-        }
+        } 
     }
 
-    const sharePost = async (e) => {
-        const post = {desc:props.desc, userId:props.userId, date: props.date, photo: props.img,room:props.room, sharer:user._id, shareDate:new Date(), shareDesc:desc.current.value}
-        try{
-            await axios.post("http://localhost:5000/api/posts",post);
-            //Envoyer le poste vers le "backend", et recharger la page pour que le poste s'affiche
-        }catch(err){
-                console.log(err) //En cas d'erreur    
-        }
-        setIsOpen(false)
-        
-    }
+    
     const handleDeletePost = async () => {
         if(user._id===props.userId){
-        await axios.delete(`http://localhost:5000/api/posts/${props.id}`, {data:{userId:user._id}})
-        } else{
-            if(user._id===props.sharer){
-                await axios.delete(`http://localhost:5000/api/posts/${props.id}`, {data:{userId:props.userId}})
-            }
-        }
+        await axios.delete(`http://localhost:5000/api/roompost/${props.id}`, {data:{userId:user._id}})
+        } 
         //Envoyer dans le "backend" une publication dans laquelles les commentaires sont modifees
         setDeleted(!deleted);
     }
-    const postStyle = (props.sharer!==undefined && props.sharer.length!==0) ? {margin: "10px", padding : "20px", border: "1px solid black", borderRadius: "10px"} : {}
+    const postStyle = {}
     if(!deleted){
     return(
           <div className="post">
@@ -377,9 +350,7 @@ const dateTime = (date1) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="div-submit">
-                            <input className="add-submit" value="Share" type="submit" onClick={sharePost} style={{padding: "10px", cursor:"pointer"}}/>
-                        </div>
+                        
                     </div>
                 </ModalContent>
               </motion.dev>
@@ -387,51 +358,7 @@ const dateTime = (date1) => {
                 </StyledModal>
               </Modal>
 
-            <div>
-              {props.sharer!==undefined && props.sharer.length!==0 &&
-                (
-                  <>
-                    <div className="post-grid">
-                        <Link className="comment-username" to={"../"+props.sharer}>
-                            {userImg(props.sharer)==="https://i.ibb.co/J25RQCT/profile.png" 
-                                ? <img className="profileimage" src={userImg(props.sharer)} alt="User Profile"/>
-                                : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.sharer)} alt="User Profile"/>
-                            }
-                        </Link>
-                        <div className="post-room-name">
-                            <Link className="post-username" to={"../"+props.sharer}> <b>{userName(props.sharer)}</b></Link>
-                            {/* <h5><b>{props.room} -</b> <small>{userName(props.userId)}</small></h5> */}
-                            <p><small>{dateTime(props.shareDate)}</small></p>
-                        </div>
-                        {(user._id === props.userId || user._id===props.sharer) && 
-                            <div className="post-edit">
-                                <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
-                                <div style={style} className="post-edit-buttons">
-                                    <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
-                                    <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                  
-                    <div className="post-desc">
-                        {isEdit && (
-                            <div className="edit-desc">
-                                <textarea
-                                    className="edit-description" 
-                                    value={sharerDescValue} 
-                                    onChange={(event)=>handleChange(event)}
-                                />
-                                <AiOutlineClose onClick={handleEditFalse} className="post-like"/>
-                                <AiOutlineCheck onClick={handleCheck} className="post-like"/>
-                            </div>
-                        )}
-                        {!isEdit && <p className="description-content">{sharerDescription}</p>}
-                    </div>
-                  </>
-                )
-              }
-            </div>
+            
             <div>
                 <div style={postStyle}>
                 <div className="orig-post">
@@ -454,7 +381,7 @@ const dateTime = (date1) => {
                     </div>
                     {user._id === props.userId && 
                         <div className="post-edit">
-                            {props.sharer!==undefined && props.sharer.length===0 && 
+                            
                                 <>
                                     <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
                                     <div style={style} className="post-edit-buttons">
@@ -462,12 +389,11 @@ const dateTime = (date1) => {
                                         <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
                                     </div>
                                 </>
-                            }
+                            
                         </div>
                     }
                 </div>
-                {props.sharer!==undefined && props.sharer.length===0 
-                ?(
+                
                     <div className="post-desc">
                         {isEdit && (
                             <div className="edit-desc">
@@ -482,39 +408,16 @@ const dateTime = (date1) => {
                         )}
                         {!isEdit && <p className="description-content">{description}</p>}
                     </div>
-                )
-                :(
-                    <p className="description-content">{props.desc}</p>
-                )}
+                
+                
                 <div>
                     {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post image" />}
                     {/* <img src="https://i.ibb.co/J25RQCT/profile.png" /> */}
                 </div>
             </div>
                 <div className="post-interact">
-                    {props.sharer!==""
-                        ? (
-                            <div className="post-rating">
-                                {vote >=0 
-                                    ? <AiFillLike className="post-like"/>
-                                    : <AiFillDislike className="post-like" />
-                                }
-                                <small>{props.like.length+props.disLike.length} Roomers</small>
-                                <small style={{width: "120%"}}>{props.comments.length} comments</small>
-                            </div>
-                        )
-                        : (
-                            <div className="post-rating">
-                                {vote >=0 
-                                    ? <AiFillLike className="post-like"/>
-                                    : <AiFillDislike className="post-like" />
-                                }
-                                <small>{roomers} Roomers</small>
-                                <small>{props.comments.length} comments</small>
-                            </div>
-                        )
-                    }
-                    {props.sharer!==undefined && props.sharer.length===0 &&(
+                   
+                    
                     <div className="post-rate">
                         <div>
                             {isLiked
@@ -533,43 +436,12 @@ const dateTime = (date1) => {
                                 <small className="hidable" style={{marginLeft:"5px"}}> comments</small>
                             </div>
                         </div>
-                        <div className="hover-cursor">
-                            <div onClick={openModal} className="hover-background">
-                                <FiShare />
-                                <small className="hidable" style={{marginLeft:"5px"}}>share</small>
-                            </div>
-                        </div>
+                        
                     </div>
-                    )}
+                    
                 </div>
                 </div>
-                {props.sharer!==undefined && props.sharer.length!==0 &&(
-                    <div className="post-rate">
-                        <div>
-                            {isLiked
-                                ? <AiFillLike onClick={()=>upvote()} className="post-like"/>
-                                : <AiOutlineLike onClick={()=>upvote()} className="post-like"/>
-                            }
-                            <small>{vote}</small>
-                            {isDisliked
-                                ? <AiFillDislike onClick={()=>downvote()} className="post-like"/>
-                                : <AiOutlineDislike onClick={()=>downvote()} className="post-like"/>
-                            }
-                        </div>
-                        <div onClick={handlecomment}>
-                            <div style={{cursor: "pointer"}} className="hover-background">
-                                <BiComment />
-                                <small className="hidable" style={{marginLeft:"5px"}}> comments</small>
-                            </div>
-                        </div>
-                        <div className="hover-cursor">
-                            <div onClick={openModal} className="hover-background">
-                                <FiShare />
-                                <small className="hidable" style={{marginLeft:"5px"}}>share</small>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                
                 {comment && 
                 <div className="comment">
                     <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div>

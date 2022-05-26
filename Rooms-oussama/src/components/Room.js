@@ -4,7 +4,7 @@ import {motion, AnimatePresence} from 'framer-motion'
 import Navbar from "./Navbar"
 import { AiFillEdit, AiFillMessage, AiOutlineClose } from "react-icons/ai"
 import RoomCard from "./RoomCard"
-import Post from "./Post"
+import RoomPost from "./Post"
 import { Rooms } from "../dummyData"
 import axios from "axios"
 import { AuthContext } from "../Context/authContext"
@@ -36,9 +36,8 @@ export default function Room(props) {
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
     const [room, setRoom] = useState({})
-    const userName = useRef();
-    const email = useRef();
-    const password = useRef();
+    const [a, setA] = useState(1)
+    const title = useRef();
     const desc = useRef();
 
     
@@ -86,6 +85,7 @@ export default function Room(props) {
                         title={x.roomTitle}
                         roomers={x.roomers}
                         className="profile-col"
+                        userId={'6287a76fd99dfbd74943b195'}
                     />
                 )
             }
@@ -100,6 +100,7 @@ export default function Room(props) {
                         img={x.roomImg}
                         title={x.roomTitle}
                         roomers={x.roomers}
+                        userId={x.userId}
                         className="profile-col"
                     />
                 )
@@ -107,19 +108,26 @@ export default function Room(props) {
         }
     })
     
+
+    
     const handleChange = async () => {
-        dispatch({ type: "LOGIN_SUCCESS", payload: {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}});
-        localStorage.setItem("user", JSON.stringify({...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}));
-        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)})
+      if(room._id!==undefined){
+
+        await axios.put(`http://localhost:5000/api/room/${room._id}`, {...room, cover:(coverPic1!==""?coverPic1:room.cover),title:(title.current.value!==""?title.current.value:room.title), desc:(desc.current.value!==""?desc.current.value:room.desc)})
+      }
         //Modifier les donnees d'utilisateur
     }
     //Manipuler le changement des photo de profil ou de couverture
     useEffect(() => {
+         
         const fetchRoom = async () => {
           const res = await axios.get("http://localhost:5000/api/room/"+props.id)
           setRoom(res.data)
+          setA(0)
         }
-        fetchRoom();
+        if(a===1){
+        fetchRoom()
+        }
         const changeProfPic = async () => {
         if (profPic) {
             const data = new FormData();
@@ -153,16 +161,17 @@ export default function Room(props) {
         }
         changeCoverPic();
         const fetchPosts = async () => {
-        const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+        const res = await axios.get("http://localhost:5000/api/roompost/posts/" + room._id);
         setPosts(
             res.data.sort((p1, p2) => {
               // return new Date(p2.date) - new Date(p1.date);
-              return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
+              return (new Date(p2.date) - new Date(p1.date));
             })
         );
         };
+        if(room._id!==undefined){
         fetchPosts();
-        
+        }
           const fetchLikes = async () => {
             const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
             const likeNotif = []
@@ -202,7 +211,7 @@ export default function Room(props) {
             );
           };
           fetchComments();
-    }, [user._id, profPic, coverPic]);
+    }, [user._id, profPic, coverPic, room]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
@@ -231,7 +240,7 @@ export default function Room(props) {
         Array.isArray(x)?x=x[0]:x=x
 
         return(
-           <Post 
+           <RoomPost 
                 key={x._id}
                 id={x._id}
                 desc={x.desc}
@@ -245,9 +254,7 @@ export default function Room(props) {
                 vote={x.likeCount}
                 comments={x.comments}
                 post={x}
-                sharer={x.sharer}
-                shareDesc={x.shareDesc}
-                shareDate={x.shareDate}
+                
                 />
     )})
 
@@ -308,9 +315,9 @@ export default function Room(props) {
                     <div className="modal-form"> 
                         <div className="flex-row">
                             <h3 style={{width: "200px"}}>Cover :</h3>
-                            {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                                ? <img src={user.cover} width="100px" alt="Cover image"/>
-                                : <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:user.cover)} width="100px" alt="Cover image"/>
+                            {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
+                                ? <img src={"http://localhost:5000/images/" +room.cover} width="100px" alt="Cover image"/>
+                                : room.cover!==undefined && <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:room.cover)} width="100px" alt="Cover image"/>
                             }
                             <label>
                                 <BsCardImage className="upload-image"/>
@@ -322,7 +329,7 @@ export default function Room(props) {
                     <form className="modal-form">
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Room Name :</h3>
-                            <input className="login-input" placeholder={user.username} ref={userName} />
+                            <input className="login-input" placeholder={room.title} ref={title} />
                         </div>
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Description :</h3>
@@ -339,7 +346,7 @@ export default function Room(props) {
                 <div className="profile-images">
                     {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
                         ? <img className="profile-cover" src={room.cover} alt="Cover image"/>
-                        : <img className="profile-cover" src={"http://localhost:5000/images/" + room.cover} alt="Cover image"/>
+                        : room.cover!==undefined && <img className="profile-cover" src={"http://localhost:5000/images/" + room.cover} alt="Cover image"/>
                     }
                 </div>
                 <div className="profile-name1">
@@ -365,8 +372,9 @@ export default function Room(props) {
                     <div className="room-admin">
                         <div className="room-admin-card"><h3>Admin</h3></div>
                         <RoomerCard 
-                            img={room.picture}
-                            title={room.userId}
+                            img={room.cover}
+                            title={room.title}
+                            userId={room.userId}
                         />
                     </div>
                     <div className="room-followers">
@@ -374,55 +382,7 @@ export default function Room(props) {
                         <div className="profile-room-grid">
                             {roomCards.length===0
                                 ? (
-                                    <>
-                                    <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA2"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA3"
-                            />
-                            <RoomerCard 
-                                img="https://i.ibb.co/MVjMppt/cover.jpg"
-                                title="HAHAHA4"
-                            /></>
+                                    <div></div>
                                 )
                                 : <h1 className="how-empty">How Empty</h1>
                             }
@@ -431,7 +391,7 @@ export default function Room(props) {
                 </div>
             </div>
             {(room.userId === user._id) &&
-            <AddPost />}
+            <AddPost a={"a"} room={room._id}/>}
             {myPosts}
         </div>
         </motion.dev>
