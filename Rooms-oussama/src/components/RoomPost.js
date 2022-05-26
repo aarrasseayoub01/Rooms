@@ -146,7 +146,7 @@ const dateTime = (date1) => {
                     return prev
                 })
                 likes.push([user.username,props.id, new Date()])
-                await axios.put("http://localhost:5000/api/posts/" + props.id,{...props.post, likes:likes, dislikes:dislikeState} );
+                await axios.put("http://localhost:5000/api/roompost/" + props.id,{...props.post, likes:likes, dislikes:dislikeState} );
                 //Envoyer dans le "backend" une publication dans laquelles l'etat de "like" sont modifees
 
             }else{
@@ -162,7 +162,7 @@ const dateTime = (date1) => {
                 likes=likes.filter((item) =>{
                     return item[0] !== user.username
                 })
-                await axios.put("http://localhost:5000/api/posts/" + props.id,{...props.post, likes:likes, dislikes:dislikeState} );
+                await axios.put("http://localhost:5000/api/roompost/" + props.id,{...props.post, likes:likes, dislikes:dislikeState} );
                 //Envoyer dans le "backend" une publication dans laquelles l'etat de "like" sont modifees
 
             }
@@ -184,7 +184,7 @@ const dateTime = (date1) => {
                 dislikes= dislikes.filter(function(item) {
                     return item[0] !== user.username
                 })
-            await axios.put("http://localhost:5000/api/posts/" + props.id,{...props.post, likes:likes,dislikes:dislikes} );
+            await axios.put("http://localhost:5000/api/roompost/" + props.id,{...props.post, likes:likes,dislikes:dislikes} );
             //Envoyer dans le "backend" une publication dans laquelles l'etat de "like" sont modifees
           
         }
@@ -200,7 +200,7 @@ const dateTime = (date1) => {
                     return prev
                 })
                 dislikes.push([user.username,props.id, new Date()])
-                await axios.put("http://localhost:5000/api/posts/" + props.id,{...props.post, dislikes:dislikes, likes:likeState} );
+                await axios.put("http://localhost:5000/api/roompost/" + props.id,{...props.post, dislikes:dislikes, likes:likeState} );
                 //Envoyer dans le "backend" une publication dans laquelles l'etat de "like" sont modifees
 
             }else{
@@ -293,6 +293,8 @@ const dateTime = (date1) => {
     if(!deleted){
     return(
           <div className="post">
+                              
+
                <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -382,13 +384,13 @@ const dateTime = (date1) => {
                     {user._id === props.userId && 
                         <div className="post-edit">
                             
-                                <>
+                            
                                     <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
                                     <div style={style} className="post-edit-buttons">
                                         <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
                                         <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
                                     </div>
-                                </>
+                                
                             
                         </div>
                     }
@@ -415,6 +417,7 @@ const dateTime = (date1) => {
                     {/* <img src="https://i.ibb.co/J25RQCT/profile.png" /> */}
                 </div>
             </div>
+            
                 <div className="post-interact">
                    
                     

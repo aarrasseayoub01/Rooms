@@ -4,7 +4,7 @@ import {motion, AnimatePresence} from 'framer-motion'
 import Navbar from "./Navbar"
 import { AiFillEdit, AiFillMessage, AiOutlineClose } from "react-icons/ai"
 import RoomCard from "./RoomCard"
-import RoomPost from "./Post"
+import RoomPost from "./RoomPost"
 import { Rooms } from "../dummyData"
 import axios from "axios"
 import { AuthContext } from "../Context/authContext"
