@@ -9,7 +9,7 @@ import AddPost from "./AddPost";
 import { MdAdd, MdDelete, MdNotificationsActive } from "react-icons/md";
 import Notification from "./Notification";
 import Message from "./Message";
-import { AiFillMessage, AiFillQuestionCircle, AiOutlineMinus, AiOutlineSearch } from "react-icons/ai";
+import { AiFillMessage, AiFillQuestionCircle, AiOutlineMinus, AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import Chatbox from "./Chatbox";
 import { BsCardImage } from "react-icons/bs";
 import MiniSearchedAdmin from "./MiniSearchedAdmin";
@@ -156,9 +156,18 @@ export default function AddRoom() {
           />
     )
   })
+  function handleDelete(username){
+    setAdmins(admins.filter(x=>x!==username));
+    setAddAdmin(addAdmin.filter(x=>x.props.value!==username))
+  }
   function handleSetName(username){
     (username!==user.username && !admins.includes(username)) && (
-      setAddAdmin(prev=>[...prev, <input className="login-input" value={username} />])
+      setAddAdmin(prev=>[...prev,(
+        <div className="addedAdmin">
+          <input className="login-input" id="addedAdmin" value={username} />
+          <AiOutlineClose style={{cursor :"pointer"}} onClick={()=>handleDelete(username)} />
+        </div>
+      )])
     )
     setAdmins(prev=>{
       !prev.includes(username) && prev.push(username);
@@ -230,7 +239,7 @@ export default function AddRoom() {
                 </div>
                 <div className="add-room-page">
                     <div className="modal-form">
-                        <div className="flex-row">
+                        <div className="flex-row" style={{justifyContent :"center"}}>
                             <h3 style={{width: "200px"}}>Cover :</h3>
                             {coverPic !== null && <img src={"http://localhost:5000/images/" +coverPic} width="100px" alt="Cover image"/>}
                             <label>
@@ -248,16 +257,19 @@ export default function AddRoom() {
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Admin :</h3>
                               <div className="room-admin-make">
-                                {addAdmin}
-                                <div className="room-admins">
+                                {radioCheck === "group" 
+                                  ? addAdmin
+                                  : <input className="login-input" value={user.username} />
+                                }
+                                {radioCheck === "group" && <div className="room-admins">
                                   <div className="room-admins" style={{flexDirection: "column"}}>
                                     <input className="login-input" placeholder="User Name" onChange={(e)=>handleInputChange(e.target.value)} value={input} />
                                     {searchedAdmin}
                                   </div>
-                                </div>
+                                </div>}
                              </div>
                         </div>
-                        <div className="flex-row">
+                        <div className="flex-row" style={{gap: "100px"}}>
                             <h3 style={{width: "200px"}}>Type :</h3>
                             <div className="room-radio">
                                 <div className="room-radio-row">
@@ -284,7 +296,7 @@ export default function AddRoom() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex-row">
+                        <div className="flex-row" style={{gap: "50px"}}>
                             <h3 style={{width: "250px"}}>Description :</h3>
                             <input className="login-textarea" type="textarea" placeholder="Description" ref={desc}/>
                         </div>

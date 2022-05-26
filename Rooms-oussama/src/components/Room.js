@@ -246,7 +246,7 @@ export default function Room(props) {
                 desc={x.desc}
                 img={x.photo}
                 date={x.date}
-                userId={x.userId}
+                userId={x.userId[0]}
                 room={x.room}
                 like={x.likes}
                 disLike={x.dislikes}
@@ -372,7 +372,6 @@ export default function Room(props) {
                     <div className="room-admin">
                         <div className="room-admin-card"><h3>Admin</h3></div>
                         <RoomerCard 
-                            img={room.cover}
                             title={room.title}
                             userId={room.userId}
                         />

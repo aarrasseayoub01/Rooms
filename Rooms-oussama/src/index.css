@@ -75,8 +75,7 @@ code {
   padding: 10px;
   margin: 10px 10%;
   text-indent: 10px;
-  width: 100%;
-  max-width: 250px;
+  width: 250px;
   box-sizing: border-box;
 }
 .login-submit{
@@ -166,6 +165,7 @@ code {
   width: 125px;
 }
 .searched-username{
+  cursor: pointer;
   padding: 0;
   font-weight: 700;
   font-size: 20px;
@@ -570,7 +570,7 @@ code {
 .flex-row{
   display: flex; 
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
   width: 100%;
 }
@@ -765,6 +765,10 @@ code {
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+.add-rooms-link{
+  text-decoration: none;
+  color: #000;
 }
 .add-rooms-button{
   display: flex;
@@ -1342,4 +1346,10 @@ margin-left: 25px !important;
   width: 100%;
   max-height: 100px;
   z-index: 100;
+}
+.addedAdmin{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
 }

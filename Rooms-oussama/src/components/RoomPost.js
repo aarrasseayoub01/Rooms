@@ -368,7 +368,7 @@ const dateTime = (date1) => {
                     }
                 </div>
                 <div className="post-grid">
-                    <Link className="comment-username" to={"../"+props.userId}>
+                    <Link className="comment-username" to={"../"+props.userId}> 
                         {userImg(props.userId)==="https://i.ibb.co/J25RQCT/profile.png" 
                             ? <img className="profileimage" src={userImg(props.userId)} />
                             : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId)} />
@@ -379,9 +379,8 @@ const dateTime = (date1) => {
                         {/* <h5><b>{props.room} -</b> <small>{userName(props.userId)}</small></h5> */}
                         <p><small>{dateTime(props.date)}</small></p>
                     </div>
-                    {user._id === props.userId && 
+                    {room.userId.includes(props.userId) && 
                         <div className="post-edit">
-                            
                                 <>
                                     <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
                                     <div style={style} className="post-edit-buttons">
@@ -412,7 +411,6 @@ const dateTime = (date1) => {
                 
                 <div>
                     {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post image" />}
-                    {/* <img src="https://i.ibb.co/J25RQCT/profile.png" /> */}
                 </div>
             </div>
                 <div className="post-interact">

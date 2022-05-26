@@ -29,7 +29,7 @@ export default function Feed() {
   const { user } = useContext(AuthContext);
   function handleA() {
     setA(prev=>!prev)
-}
+  }
   //gerer la fenetre des notifications
   function handleNotif() {
     setIsNotifClicked(prev=>!prev)
@@ -191,20 +191,20 @@ export default function Feed() {
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   const roomList = rooms.map(room=> {
     if(room!==[]){
-    return(
-                      <div className="my-rooms" key={room._id}>
-                        <Link className="my-rooms" to={"../room/"+room._id}>
-                          <div className="mini-room">
-                            <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" />
-                            <h5>{room.title}</h5>
-                          </div>
-                        </Link>
-                      </div>
-    )
-  } else {
-    return null
+      return(
+        <div className="my-rooms" key={room._id}>
+          <Link className="my-rooms" to={"../room/"+room._id}>
+            <div className="mini-room">
+              <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" />
+              <h5>{room.title}</h5>
+            </div>
+          </Link>
+        </div>
+      )
+    } else {
+      return null
+    }
   }
-}
     )
   return(
         <>
@@ -240,14 +240,14 @@ export default function Feed() {
                   </div>
                   {isRoomClicked &&
                     <div className="room-hide">
-                      <Link to="./newroom">
-                      <div className="add-rooms" onClick={addRoom}>
-                        <div className="add-rooms-button">
-                          <MdAdd />
-                          <h5>Add a Room</h5>
+                      <Link className="add-rooms-link" to="./newroom">
+                        <div className="add-rooms" onClick={addRoom}>
+                          <div className="add-rooms-button">
+                            <MdAdd />
+                            <h5>Add a Room</h5>
+                          </div>
+                          
                         </div>
-                        
-                      </div>
                       </Link>
                       {roomList}
                     </div>

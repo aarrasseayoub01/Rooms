@@ -11,11 +11,12 @@ export default function RoomCard(props) {
         }
         title()
     })
+    
     if(title!==""){
     return(
         <div className="room-card">
             <div>
-                <img className="room-cursor room-card-img" src={props.img} />
+                <img className="room-cursor room-card-img" src={"http://localhost:5000/images/" + props.img} />
             </div>
             <div className="room-card-text">
                 <h3 className="room-cursor" style={{padding: "0px"}}>{title}</h3>
