@@ -102,7 +102,6 @@ const dateTime = (date1) => {
             post={props.post}
         />
     )
-    
     //Detetmine le nom d'utilisateur depuis son idetifiant
     function userName(thisId) {
         for (let i=0;i<users.length;i++){
@@ -264,8 +263,8 @@ const dateTime = (date1) => {
         setIsEdit(false) //Desactiver le mode de modification de texte de la pubication
     }
     function handleChange(event) {
-        if(user._id===props.userId){
-        setDescValue(event.target.value) //Rendre la valeur de "input" incontrolle
+        if(props.userId.includes(user._id)){
+            setDescValue(event.target.value) //Rendre la valeur de "input" incontrolle
         } 
         
     }
@@ -273,7 +272,7 @@ const dateTime = (date1) => {
         
         setIsEdit(false)
         //Definir une liste constitues des elements precedents sauf de changement de la valeur de texte du commentaire
-        if(user._id===props.userId){
+        if(props.userId.includes(user._id)){
             setDescription(descValue)
             await axios.put(
                 `http://localhost:5000/api/roompost/${props.id}`,
@@ -284,8 +283,8 @@ const dateTime = (date1) => {
 
     
     const handleDeletePost = async () => {
-        if(user._id===props.userId){
-        await axios.delete(`http://localhost:5000/api/roompost/${props.id}`, {data:{userId:user._id}})
+        if(props.userId.includes(user._id)){
+            await axios.delete(`http://localhost:5000/api/roompost/${props.id}`, {data:{userId:user._id}})
         } 
         //Envoyer dans le "backend" une publication dans laquelles les commentaires sont modifees
         setDeleted(!deleted);
@@ -326,12 +325,12 @@ const dateTime = (date1) => {
                         </div>
                         <div className="modal-wrapper">
                             <div className="modal-grid">
-                                {userImg(props.userId)==="https://i.ibb.co/J25RQCT/profile.png" 
-                                    ? <img className="profileimage" src={userImg(props.userId)} alt="Post User Profile"/>
-                                    : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId)} alt="Post User Profile"/>
+                                {userImg(props.userId[0])==="https://i.ibb.co/J25RQCT/profile.png" 
+                                    ? <img className="profileimage" src={userImg(props.userId[0])} alt="Post User Profile"/>
+                                    : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId[0])} alt="Post User Profile"/>
                                 }
                                 <div className="post-room-name" style={{gap: "20px"}} >
-                                    <b>{userName(props.userId)}</b>
+                                    <b>{userName(props.userId[0])}</b>
                                     <p><small>{dateTime(props.date)}</small></p>
                                 </div>
                             </div>
@@ -371,18 +370,18 @@ const dateTime = (date1) => {
                     }
                 </div>
                 <div className="post-grid">
-                    <Link className="comment-username" to={"../"+props.userId}> 
+                    <Link className="comment-username" to={"../"+props.userId[0]}> 
                         {userImg(props.userId)==="https://i.ibb.co/J25RQCT/profile.png" 
                             ? <img className="profileimage" src={userImg(props.userId)} />
-                            : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId)} />
+                            : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId[0])} />
                         }
                     </Link>
                     <div className="post-room-name">
-                        <Link className="post-username" to={"../"+props.userId}> <b>{userName(props.userId)+"hh"}</b></Link>
+                        <Link className="post-username" to={"../"+props.userId[0]}> <b>{userName(props.userId[0])+"hh"}</b></Link>
                         {/* <h5><b>{props.room} -</b> <small>{userName(props.userId)}</small></h5> */}
                         <p><small>{dateTime(props.date)}</small></p>
                     </div>
-                    {user._id===props.userId && 
+                    {props.userId.includes(user._id) && 
                         <div className="post-edit">
                             
                             
@@ -419,7 +418,14 @@ const dateTime = (date1) => {
             </div>
             
                 <div className="post-interact">
-                   
+                    <div className="post-rating">
+                        {vote >=0 
+                            ? <AiFillLike className="post-like"/>
+                            : <AiFillDislike className="post-like" />
+                        }
+                        <small>{roomers} Roomers</small>
+                        <small style={{width: "120%"}}>{props.comments.length} comments</small>
+                    </div>
                     
                     <div className="post-rate">
                         <div>

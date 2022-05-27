@@ -241,13 +241,13 @@ export default function Room(props) {
         Array.isArray(x)?x=x[0]:x=x
 
         return(
-           <RoomPost 
+          <RoomPost 
                 key={x._id}
                 id={x._id}
                 desc={x.desc}
                 img={x.photo}
                 date={x.date}
-                userId={x.userId[0]}
+                userId={x.userId}
                 room={x.room}
                 like={x.likes}
                 disLike={x.dislikes}
@@ -256,7 +256,7 @@ export default function Room(props) {
                 comments={x.comments}
                 post={x}
                 
-                />
+          />
     )})
 
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
