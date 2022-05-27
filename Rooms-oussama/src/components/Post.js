@@ -338,8 +338,8 @@ const dateTime = (date1) => {
                     <div className="profile-modal">
                         <div className="modal-edit-desc">
                             {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                                ? <img className="profileimage" src={user.picture} />
-                                : <img className="profileimage" src={"http://localhost:5000/images/" + user.picture} />
+                                ? <img className="profileimage" src={user.picture} alt="" />
+                                : <img className="profileimage" src={"http://localhost:5000/images/" + user.picture} alt="" />
                             }
                             <textarea
                                 className="modal-description" 
@@ -363,7 +363,7 @@ const dateTime = (date1) => {
                                 <p className="description-content">{description}</p>
                             </div>
                             <div>
-                                {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post image" />}
+                                {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post" />}
                             </div>
                             <div className="post-interact">
                                 <div className="modal-rating">
@@ -443,8 +443,8 @@ const dateTime = (date1) => {
                 <div className="post-grid">
                     <Link className="comment-username" to={"../"+props.userId}>
                         {userImg(props.userId)==="https://i.ibb.co/J25RQCT/profile.png" 
-                            ? <img className="profileimage" src={userImg(props.userId)} />
-                            : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId)} />
+                            ? <img className="profileimage" src={userImg(props.userId)} alt="" />
+                            : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId)} alt="" />
                         }
                     </Link>
                     <div className="post-room-name">
@@ -487,7 +487,7 @@ const dateTime = (date1) => {
                     <p className="description-content">{props.desc}</p>
                 )}
                 <div>
-                    {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post image" />}
+                    {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post" />}
                     {/* <img src="https://i.ibb.co/J25RQCT/profile.png" /> */}
                 </div>
             </div>

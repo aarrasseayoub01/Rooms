@@ -62,7 +62,7 @@ export default function Room(props) {
     //cacher les fenetres de chat
     function ShutChat(id){
       setChatId(prev=>{
-        const prev2 = prev.filter(x=>x!=id)
+        const prev2 = prev.filter(x=>x!==id)
         return prev2
       })
       if(chatId.length === 0) setIsChatClicked(false)
@@ -211,7 +211,7 @@ export default function Room(props) {
             );
           };
           fetchComments();
-    }, [user._id, profPic, coverPic, room]);
+    }, [user._id, profPic, coverPic, room, a, props.id]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
@@ -236,6 +236,7 @@ export default function Room(props) {
           />
     )
   })
+  console.log(posts)
     const myPosts = posts.map(x=>{
         Array.isArray(x)?x=x[0]:x=x
 
@@ -246,7 +247,7 @@ export default function Room(props) {
                 desc={x.desc}
                 img={x.photo}
                 date={x.date}
-                userId={x.userId}
+                userId={x.userId[0]}
                 room={x.room}
                 like={x.likes}
                 disLike={x.dislikes}
@@ -316,8 +317,8 @@ export default function Room(props) {
                         <div className="flex-row">
                             <h3 style={{width: "200px"}}>Cover :</h3>
                             {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                                ? <img src={"http://localhost:5000/images/" +room.cover} width="100px" alt="Cover image"/>
-                                : room.cover!==undefined && <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:room.cover)} width="100px" alt="Cover image"/>
+                                ? <img src={"http://localhost:5000/images/" +room.cover} width="100px" alt="Cover"/>
+                                : room.cover!==undefined && <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:room.cover)} width="100px" alt="Cover"/>
                             }
                             <label>
                                 <BsCardImage className="upload-image"/>
@@ -345,8 +346,8 @@ export default function Room(props) {
             <div className="profile-card">
                 <div className="profile-images">
                     {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                        ? <img className="profile-cover" src={room.cover} alt="Cover image"/>
-                        : room.cover!==undefined && <img className="profile-cover" src={"http://localhost:5000/images/" + room.cover} alt="Cover image"/>
+                        ? <img className="profile-cover" src={room.cover} alt="Cover"/>
+                        : room.cover!==undefined && <img className="profile-cover" src={"http://localhost:5000/images/" + room.cover} alt="Cover"/>
                     }
                 </div>
                 <div className="profile-name1">
@@ -355,7 +356,7 @@ export default function Room(props) {
                 <div className="profile-desc">
                     {room.desc 
                         ? <div className="edit-desc">
-                            <p>{user.desc}</p>
+                            <p>{room.desc}</p>
                           </div>
                         : <div className="div-submit" style={{marginBottom: "10px"}}>
                             <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
@@ -372,7 +373,6 @@ export default function Room(props) {
                     <div className="room-admin">
                         <div className="room-admin-card"><h3>Admin</h3></div>
                         <RoomerCard 
-                            img={room.cover}
                             title={room.title}
                             userId={room.userId}
                         />

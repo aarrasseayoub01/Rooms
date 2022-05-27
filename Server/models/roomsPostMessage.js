@@ -11,7 +11,7 @@ const roomsPostSchema = new mongoose.Schema({
         type: String,
         default:'',
       },
-    // selectedFile: String,
+    // selectedFile: String, 
     likes: {
         type: Array,
         default: []

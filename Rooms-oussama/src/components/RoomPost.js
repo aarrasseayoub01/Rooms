@@ -4,7 +4,7 @@ import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
 import Comment from "./Comment";
 import { AuthContext } from "../Context/authContext";
-import AddComment from "./AddComment";
+import AddRoomComment from "./AddRoomComment";
 import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
@@ -85,7 +85,7 @@ const dateTime = (date1) => {
     }
     return dateStr
 }
-    
+    console.log(props.comments)
     //Envoyer les commentaires chacune a sa composante avec ses "props"
     const comments = props.comments.map(x=>
         <Comment 
@@ -189,6 +189,7 @@ const dateTime = (date1) => {
           
         }
     }
+    
     const downvote = async () => {
         if(!isLiked){
             if(!isDisliked) {
@@ -370,18 +371,18 @@ const dateTime = (date1) => {
                     }
                 </div>
                 <div className="post-grid">
-                    <Link className="comment-username" to={"../"+props.userId}>
+                    <Link className="comment-username" to={"../"+props.userId}> 
                         {userImg(props.userId)==="https://i.ibb.co/J25RQCT/profile.png" 
                             ? <img className="profileimage" src={userImg(props.userId)} />
                             : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId)} />
                         }
                     </Link>
                     <div className="post-room-name">
-                        <Link className="post-username" to={"../"+props.userId}> <b>{userName(props.userId)}</b></Link>
+                        <Link className="post-username" to={"../"+props.userId}> <b>{userName(props.userId)+"hh"}</b></Link>
                         {/* <h5><b>{props.room} -</b> <small>{userName(props.userId)}</small></h5> */}
                         <p><small>{dateTime(props.date)}</small></p>
                     </div>
-                    {user._id === props.userId && 
+                    {user._id===props.userId && 
                         <div className="post-edit">
                             
                             
@@ -414,7 +415,6 @@ const dateTime = (date1) => {
                 
                 <div>
                     {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post image" />}
-                    {/* <img src="https://i.ibb.co/J25RQCT/profile.png" /> */}
                 </div>
             </div>
             
@@ -448,7 +448,7 @@ const dateTime = (date1) => {
                 {comment && 
                 <div className="comment">
                     <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div>
-                    <AddComment post={props.post} comments={props.comments} handleA={props.handleA}/>
+                    <AddRoomComment post={props.post} comments={props.comments} handleA={props.handleA}/>
                     {props.comments.length!==0 && 
                         comments
                     }
