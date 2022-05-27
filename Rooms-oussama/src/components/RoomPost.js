@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck} from "react-icons/ai"
 import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
-import Comment from "./Comment";
+import RoomComment from "./RoomComment";
 import { AuthContext } from "../Context/authContext";
 import AddRoomComment from "./AddRoomComment";
 import axios from "axios";
@@ -88,7 +88,7 @@ const dateTime = (date1) => {
     console.log(props.comments)
     //Envoyer les commentaires chacune a sa composante avec ses "props"
     const comments = props.comments.map(x=>
-        <Comment 
+        <RoomComment 
             key={x.id}
             id={props.id}
             userId={x.userId}
