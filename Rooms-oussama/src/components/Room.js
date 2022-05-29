@@ -398,7 +398,7 @@ export default function Room(props) {
                     </div>
                 </div>
             </div>
-            {(room.userId === user._id) &&
+            {(room.userId !== undefined) && (room.userId.includes(user._id)) &&
             <AddPost a={"a"} room={room._id}/>}
             {myPosts}
         </div>
