@@ -44,21 +44,21 @@ export const getRooms = async (req, res) => {
       const res = await Room.find()
 
       let room = []
-      const room1 = []
+      let room1 = []
       for(let i=0;i<res.length;i++){
+        for(let j=0;j<res[i].userId.length;j++){
 
-        if(res[i].userId[0]===req.params.userId){
+        if(res[i].userId[j]===req.params.userId){
           
 
           room = await Room.find({userId:res[i].userId});
-          console.log(room)
-          room1.concat(room)
+          room1=[...room1, ...room]
         }
       }
-      
-
-
+    }
+       console.log(room1)
       res.status(200).json(room1);
+
     } catch (err) {
       res.status(500).json(err);
     }

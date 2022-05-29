@@ -24,6 +24,7 @@ export default function AddRoom() {
   const [dislikeNotes, setDislikeNotes] = useState([]);
   const [commentNotes, setCommentNotes] = useState([]);
   const [file,setFile]=useState()
+  const [admin, setAdmin] = useState([]);
   const title = useRef()
   const desc = useRef()
   const { user } = useContext(AuthContext);
@@ -72,7 +73,7 @@ export default function AddRoom() {
     setRadioCheck(prev=>(prev==="page" ? "group" : "page"))
   }
   const handleSubmit = async () => {
-  const room = await axios.post("http://localhost:5000/api/room/",{userId:user._id, cover:coverPic, title: title.current.value, desc:desc.current.value, type:radioCheck})
+  const room = await axios.post("http://localhost:5000/api/room/",{userId:[user._id, ...admin], cover:coverPic, title: title.current.value, desc:desc.current.value, type:radioCheck})
 
   }
   //Ajouter un autre admin
@@ -159,16 +160,21 @@ export default function AddRoom() {
     setAdmins(admins.filter(x=>x!==username));
     setAddAdmin(addAdmin.filter(x=>x.props.value!==username))
   }
-  function handleSetName(username){
-    (username!==user.username && !admins.includes(username)) && (
+  const handleSetName = async (username) => {
+    if(username!==user.username && !admins.includes(username)) {
+      let id = await axios.get("http://localhost:5000/api/user/allusers/");
+      id=id.data.filter(x=>x.username===username)
+      setAdmin(prev=>{
+        return [...prev, id[0]._id]
+      })
       setAddAdmin(prev=>[...prev,(
         <div className="addedAdmin">
           <input className="login-input" id="addedAdmin" value={username} />
           <AiOutlineClose style={{cursor :"pointer"}} onClick={()=>handleDelete(username)} />
         </div>
       )])
-    )
-    setAdmins(prev=>{
+      }
+        setAdmins(prev=>{
       !prev.includes(username) && prev.push(username);
       return prev;
     })
