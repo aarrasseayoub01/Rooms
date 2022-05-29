@@ -212,6 +212,7 @@ export default function Room(props) {
           };
           fetchComments();
     }, [user._id, profPic, coverPic, room, a, props.id]);
+    console.log(room)
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
@@ -363,9 +364,11 @@ export default function Room(props) {
                           </div> 
                     }
                 </div>
-                <label>
-                    <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
-                </label>
+                {/* {room.userId.includes(user._id) ??
+                  <label>
+                      <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
+                  </label>
+                } */}
             </div>
             <div className="profile-rooms">
                 <h1 className="rooms-title">Roomers</h1>

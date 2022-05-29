@@ -66,7 +66,7 @@ export default function MiniSearchedAdmin(props) {
                     : <img className="searchimage" src={"http://localhost:5000/images/" + props.image} alt="User Profile" />
                 }
                 <div className="user-propreties">
-                    <b onClick={()=>props.handleSetName(props.username)} className="searched-username">{props.username}</b>
+                    <b onClick={()=>props.handleSetName(props.username, props.id)} className="searched-username">{props.username}</b>
                     <p>{(user._id===props.id 
                         ? "Your profile"
                         : checkFriendship(props.id, user.following, user.followers)
