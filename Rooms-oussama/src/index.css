@@ -847,7 +847,12 @@ code {
 }
 .div-submit{
   padding: 10px;
-
+}
+.div-submit-post{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 .add-comment-textarea{
   border-radius: 9px;
