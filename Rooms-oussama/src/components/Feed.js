@@ -195,7 +195,7 @@ export default function Feed() {
         <div className="my-rooms" key={room._id}>
           <Link className="my-rooms" to={"../room/"+room._id}>
             <div className="mini-room">
-              <img className="profileimage" src="https://i.ibb.co/J25RQCT/profile.png" alt="" />
+              <img className="profileimage" src={"http://localhost:5000/images/" + room.cover} alt="" />
               <h5>{room.title}</h5>
             </div>
           </Link>
@@ -246,7 +246,6 @@ export default function Feed() {
                             <MdAdd />
                             <h5>Add a Room</h5>
                           </div>
-                          
                         </div>
                       </Link>
                       {roomList}

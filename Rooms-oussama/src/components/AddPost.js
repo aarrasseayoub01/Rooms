@@ -71,7 +71,7 @@ export default function AddPost(props) {
                 </div>
                 
             </div>
-            <div className="div-submit">
+            <div className="div-submit-post">
             <input className="add-submit" value="post" type="submit" onClick={handlePost}/>
             </div>
             </form>

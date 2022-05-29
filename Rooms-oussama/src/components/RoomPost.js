@@ -371,13 +371,13 @@ const dateTime = (date1) => {
                 </div>
                 <div className="post-grid">
                     <Link className="comment-username" to={"../"+props.userId[0]}> 
-                        {userImg(props.userId)==="https://i.ibb.co/J25RQCT/profile.png" 
-                            ? <img className="profileimage" src={userImg(props.userId)} />
+                        {userImg(props.userId[0])==="https://i.ibb.co/J25RQCT/profile.png" 
+                            ? <img className="profileimage" src={userImg(props.userId[0])} />
                             : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId[0])} />
                         }
                     </Link>
                     <div className="post-room-name">
-                        <Link className="post-username" to={"../"+props.userId[0]}> <b>{userName(props.userId[0])+"hh"}</b></Link>
+                        <Link className="post-username" to={"../"+props.userId[0]}> <b>{userName(props.userId[0])}</b></Link>
                         {/* <h5><b>{props.room} -</b> <small>{userName(props.userId)}</small></h5> */}
                         <p><small>{dateTime(props.date)}</small></p>
                     </div>
@@ -456,7 +456,9 @@ const dateTime = (date1) => {
                     <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div>
                     <AddRoomComment post={props.post} comments={props.comments} handleA={props.handleA}/>
                     {props.comments.length!==0 && 
-                        comments
+                        <div className="comment-section">
+                            {comments}
+                        </div>
                     }
                 </div>
                 }

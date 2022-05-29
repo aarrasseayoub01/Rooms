@@ -78,7 +78,7 @@ export default function AddRoom() {
   }
   //Ajouter un autre admin
   const [addAdmin,setAddAdmin] = useState([<input className="login-input" value={user.username} />]);
-  const [admins, setAdmins] = useState([user.username]);
+  const [admins, setAdmins] = useState([user._id]);
   const [input, setInput] = useState("");
 
   function handleInputChange(e){
@@ -156,8 +156,8 @@ export default function AddRoom() {
           />
     )
   })
-  function handleDelete(username){
-    setAdmins(admins.filter(x=>x!==username));
+  function handleDelete(username, id){
+    setAdmins(admins.filter(x=>x!==id));
     setAddAdmin(addAdmin.filter(x=>x.props.value!==username))
   }
   const handleSetName = async (username) => {
@@ -170,7 +170,7 @@ export default function AddRoom() {
       setAddAdmin(prev=>[...prev,(
         <div className="addedAdmin">
           <input className="login-input" id="addedAdmin" value={username} />
-          <AiOutlineClose style={{cursor :"pointer"}} onClick={()=>handleDelete(username)} />
+          <AiOutlineClose style={{cursor :"pointer"}} onClick={()=>handleDelete(username, id)} />
         </div>
       )])
       }

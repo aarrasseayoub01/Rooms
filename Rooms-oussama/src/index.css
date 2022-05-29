@@ -775,7 +775,7 @@ code {
   justify-content: center;
   align-items: center;
   margin: 10px 0;
-  width: 70%;
+  width: 100%;
   height: 30px;
   background-color: #B2FFDA;
   border-radius: 10px;
@@ -787,7 +787,7 @@ code {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 5px;
   width: 100%;
 }
@@ -798,9 +798,11 @@ code {
   padding: 10px;
   border-radius: 10px;
   height: 50px;
+  width: max-content;
   border: 1px solid black;
   color: #000000;
   text-decoration: none;
+  gap: 15px;
 }
 .mini-room:hover{
   background-color: #93e5be;
@@ -820,11 +822,10 @@ code {
 }
 .comment-add{
   background-color: #FFFFFF;
-  margin: 10px 20%;
   border-radius: 9px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  max-width: 400px;
-  max-height: 300px;
+  width: 100%;
+  max-height: 200px;
 }
 .add-comment-title{
   margin: 10px 0px 0px 20px;
@@ -832,10 +833,9 @@ code {
 .add-comment{
   display: flex;
   justify-content: space-between;
-  align-items:baseline;
-  max-width: 300px;
-  min-height: 100px;
-  padding: 5px;
+  align-items:center;
+  width: 100%;
+  min-height: 70px;
 }
 .add-comment-text{
   display: flex;
@@ -843,13 +843,16 @@ code {
 .add-submit{
   border-radius: 10px;
   background-color: #B2FFDA;
-  padding: 1% 5%;
+  padding: 5px 10px;
 }
 .div-submit{
+  padding: 10px;
+}
+.div-submit-post{
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 .add-comment-textarea{
   border-radius: 9px;
@@ -859,7 +862,7 @@ code {
   vertical-align: top;
   box-sizing: border-box;
   width: 100%;
-  min-height: 50px;
+  min-height: 60px;
   background-color: #B2FFDA;
   border: 1px solid;
   font-size: 20px;
@@ -887,6 +890,9 @@ code {
   }
   .feed-rooms{
     max-width: 120px;
+  }
+  .mini-room{
+    max-width: 100px;
   }
   .rooms-banner{
     max-width: 120px;
@@ -1352,4 +1358,8 @@ margin-left: 25px !important;
   justify-content: flex-end;
   align-items: center;
   width: 100%;
+}
+.comment-section{
+  max-height: 200px;
+  overflow-y: scroll;
 }

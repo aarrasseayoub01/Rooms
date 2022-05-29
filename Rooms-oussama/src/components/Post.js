@@ -572,10 +572,12 @@ const dateTime = (date1) => {
                 )}
                 {comment && 
                 <div className="comment">
-                    <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div>
+                    {/* <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div> */}
                     <AddComment post={props.post} comments={props.comments} handleA={props.handleA}/>
                     {props.comments.length!==0 && 
-                        comments
+                        <div className="comment-section">
+                            {comments}
+                        </div>
                     }
                 </div>
                 }
