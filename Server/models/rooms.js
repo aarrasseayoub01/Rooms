@@ -2,7 +2,10 @@ import mongoose from 'mongoose';
 //Creation du tableau de User
 const roomSchema = new mongoose.Schema({
     title: String,
-    userId: String,
+    userId: {
+        type: Array,
+        default: []
+    },
     desc: String,
     cover: String,
     followers: {
