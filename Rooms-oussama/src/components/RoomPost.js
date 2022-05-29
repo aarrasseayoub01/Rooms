@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck} from "react-icons/ai"
 import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
-import Comment from "./Comment";
+import RoomComment from "./RoomComment";
 import { AuthContext } from "../Context/authContext";
-import AddComment from "./AddComment";
+import AddRoomComment from "./AddRoomComment";
 import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
@@ -85,10 +85,10 @@ const dateTime = (date1) => {
     }
     return dateStr
 }
-    
+    console.log(props.comments)
     //Envoyer les commentaires chacune a sa composante avec ses "props"
     const comments = props.comments.map(x=>
-        <Comment 
+        <RoomComment 
             key={x.id}
             id={props.id}
             userId={x.userId}
@@ -188,6 +188,7 @@ const dateTime = (date1) => {
           
         }
     }
+    
     const downvote = async () => {
         if(!isLiked){
             if(!isDisliked) {
@@ -292,6 +293,8 @@ const dateTime = (date1) => {
     if(!deleted){
     return(
           <div className="post">
+                              
+
                <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -380,13 +383,14 @@ const dateTime = (date1) => {
                     </div>
                     {props.userId.includes(user._id) && 
                         <div className="post-edit">
-                                <>
+                            
+                            
                                     <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
                                     <div style={style} className="post-edit-buttons">
                                         <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
                                         <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
                                     </div>
-                                </>
+                                
                             
                         </div>
                     }
@@ -412,6 +416,7 @@ const dateTime = (date1) => {
                     {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post image" />}
                 </div>
             </div>
+            
                 <div className="post-interact">
                     <div className="post-rating">
                         {vote >=0 
@@ -448,8 +453,8 @@ const dateTime = (date1) => {
                 
                 {comment && 
                 <div className="comment">
-                    {/* <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div> */}
-                    <AddComment post={props.post} comments={props.comments} />
+                    <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div>
+                    <AddRoomComment post={props.post} comments={props.comments} handleA={props.handleA}/>
                     {props.comments.length!==0 && 
                         <div className="comment-section">
                             {comments}

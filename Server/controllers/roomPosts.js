@@ -44,13 +44,14 @@ export const myPost = async (req, res) => {
 
   
   export const updatePost = async (req, res) => {
+    
     try {
       const post = await RoomPostMessage.findById(req.params.id);
-      if (post.userId.includes(req.body.userId)) {
+     
+
+      if (post.userId[0] === req.body.userId[0]) {
         await post.updateOne({ $set: req.body });
         res.status(200).json("the post has been updated");
-      } else {
-        res.status(403).json("you can update only your post");
       }
     } catch (err) {
       res.status(500).json(err);
@@ -60,7 +61,8 @@ export const myPost = async (req, res) => {
    export const deletePost = async (req, res) => {
     try {
       const post = await RoomPostMessage.findById(req.params.id);
-      if (post.userId.includes(req.body.userId)) {
+     
+      if (post.userId[0] === req.body.userId) {
         console.log("after")
         await post.deleteOne();
         res.status(200).json("the post has been deleted");
