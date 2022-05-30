@@ -227,6 +227,9 @@ export default function Room(props) {
         return new Date(p2[2]) - new Date(p1.date)
       }
     })
+
+    const [followed, setFollowed] = useState(room.followers!==undefined && room.followers.includes(user._id))
+console.log(followed)
   const testy = ["test"]
   // const roomers = room.userId.map(user=>{
   const roomers = testy.map(user=>{
@@ -273,6 +276,17 @@ export default function Room(props) {
     userId={user}
 />)})}
 
+ const handleFollow = async ()=>{
+   if(!followed){
+     setFollowed(true)
+      await axios.put('http://localhost:5000/api/room/'+room._id, {...room, followers:[...room.followers, user._id]})
+   }else{
+     setFollowed(false)
+     const followers = room.followers.filter(x=>x!==user._id)
+    await axios.put('http://localhost:5000/api/room/'+room._id, {...room, followers:followers})
+
+   }
+ }
   return(
         <>
         {/* <Navbar handleNotif={handleNotif}/> */} 
@@ -366,10 +380,10 @@ export default function Room(props) {
                 <div className="profile-name1">
                     <h1>{room.title}</h1>
                     {(room.userId !== undefined && !room.userId.includes(user._id)) 
-                      ? (room.followers !== undefined && room.followers.includes(user._id) 
-                        ? <AiFillPlusCircle size={30} style={{cursor: "pointer"}} />
-                        : <AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} />
-                      ) 
+                      ? followed
+                        ? <button onClick={handleFollow}><AiFillPlusCircle size={30} style={{cursor: "pointer"}} /></button>
+                        : <button onClick={handleFollow}><AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} /></button>
+                      
                       : (<label>
                             <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
                          </label>
