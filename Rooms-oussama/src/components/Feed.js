@@ -196,7 +196,7 @@ export default function Feed() {
           <Link className="my-rooms" to={"../room/"+room._id}>
             <div className="mini-room">
               <img className="profileimage" src={"http://localhost:5000/images/" + room.cover} alt="" />
-              <h5>{room.title}</h5>
+              <h5 className="roomname-overflow">{room.title}</h5>
             </div>
           </Link>
         </div>

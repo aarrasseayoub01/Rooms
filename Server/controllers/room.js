@@ -27,7 +27,14 @@ export const create = async (req, res) => {
     }
 }
 
-
+export const allRooms = async(req, res) => {
+  try{
+    const allrooms = await Room.find();
+    res.status(200).json(allrooms);
+  } catch(err){
+    res.status(500).json(err);
+  }
+}
 
 export const myRoom = async (req, res) => {
     try {

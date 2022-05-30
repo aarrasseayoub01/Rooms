@@ -10,6 +10,7 @@ import Notification from "./Notification";
 import { AiFillMessage } from "react-icons/ai";
 import Message from "./Message";
 import Chatbox from "./Chatbox";
+import SearchedRoom from "./SearchedRoom";
 
 export default function Searching(props) {
     const [isNotifClicked, setIsNotifClicked] = useState(false);
@@ -20,6 +21,7 @@ export default function Searching(props) {
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
     const [users, setUsers] = useState([]);
+    const [rooms, setRooms] = useState([]);
     const {user}  = useContext(AuthContext);
 
     //gerer la fenetre des notifications
@@ -56,6 +58,14 @@ export default function Searching(props) {
             })
         )};
         fetchUsers();
+        const fetchRooms = async () => {
+          const res = await axios.get("http://localhost:5000/api/room/allrooms");
+          setRooms(
+              res.data.sort((p1, p2) => {
+                return new Date(p2.createdAt) - new Date(p1.createdAt);
+              })
+          )};
+          fetchRooms();
         const fetchLikes = async () => {
             const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
             const likeNotif = []
@@ -128,6 +138,22 @@ export default function Searching(props) {
             </AnimatePresence>):null)
         }
     )
+    const searchedRooms = rooms.map(x=>{
+      return(x.title.toLowerCase().includes(props.userId.toLowerCase()) //Rendre le recherche insensible au majuscules et miniscules
+            ?(<AnimatePresence>
+            <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
+                <SearchedRoom 
+                  key={x._id} 
+                  id={x._id}
+                  title={x.title}
+                  cover={x.cover}
+                  admins={x.userId} 
+                  followers={x.followers}
+                  room={x}
+                />
+                </motion.dev>
+            </AnimatePresence>):null)
+    })
     const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
     return(
         <>
@@ -166,10 +192,10 @@ export default function Searching(props) {
                 <div className="search-div">
                     {searchedUsers}
                 </div>
-                {/* <h2 className="search-title">Rooms</h2>
+                <h2 className="search-title">Rooms</h2>
                 <div className="search-div">
-                    {searchedUsers}
-                </div> */}
+                    {searchedRooms}
+                </div>
             </div>
         </>
     )
