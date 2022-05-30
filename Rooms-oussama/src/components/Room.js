@@ -229,7 +229,6 @@ export default function Room(props) {
     })
 
     const [followed, setFollowed] = useState(room.followers!==undefined && room.followers.includes(user._id))
-console.log(followed)
   const testy = ["test"]
   // const roomers = room.userId.map(user=>{
   const roomers = testy.map(user=>{
