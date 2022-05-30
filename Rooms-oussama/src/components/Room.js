@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import {motion, AnimatePresence} from 'framer-motion'
 
 import Navbar from "./Navbar"
-import { AiFillEdit, AiFillMessage, AiOutlineClose } from "react-icons/ai"
+import { AiFillEdit, AiFillMessage, AiFillPlusCircle, AiOutlineClose, AiOutlinePlusCircle } from "react-icons/ai"
 import RoomCard from "./RoomCard"
 import RoomPost from "./RoomPost"
 import { Rooms } from "../dummyData"
@@ -13,7 +13,7 @@ import Modal from 'react-modal';
 import { BsCardImage } from "react-icons/bs"
 // import { CSSTransition } from 'react-transition-group';
 import styled from "styled-components";
-import { MdNotificationsActive } from "react-icons/md"
+import { MdAdd, MdNotificationsActive, MdOutlineAdd } from "react-icons/md"
 import Notification from "./Notification"
 import Message from "./Message"
 import Chatbox from "./Chatbox"
@@ -365,6 +365,15 @@ export default function Room(props) {
                 </div>
                 <div className="profile-name1">
                     <h1>{room.title}</h1>
+                    {(room.userId !== undefined && !room.userId.includes(user._id)) 
+                      ? (room.followers !== undefined && room.followers.includes(user._id) 
+                        ? <AiFillPlusCircle size={30} style={{cursor: "pointer"}} />
+                        : <AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} />
+                      ) 
+                      : (<label>
+                            <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
+                         </label>
+                    )}
                 </div>
                 <div className="profile-desc">
                     {room.desc 
@@ -376,10 +385,6 @@ export default function Room(props) {
                           </div> 
                     }
                 </div>
-                
-                  <label>
-                      <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
-                  </label>
                 
             </div>
             <div className="profile-rooms">

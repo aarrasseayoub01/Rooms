@@ -533,6 +533,12 @@ code {
   gap: 20px;
   margin-right: -20%;
 }
+.profile-name1{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
 .profile-rooms{
   width: 600px;
   display: flex;
