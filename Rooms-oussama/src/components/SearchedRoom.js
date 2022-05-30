@@ -8,6 +8,7 @@ import axios from "axios";
 export default function SearchedRoom(props) {
     const {user, dispatch} = useContext(AuthContext)
     const [rooms, setRooms] = useState([]);
+    const [followed, setFollowed] = useState(props.followers.includes(user._id));
 
     useEffect(() => {
         const fetchRooms = async () => {
@@ -25,8 +26,8 @@ export default function SearchedRoom(props) {
 
     
     const handleFollow =  async () => {
+        setFollowed(prev=>!prev)
         const followersList = props.followers;
-        
         if(!followersList.includes(user._id)){
             followersList.push(user._id)
         } else {
@@ -75,7 +76,7 @@ export default function SearchedRoom(props) {
                         <>
                             <div className="profile-add">
                                 {!props.admins.includes(user._id) &&
-                                    (!props.followers.includes(user._id)
+                                    (!followed
                                         ? <AiOutlinePlusCircle size={30} onClick={handleFollow}/>
                                         : <AiFillPlusCircle size={30} onClick={handleFollow}/>
                                     )

@@ -228,15 +228,7 @@ export default function Room(props) {
       }
     })
 
-    const [followed, setFollowed] = useState(room.followers!==undefined && room.followers.includes(user._id))
-console.log(followed)
-  const testy = ["test"]
-  // const roomers = room.userId.map(user=>{
-  const roomers = testy.map(user=>{
-    <RoomerCard 
-        userId={user}
-    />
-  })
+  const [followed, setFollowed] = useState(room.followers!==undefined && room.followers.includes(user._id))
   const notif2 = notif1.map(x=>{
     return(
           <Notification 
@@ -279,15 +271,16 @@ console.log(followed)
     )})}
 
  const handleFollow = async ()=>{
-   if(!followed){
-     setFollowed(true)
-      await axios.put('http://localhost:5000/api/room/'+room._id, {...room, followers:[...room.followers, user._id]})
-   }else{
-     setFollowed(false)
-     const followers = room.followers.filter(x=>x!==user._id)
-    await axios.put('http://localhost:5000/api/room/'+room._id, {...room, followers:followers})
-
-   }
+    setFollowed(prev=>!prev)
+    const followersList = room.followers;
+    if(!followersList.includes(user._id)){
+        followersList.push(user._id)
+    } else {
+        var index = followersList.indexOf(user._id)
+        followersList.splice(index,1)
+    }
+    
+    await axios.put(`http://localhost:5000/api/room/${room._id}`, {...room, followers: followersList})
  }
   return(
         <>
@@ -381,11 +374,11 @@ console.log(followed)
                 </div>
                 <div className="profile-name1">
                     <h1>{room.title}</h1>
-                    {(room.userId !== undefined && !room.userId.includes(user._id)) 
-                      ? followed
-                        ? <button onClick={handleFollow}><AiFillPlusCircle size={30} style={{cursor: "pointer"}} /></button>
-                        : <button onClick={handleFollow}><AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} /></button>
-                      
+                    {(room.userId !== undefined && !room.userId.includes(user._id))
+                      ? (followed
+                        ? <AiFillPlusCircle size={30} onClick={handleFollow} style={{cursor: "pointer"}} />
+                        : <AiOutlinePlusCircle size={30} onClick={handleFollow} style={{cursor: "pointer"}} />
+                      )
                       : (<label>
                             <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
                          </label>
@@ -396,9 +389,10 @@ console.log(followed)
                         ? <div className="edit-desc">
                             <p>{room.desc}</p>
                           </div>
-                        : <div className="div-submit" style={{marginBottom: "10px"}}>
-                            <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
-                          </div> 
+                        : ((room.userId !== undefined && room.userId.includes(user._id)) &&
+                            (<div className="div-submit" style={{marginBottom: "10px"}}>
+                              <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
+                            </div>))
                     }
                 </div>
                 
