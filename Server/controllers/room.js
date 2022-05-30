@@ -61,8 +61,17 @@ export const getRooms = async (req, res) => {
           room = await Room.find({userId:res1[i].userId});
           room1=[...room1, ...room]
         }
+        for(let j=0;j<res1[i].followers.length;j++){
+
+        if(res1[i].followers[j]===req.params.userId){
+          
+
+          room = await Room.find({followers:res1[i].followers});
+          room1=[...room1, ...room]
+        }
       }
     }
+  }
       res.status(200).json(room1);
 
     } catch (err) {
