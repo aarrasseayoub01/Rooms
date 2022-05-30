@@ -265,6 +265,14 @@ export default function Room(props) {
     )})
 
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
+  let admins =[]
+  if(room.userId!==undefined){
+    admins = room.userId.map(user=>
+  {return (<RoomerCard 
+    title={room.title}
+    userId={user}
+/>)})}
+
   return(
         <>
         {/* <Navbar handleNotif={handleNotif}/> */} 
@@ -379,7 +387,7 @@ export default function Room(props) {
                 <div className="rooms-section">
                     <div className="room-admin">
                         <div className="room-admin-card"><h3>Admin</h3></div>
-                        {roomers}
+                        {admins}
                     </div>
                     <div className="room-followers">
                         <div className="room-admin-card"><h3>Roomers</h3></div>
@@ -394,9 +402,8 @@ export default function Room(props) {
                     </div>
                 </div>
             </div>
-            <AddPost a={"a"} room={room._id}/>
-            {/* {(room.userId.includes(user._id)) &&
-            } */}
+            {(room.userId !== undefined) && (room.userId.includes(user._id)) &&
+            <AddPost a={"a"} room={room._id}/>}
             {myPosts}
         </div>
         </motion.dev>
