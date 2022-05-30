@@ -85,7 +85,6 @@ const dateTime = (date1) => {
     }
     return dateStr
 }
-    console.log(props.comments)
     //Envoyer les commentaires chacune a sa composante avec ses "props"
     const comments = props.comments.map(x=>
         <RoomComment 
@@ -453,7 +452,6 @@ const dateTime = (date1) => {
                 
                 {comment && 
                 <div className="comment">
-                    <div className="comment-close"><AiOutlineClose className="hover-background" onClick={()=>handlecomment()} /></div>
                     <AddRoomComment post={props.post} comments={props.comments} handleA={props.handleA}/>
                     {props.comments.length!==0 && 
                         <div className="comment-section">

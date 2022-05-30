@@ -22,7 +22,7 @@ export default function AddComment(props) {
         props.handleA()
     }
     return(
-        <form className="comment-add">
+        <div className="comment-add">
             <div className="add-comment-title">
                 <h3>Add a Comment</h3>
             </div>
@@ -40,6 +40,6 @@ export default function AddComment(props) {
                     </div>
                 </div>
             </form>
-        </form>
+        </div>
     )
 }

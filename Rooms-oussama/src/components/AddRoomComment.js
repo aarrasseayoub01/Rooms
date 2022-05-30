@@ -22,24 +22,24 @@ export default function AddComment(props) {
         props.handleA()
     }
     return(
-        <form className="comment-add">
+        <div className="comment-add">
             <div className="add-comment-title">
                 <h3>Add a Comment</h3>
             </div>
             <form>
-            <div className="add-comment">
-                {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                    ? <img className="profileimage" src={user.picture} />
-                    : <img className="profileimage" src={"http://localhost:5000/images/" + user.picture} />
-                }
-                <div className="add-comment-text">
-                    <textarea type='textarea' className="add-comment-textarea" placeholder="New Comment" ref={content} />
-                </div> 
-            </div>
-            <div className="div-submit">
-                <input type='submit' className="add-submit" value={"Post"} onClick={handleComment} />
-            </div>
+                <div className="add-comment">
+                    {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
+                        ? <img className="profileimage" src={user.picture} />
+                        : <img className="profileimage" src={"http://localhost:5000/images/" + user.picture} />
+                    }
+                    <div className="add-comment-text">
+                        <textarea type='textarea' className="add-comment-textarea" placeholder="New Comment" ref={content} />
+                    </div> 
+                    <div className="div-submit">
+                        <input type='submit' className="add-submit" value={"Post"} onClick={handleComment} />
+                    </div>
+                </div>
             </form>
-        </form>
+        </div>
     )
 }

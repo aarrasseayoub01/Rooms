@@ -119,14 +119,13 @@ export default function Room(props) {
     }
     //Manipuler le changement des photo de profil ou de couverture
     useEffect(() => {
-         
         const fetchRoom = async () => {
           const res = await axios.get("http://localhost:5000/api/room/"+props.id)
           setRoom(res.data)
           setA(0)
         }
         if(a===1){
-        fetchRoom()
+          fetchRoom()
         }
         const changeProfPic = async () => {
         if (profPic) {
@@ -212,7 +211,6 @@ export default function Room(props) {
           };
           fetchComments();
     }, [user._id, profPic, coverPic, room, a, props.id]);
-    console.log(room)
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
@@ -229,6 +227,13 @@ export default function Room(props) {
         return new Date(p2[2]) - new Date(p1.date)
       }
     })
+  const testy = ["test"]
+  // const roomers = room.userId.map(user=>{
+  const roomers = testy.map(user=>{
+    <RoomerCard 
+        userId={user}
+    />
+  })
   const notif2 = notif1.map(x=>{
     return(
           <Notification 
@@ -237,7 +242,6 @@ export default function Room(props) {
           />
     )
   })
-  console.log(posts)
     const myPosts = posts.map(x=>{
         Array.isArray(x)?x=x[0]:x=x
 
@@ -364,21 +368,18 @@ export default function Room(props) {
                           </div> 
                     }
                 </div>
-                {/* {room.userId.includes(user._id) ??
+                
                   <label>
                       <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
                   </label>
-                } */}
+                
             </div>
             <div className="profile-rooms">
                 <h1 className="rooms-title">Roomers</h1>
                 <div className="rooms-section">
                     <div className="room-admin">
                         <div className="room-admin-card"><h3>Admin</h3></div>
-                        <RoomerCard 
-                            title={room.title}
-                            userId={room.userId}
-                        />
+                        {roomers}
                     </div>
                     <div className="room-followers">
                         <div className="room-admin-card"><h3>Roomers</h3></div>
@@ -393,8 +394,9 @@ export default function Room(props) {
                     </div>
                 </div>
             </div>
-            {(room.userId === user._id) &&
-            <AddPost a={"a"} room={room._id}/>}
+            <AddPost a={"a"} room={room._id}/>
+            {/* {(room.userId.includes(user._id)) &&
+            } */}
             {myPosts}
         </div>
         </motion.dev>
