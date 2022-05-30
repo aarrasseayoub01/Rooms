@@ -267,11 +267,13 @@ export default function Room(props) {
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   let admins =[]
   if(room.userId!==undefined){
-    admins = room.userId.map(user=>
-  {return (<RoomerCard 
-    title={room.title}
-    userId={user}
-/>)})}
+    admins = room.userId.map(user=>{
+    return (
+      <RoomerCard 
+          title={room.title}
+          userId={user}
+      />
+    )})}
 
   return(
         <>
@@ -392,7 +394,9 @@ export default function Room(props) {
                 <div className="rooms-section">
                     <div className="room-admin">
                         <div className="room-admin-card"><h3>Admin</h3></div>
-                        {admins}
+                        <div className="profile-room-grid">
+                          {admins}
+                        </div>
                     </div>
                     <div className="room-followers">
                         <div className="room-admin-card"><h3>Roomers</h3></div>

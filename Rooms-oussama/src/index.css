@@ -635,9 +635,11 @@ code {
 .roomer-card{
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   border-radius: 10px;
   background-color: #B2FFDA;
+  width: max-content;
   max-width: 200px;
   border: 1px solid;
 }
@@ -737,8 +739,6 @@ code {
   display: flex;
   gap: 5px;
 }
-.feed-fit{
-}
 .feed-rooms-close{
   display: flex;
   justify-content: flex-end;
@@ -812,6 +812,9 @@ code {
 }
 .mini-room:hover{
   background-color: #93e5be;
+}
+.roomname-overflow{
+  overflow-x: hidden;
 }
 .room-hide{
   display: flex;
