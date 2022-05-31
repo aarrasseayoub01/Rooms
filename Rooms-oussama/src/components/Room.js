@@ -279,18 +279,18 @@ export default function Room(props) {
     )})}
 
  const handleFollow = async ()=>{
-   if(!followed){
-     setFollowed(true)
-      await axios.put('http://localhost:5000/api/room/'+room._id, {...room, followers:[...room.followers, user._id]})
-   }else{
-     setFollowed(false)
-     const followers = room.followers.filter(x=>x!==user._id)
-    await axios.put('http://localhost:5000/api/room/'+room._id, {...room, followers:followers})
-
-   }
+    setFollowed(prev=>!prev)
+    const followersList = room.followers;
+    if(!followersList.includes(user._id)){
+        followersList.push(user._id)
+    } else {
+        var index = followersList.indexOf(user._id)
+        followersList.splice(index,1)
+    }
+    
+    await axios.put(`http://localhost:5000/api/room/${room._id}`, {...room, followers: followersList})
  }
- if(room.followers!==undefined){
-   console.log(followed)
+ 
   return(
         <>
         {/* <Navbar handleNotif={handleNotif}/> */} 
@@ -383,7 +383,7 @@ export default function Room(props) {
                 </div>
                 <div className="profile-name1">
                     <h1>{room.title}</h1>
-                    {(!room.userId.includes(user._id)) 
+                    {(room.userId!==undefined && !room.userId.includes(user._id)) 
                       ? followed
                         ? <button onClick={handleFollow}><AiFillPlusCircle size={30} style={{cursor: "pointer"}} /></button>
                         : <button onClick={handleFollow}><AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} /></button>
@@ -398,9 +398,10 @@ export default function Room(props) {
                         ? <div className="edit-desc">
                             <p>{room.desc}</p>
                           </div>
-                        : <div className="div-submit" style={{marginBottom: "10px"}}>
-                            <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
-                          </div> 
+                        : ((room.userId !== undefined && room.userId.includes(user._id)) &&
+                            (<div className="div-submit" style={{marginBottom: "10px"}}>
+                              <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
+                            </div>))
                     }
                 </div>
                 
@@ -435,10 +436,8 @@ export default function Room(props) {
          </AnimatePresence>
          </>
     )
-} else {
-  return null
-}
-}
+} 
+
 const StyledModal = styled.div`
   display: flex;
   justify-content: center;

@@ -240,7 +240,7 @@ export default function Feed() {
                   </div>
                   {isRoomClicked &&
                     <div className="room-hide">
-                      <Link className="add-rooms-link" to="./newroom">
+                      <Link className="add-rooms-link" to="../newroom">
                         <div className="add-rooms" onClick={addRoom}>
                           <div className="add-rooms-button">
                             <MdAdd />
