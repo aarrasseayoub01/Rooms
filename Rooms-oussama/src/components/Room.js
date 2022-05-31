@@ -36,6 +36,7 @@ export default function Room(props) {
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
     const [room, setRoom] = useState({})
+    const [followed, setFollowed] = useState([])
     const [a, setA] = useState(1)
     const title = useRef();
     const desc = useRef();
@@ -210,6 +211,7 @@ export default function Room(props) {
             );
           };
           fetchComments();
+          setFollowed(room.followers!==undefined && room.followers.includes(user._id))
     }, [user._id, profPic, coverPic, room, a, props.id]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
@@ -228,7 +230,6 @@ export default function Room(props) {
       }
     })
 
-    const [followed, setFollowed] = useState(room.followers!==undefined && room.followers.includes(user._id))
   const testy = ["test"]
   // const roomers = room.userId.map(user=>{
   const roomers = testy.map(user=>{
@@ -288,6 +289,8 @@ export default function Room(props) {
 
    }
  }
+ if(room.followers!==undefined){
+   console.log(followed)
   return(
         <>
         {/* <Navbar handleNotif={handleNotif}/> */} 
@@ -380,7 +383,7 @@ export default function Room(props) {
                 </div>
                 <div className="profile-name1">
                     <h1>{room.title}</h1>
-                    {(room.userId !== undefined && !room.userId.includes(user._id)) 
+                    {(!room.userId.includes(user._id)) 
                       ? followed
                         ? <button onClick={handleFollow}><AiFillPlusCircle size={30} style={{cursor: "pointer"}} /></button>
                         : <button onClick={handleFollow}><AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} /></button>
@@ -432,7 +435,10 @@ export default function Room(props) {
          </AnimatePresence>
          </>
     )
-} 
+} else {
+  return null
+}
+}
 const StyledModal = styled.div`
   display: flex;
   justify-content: center;
