@@ -1,4 +1,5 @@
 import RoomPostMessage from '../models/roomsPostMessage.js'
+import User from '../models/user.js'
 import Room from '../models/rooms.js'
 //Les fonctions qu'on executera lorsqu'on accedera a un url dans le fichier ./routes/posts.js
 export const getPost = async (req, res) => {
@@ -25,21 +26,23 @@ export const createPost = async (req, res) => {
 
 export const allPosts = async (req, res) => {
     try {
-      const room = await Room.findOne({ userId: req.params.userId });
-      const posts = await RoomPostMessage.find({ userId: room._id });
-      res.status(200).json(posts);
+      const user = await User.findOne({_id:req.params.id})
+      const posts = user.saved.map(p=>p.id)
+      const posts1 = await RoomPostMessage.find({_id:{$in:posts}})
+      console.log(posts1)
+      res.status(200).json(posts1)
     } catch (err) {
       res.status(500).json(err);
     }
   };
-export const allRoomPosts = async (req, res) =>{
-  try{
-    const allroomposts = await RoomPostMessage.find();
-    res.status(200).json(allroomposts);
-  } catch(err){
-    res.status(500).json(err);
-  }
-}
+// export const allRoomPosts = async (req, res) =>{
+//   try{
+//     const allroomposts = await RoomPostMessage.find();
+//     res.status(200).json(allroomposts);
+//   } catch(err){
+//     res.status(500).json(err);
+//   }
+// }
 export const myPost = async (req, res) => {
     try {
       const posts = await RoomPostMessage.findOne({ _id: req.params.postId });

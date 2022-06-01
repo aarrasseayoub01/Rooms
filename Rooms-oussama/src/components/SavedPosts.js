@@ -59,7 +59,8 @@ export default function SavedPosts() {
     //Amener tous les utilisateurs
     useEffect(() => {
         const fetchRoomposts = async() =>{
-            const res = await axios.get("http://localhost:5000/api/roompost/allroomposts");
+            const res = await axios.get("http://localhost:5000/api/roompost/allroomposts/"+user._id);
+            console.log(res.data)
             setRoomposts(
                 res.data.sort((p1, p2) => {
                     return new Date(p2.createdAt) - new Date(p1.createdAt);
