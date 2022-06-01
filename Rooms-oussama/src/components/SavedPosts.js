@@ -54,85 +54,86 @@ export default function SavedPosts() {
         dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: savedUpdated}});
         localStorage.setItem("user", JSON.stringify({...user, saved: savedUpdated}));
         await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: savedUpdated})
-        setSaved(savedUpdated)
+        setSaved(savedUpdated);
+        setRoomposts(prev=>prev.filter(x=>x._id!==thisId))
     }
     //Amener tous les utilisateurs
     useEffect(() => {
         const fetchRoomposts = async() =>{
-            const res = await axios.get("http://localhost:5000/api/roompost/allroomposts/"+user._id);
-            setRoomposts(
-                res.data.sort((p1, p2) => {
-                    return new Date(p2.createdAt) - new Date(p1.createdAt);
+          const res = await axios.get("http://localhost:5000/api/roompost/allroomposts/"+user._id);
+          setRoomposts(
+            res.data.sort((p1, p2) => {
+              return new Date(p2.createdAt) - new Date(p1.createdAt);
                 })
-            )
-        }
-        fetchRoomposts();
-        const fetchPosts = async() =>{
-            const res = await axios.get("http://localhost:5000/api/posts/allposts");
-            setPosts(
-                res.data.sort((p1, p2) => {
+                )
+              }
+              fetchRoomposts();
+              const fetchPosts = async() =>{
+                const res = await axios.get("http://localhost:5000/api/posts/allposts");
+                setPosts(
+                  res.data.sort((p1, p2) => {
                     return new Date(p2.createdAt) - new Date(p1.createdAt);
-                })
-            )
+                  })
+                  )
         }
         fetchPosts();
         const fetchUsers = async () => {
-            const res = await axios.get("http://localhost:5000/api/user/allusers");
-            setUsers(
-                res.data.sort((p1, p2) => {
-                    return new Date(p2.createdAt) - new Date(p1.createdAt);
-                })
+          const res = await axios.get("http://localhost:5000/api/user/allusers");
+          setUsers(
+            res.data.sort((p1, p2) => {
+              return new Date(p2.createdAt) - new Date(p1.createdAt);
+            })
             )
-        };
-        fetchUsers();
-        const fetchRooms = async () => {
-          const res = await axios.get("http://localhost:5000/api/room/allrooms");
-          setRooms(
+          };
+          fetchUsers();
+          const fetchRooms = async () => {
+            const res = await axios.get("http://localhost:5000/api/room/allrooms");
+            setRooms(
               res.data.sort((p1, p2) => {
                 return new Date(p2.createdAt) - new Date(p1.createdAt);
               })
-          )};
+              )};
           fetchRooms();
-        const fetchLikes = async () => {
+          const fetchLikes = async () => {
             const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
             const likeNotif = []
             res.data.forEach(post=>{
                  likeNotif.push(post.likes.map(x=>[...x, 'like']))
-            })
-            setLikeNotes(
-              likeNotif.flat().sort((p1, p2) => {
+                })
+                setLikeNotes(
+                  likeNotif.flat().sort((p1, p2) => {
                 return new Date(p2[1]) - new Date(p1[1]);
               })
-            );
-          };
-          fetchLikes();
-          const fetchDislikes = async () => {
+              );
+            };
+            fetchLikes();
+            const fetchDislikes = async () => {
             const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
             const dislikeNotif = []
             res.data.forEach(post=>{
-                 dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
+              dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
             })
             setDislikeNotes(
               dislikeNotif.flat().sort((p1, p2) => {
                 return new Date(p2[1]) - new Date(p1[1]);
               })
-            );
-          };
-          fetchDislikes();
-          const fetchComments = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const commentNotif = []
-            res.data.forEach(post=>{
-                 commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
-            })
-            setCommentNotes(
+              );
+            };
+            fetchDislikes();
+            const fetchComments = async () => {
+              const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+              const commentNotif = []
+              res.data.forEach(post=>{
+                commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
+              })
+              setCommentNotes(
               commentNotif.flat().sort((p1, p2) => {
                 return new Date(p2[1]) - new Date(p1[1]);
               })
-            );
-          };
-          fetchComments();
-    }, [user._id]);
+              );
+            };
+            fetchComments();
+          }, [user._id]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
@@ -151,46 +152,46 @@ export default function SavedPosts() {
     })
     const notif2 = notif1.map(x=>{
       return(
-            <Notification 
-              key={x.date}
-              x={x}
-            />
-      )
-    })
-    //Detetmine le nom d'utilisateur depuis son idenifiant
+        <Notification 
+        key={x.date}
+        x={x}
+        />
+        )
+      })
+      //Detetmine le nom d'utilisateur depuis son idenifiant
     function userName(thisId) {
         for (let i=0;i<users.length;i++){
-            if(users[i]._id===thisId){
-                return(users[i].username)
-            }
+          if(users[i]._id===thisId){
+            return(users[i].username)
+          }
         }
-    }
-    //Detetmine la photo de profil d'utilisateur depuis son idetifiant
-    function userImg(thisId) {
+      }
+      //Detetmine la photo de profil d'utilisateur depuis son idetifiant
+      function userImg(thisId) {
         for (let i=0;i<users.length;i++){
-            if(users[i]._id===thisId){
-                return(users[i].picture)
-            }
+          if(users[i]._id===thisId){
+            return(users[i].picture)
+          }
         }
-    }
-    const savedroomposts = roomposts.map(x=>{
-            return(
-                <div className="saved-post">
+      }
+      const savedroomposts = roomposts.map(x=>{
+        return(
+          <div className="saved-post">
                     {x.photo !== ""
                         ? <img src={"http://localhost:5000/images/" + x.photo} width={60}/>
                         : (userImg(x.userId[0]) === "https://i.ibb.co/J25RQCT/profile.png"
-                            ? <img src={userImg(x.userId[0])} className="profileimage" />
-                            : <img src={"http://localhost:5000/images/" + userImg(x.userId[0])} className="profileimage" />
+                        ? <img src={userImg(x.userId[0])} className="profileimage" />
+                        : <img src={"http://localhost:5000/images/" + userImg(x.userId[0])} className="profileimage" />
                         )
-                    }
+                      }
                     <div className="savedpost-infos">
                         <p className="overflow-saved">{x.desc !== "" ? x.desc : "No description"}</p>
                         <b className="overflow-saved">{userName(x.userId[0])}</b>
                         <small className="overflow-saved">Saved 11h ago</small>
                     </div>
                     <div className="saved-edit-buttons">
-                        <Link to={"../roompost/"+x.id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
-                        <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x.id)} />
+                        <Link to={"../roompost/"+x._id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
+                        <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x._id)} />
                     </div>
                 </div>
             )
@@ -222,7 +223,7 @@ export default function SavedPosts() {
                     </div>
                     <div className="saved-edit-buttons">
                         <Link to={"../posts/"+x.id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
-                        <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x.id)} />
+                        <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x._id)} />
                     </div>
                 </div>
             )
