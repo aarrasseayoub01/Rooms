@@ -383,7 +383,7 @@ code {
   border-radius: 10px;
   padding: 10px;
   background-color: #B2FFDA;
-  margin-bottom: -72px;
+  margin-bottom: -108px;
   z-index: 1;
 }
 .edit-description{
@@ -743,7 +743,7 @@ code {
   display: flex;
   justify-content: flex-end;
 }
-.feed-rooms{
+.feed-sidebar{
   display: flex;
   flex-direction: column;
   max-width: 300px;
@@ -822,6 +822,8 @@ code {
   justify-content: center;
   align-items: center;
   width: 100%;
+  border-bottom: 2px solid;
+  padding-bottom: 5px;
 }
 .feed{
   display: flex;
@@ -1371,4 +1373,67 @@ margin-left: 25px !important;
 .comment-section{
   max-height: 200px;
   overflow-y: scroll;
+}
+.follow-room-btn{
+  background-color: transparent;
+  border: none;
+}
+.saved-banner{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  text-decoration: none;
+}
+.text-decoration{
+  text-decoration: none;
+  color: black;
+}
+.savedposts-banner{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.savedposts-panel{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.saved-post{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+  background-color: #B2FFDA;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.savedpost-infos{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 150px;
+}
+.overflow-saved{
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.saved-edit-buttons{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #B2FFDA;
+  z-index: 1;
 }

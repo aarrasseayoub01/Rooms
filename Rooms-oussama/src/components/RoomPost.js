@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck} from "react-icons/ai"
+import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck, AiFillSave, AiOutlineSave} from "react-icons/ai"
 import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
 import RoomComment from "./RoomComment";
@@ -25,11 +25,19 @@ export default function RoomPost(props) {
     const [style, setStyle] = useState(hideStyle);
     const [descValue,setDescValue] = useState(props.desc);
     const [description,setDescription] = useState(props.desc);
-    const [likeState, setLikeState] = useState(props.post.likes)
-    const [dislikeState, setDislikeState] = useState(props.post.dislikes)
-    const [deleted, setDeleted] = useState(false)
+    const [likeState, setLikeState] = useState(props.post.likes);
+    const [dislikeState, setDislikeState] = useState(props.post.dislikes);
+    const [deleted, setDeleted] = useState(false);
+    const {user, dispatch} = useContext(AuthContext);
+    var isSaved = false;
+    for (let i=0;i<user.saved.length;i++){
+        if(user.saved[i].id === props.id){
+            isSaved = true;
+            break;
+        }
+    }
+    const [saved, setSaved] = useState(isSaved);
 
-    const {user} = useContext(AuthContext);
     const desc = useRef();
     const history = useNavigate()
     
@@ -288,6 +296,20 @@ const dateTime = (date1) => {
         //Envoyer dans le "backend" une publication dans laquelles les commentaires sont modifees
         setDeleted(!deleted);
     }
+    const handleSavePost = async () => {
+        if (!saved){
+            setSaved(true);
+            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "roompost", id: props.id}]}});
+            localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "roompost", id: props.id}]}));
+            await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: [...user.saved, {type: "roompost", id: props.id}]})
+        } else{
+            setSaved(false)
+            const savedUpdated = user.saved.filter(x=>x.id !== props.id);
+            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: savedUpdated}});
+            localStorage.setItem("user", JSON.stringify({...user, saved: savedUpdated}));
+            await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: savedUpdated})
+        }
+    }
     const postStyle = {}
     if(!deleted){
     return(
@@ -364,7 +386,7 @@ const dateTime = (date1) => {
                 <div style={postStyle}>
                 <div className="orig-post">
                     {!props.singlepost 
-                        ? <Link className="post-username" to={"../posts/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>
+                        ? <Link className="post-username" to={"../roompost/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>
                         : <small onClick={() => history(-1)} className="orig-post-btn">Return</small>
                     }
                 </div>
@@ -388,6 +410,10 @@ const dateTime = (date1) => {
                                     <div style={style} className="post-edit-buttons">
                                         <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
                                         <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                                        {saved 
+                                            ? <AiFillSave style={{cursor: "pointer"}} onClick={handleSavePost} />
+                                            : <AiOutlineSave style={{cursor: "pointer"}} onClick={handleSavePost} />
+                                        }
                                     </div>
                                 
                             

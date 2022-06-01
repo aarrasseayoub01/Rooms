@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import {motion, AnimatePresence} from 'framer-motion'
 import Navbar from "./Navbar";
-import Post from "./Post";
 // import { postCall } from "../apiCalls";
 import axios from "axios"
 import { AuthContext } from "../Context/authContext";
@@ -10,8 +9,9 @@ import Notification from "./Notification";
 import Message from "./Message";
 import { AiFillMessage } from "react-icons/ai";
 import Chatbox from "./Chatbox";
+import RoomPost from "./RoomPost";
 
-export default function PostPage(props) {
+export default function RoomPostPage(props) {
   const [isNotifClicked, setIsNotifClicked] = useState(false);
   const [isMsgClicked, setIsMsgClicked] = useState(false);
   const [isChatClicked, setIsChatClicked] = useState(false);
@@ -49,12 +49,12 @@ export default function PostPage(props) {
   //Amener tous les publications du "backend"
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get("http://localhost:5000/api/posts/" + props.id);
+      const res = await axios.get("http://localhost:5000/api/roompost/" + props.id);
       setPosts(res.data);
     };
     fetchPosts();
     const fetchLikes = async () => {
-      const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+      const res = await axios.get("http://localhost:5000/api/roompost/" + user._id);
       const likeNotif = []
       res.data.forEach(post=>{
            likeNotif.push(post.likes.map(x=>[...x, 'like']))
@@ -67,7 +67,7 @@ export default function PostPage(props) {
     };
     fetchLikes();
     const fetchDislikes = async () => {
-      const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+      const res = await axios.get("http://localhost:5000/api/roompost/" + user._id);
       const dislikeNotif = []
       res.data.forEach(post=>{
            dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
@@ -80,7 +80,7 @@ export default function PostPage(props) {
     };
     fetchDislikes();
     const fetchComments = async () => {
-      const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+      const res = await axios.get("http://localhost:5000/api/roompost/" + user._id);
       const commentNotif = []
       res.data.forEach(post=>{
            commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
@@ -117,6 +117,7 @@ export default function PostPage(props) {
           />
     )
   })
+  console.log(posts)
   if(posts.likes!==undefined){
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   return(
@@ -154,7 +155,7 @@ export default function PostPage(props) {
             <AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
             <div className="feed">
-            <Post 
+            <RoomPost
               key={posts._id}
               id={posts._id}
               desc={posts.desc}

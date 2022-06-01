@@ -10,6 +10,8 @@ import Searching from "./components/Searching"
 import PostPage from "./components/PostPage"
 import Room from "./components/Room"
 import AddRoom from "./components/AddRoom"
+import RoomPostPage from "./components/RoomPostPage.js"
+import SavedPosts from "./components/SavedPosts"
 
 
 export default function App() {
@@ -38,6 +40,12 @@ export default function App() {
       <PostPage id={id} />
     )
   }
+  function HandleRoomPost() {
+    let { id } = useParams();
+    return(
+      <RoomPostPage id={id} />
+    )
+  }
   function HandleRoom() {
     let { id } = useParams();
     return(
@@ -62,11 +70,17 @@ export default function App() {
           <Route path="/posts/:id" element={user
               ? <HandlePost />
               : <Login />} />
+          <Route path="/roompost/:id" element={user
+              ? <HandleRoomPost />
+              : <Login />} />
           <Route path="/room/:id" element={user
               ? <HandleRoom />
               : <Login />} />
           <Route path="/newroom" element={user
               ? <AddRoom />
+              : <Login />} />
+          <Route path="/savedposts" element={user
+              ? <SavedPosts />
               : <Login />} />
         {/* </Route> */}
       </Routes>

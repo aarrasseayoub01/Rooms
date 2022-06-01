@@ -32,7 +32,14 @@ export const allPosts = async (req, res) => {
       res.status(500).json(err);
     }
   };
-  
+export const allRoomposts = async (req, res) =>{
+  try{
+    const allroomposts = await RoomPostMessage.find();
+    res.status(200).json(allroomposts);
+  } catch(err){
+    res.status(500).json(err);
+  }
+}
 export const myPost = async (req, res) => {
     try {
       const posts = await RoomPostMessage.findOne({ _id: req.params.postId });

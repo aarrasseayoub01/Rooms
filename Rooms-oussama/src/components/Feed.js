@@ -234,7 +234,7 @@ export default function Feed() {
             <AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
             <div className="feed-page">
-                <div className="feed-rooms">
+                <div className="feed-sidebar">
                   <div onClick={openRoom} className="rooms-banner">
                     <h3>Rooms</h3>
                   </div>
@@ -251,6 +251,13 @@ export default function Feed() {
                       {roomList}
                     </div>
                   }
+                  <div>
+                    <Link to={"../savedposts"} >
+                      <div className="saved-banner">
+                        <h3 className="text-decoration">Saved</h3>
+                      </div>
+                    </Link>
+                  </div>
                 </div>
                 <div className="feed">
                   <AddPost /> 

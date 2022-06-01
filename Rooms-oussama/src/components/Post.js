@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck} from "react-icons/ai"
+import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck, AiFillSave, AiOutlineSave} from "react-icons/ai"
 import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
 import { FiShare } from "react-icons/fi"
@@ -11,6 +11,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import styled from "styled-components";
+import { MdAdd } from "react-icons/md";
 
 
 
@@ -32,7 +33,15 @@ export default function Post(props) {
     const [dislikeState, setDislikeState] = useState(props.post.dislikes)
     const [deleted, setDeleted] = useState(false)
 
-    const {user} = useContext(AuthContext);
+    const {user, dispatch} = useContext(AuthContext);
+    var isSaved = false;
+    for (let i=0;i<user.saved.length;i++){
+        if(user.saved[i].id === props.id){
+            isSaved = true;
+            break;
+        }
+    }
+    const [saved, setSaved] = useState(isSaved);
     const desc = useRef();
     const history = useNavigate()
     
@@ -106,7 +115,7 @@ const dateTime = (date1) => {
         />
     )
     
-    //Detetmine le nom d'utilisateur depuis son idetifiant
+    //Detetmine le nom d'utilisateur depuis son idenifiant
     function userName(thisId) {
         for (let i=0;i<users.length;i++){
             if(users[i]._id===thisId){
@@ -293,6 +302,20 @@ const dateTime = (date1) => {
             }
         }
     }
+    const handleSavePost = async () => {
+        if (!saved){
+            setSaved(true);
+            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "post", id: props.id}]}});
+            localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "post", id: props.id}]}));
+            await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: [...user.saved, {type: "post", id: props.id}]})
+        } else{
+            setSaved(false)
+            const savedUpdated = user.saved.filter(x=>x.id !== props.id);
+            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: savedUpdated}});
+            localStorage.setItem("user", JSON.stringify({...user, saved: savedUpdated}));
+            await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: savedUpdated})
+        }
+    }
 
     const sharePost = async (e) => {
         const post = {desc:props.desc, userId:props.userId, date: props.date, photo: props.img,room:props.room, sharer:user._id, shareDate:new Date(), shareDesc:desc.current.value}
@@ -409,6 +432,10 @@ const dateTime = (date1) => {
                                 <div style={style} className="post-edit-buttons">
                                     <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
                                     <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                                    {saved 
+                                        ? <AiFillSave style={{cursor: "pointer"}} onClick={handleSavePost} />
+                                        : <AiOutlineSave style={{cursor: "pointer"}} onClick={handleSavePost} />
+                                    }
                                 </div>
                             </div>
                         }

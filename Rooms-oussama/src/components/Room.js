@@ -172,49 +172,49 @@ export default function Room(props) {
         if(room._id!==undefined){
         fetchPosts();
         }
-          const fetchLikes = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const likeNotif = []
-            res.data.forEach(post=>{
-                 likeNotif.push(post.likes.map(x=>[...x, 'like']))
+        const fetchLikes = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const likeNotif = []
+          res.data.forEach(post=>{
+                likeNotif.push(post.likes.map(x=>[...x, 'like']))
+          })
+          setLikeNotes(
+            likeNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setLikeNotes(
-              likeNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchLikes();
-          const fetchDislikes = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const dislikeNotif = []
-            res.data.forEach(post=>{
-                 dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
+          );
+        };
+        fetchLikes();
+        const fetchDislikes = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const dislikeNotif = []
+          res.data.forEach(post=>{
+                dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
+          })
+          setDislikeNotes(
+            dislikeNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setDislikeNotes(
-              dislikeNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchDislikes();
-          const fetchComments = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const commentNotif = []
-            res.data.forEach(post=>{
-                 commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
+          );
+        };
+        fetchDislikes();
+        const fetchComments = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const commentNotif = []
+          res.data.forEach(post=>{
+                commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
+          })
+          setCommentNotes(
+            commentNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setCommentNotes(
-              commentNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchComments();
-          setFollowed(room.followers!==undefined && room.followers.includes(user._id))
+          );
+        };
+        fetchComments();
+        setFollowed(room.followers!==undefined && room.followers.includes(user._id))
     }, [user._id, profPic, coverPic, room, a, props.id]);
-    const notif=likeNotes.concat(dislikeNotes)
-    const notiff=notif.concat(commentNotes)
+    const notif=likeNotes.concat(dislikeNotes);
+    const notiff=notif.concat(commentNotes);
     const notif1 = notiff.sort((p1, p2) => {
       if(Array.isArray(p1) && Array.isArray(p2)) {
         return new Date(p2[2]) - new Date(p1[2])
@@ -230,13 +230,6 @@ export default function Room(props) {
       }
     })
 
-  const testy = ["test"]
-  // const roomers = room.userId.map(user=>{
-  const roomers = testy.map(user=>{
-    <RoomerCard 
-        userId={user}
-    />
-  })
   const notif2 = notif1.map(x=>{
     return(
           <Notification 
@@ -385,8 +378,8 @@ export default function Room(props) {
                     <h1>{room.title}</h1>
                     {(room.userId!==undefined && !room.userId.includes(user._id)) 
                       ? followed
-                        ? <button onClick={handleFollow}><AiFillPlusCircle size={30} style={{cursor: "pointer"}} /></button>
-                        : <button onClick={handleFollow}><AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} /></button>
+                        ? <button className="follow-room-btn" onClick={handleFollow}><AiFillPlusCircle size={30} style={{cursor: "pointer"}} /></button>
+                        : <button className="follow-room-btn" onClick={handleFollow}><AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} /></button>
                       
                       : (<label>
                             <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
