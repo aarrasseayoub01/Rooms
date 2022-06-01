@@ -24,7 +24,7 @@ export default function SavedPosts() {
     const [posts, setPosts] = useState([]);
     const [roomposts, setRoomposts] = useState([]);
     const {user, dispatch}  = useContext(AuthContext);
-    const [saved, setSaved] = useState(user.saved);
+    const [saved, setSaved] = useState(roomposts);
 
     //gerer la fenetre des notifications
     function handleNotif() {
@@ -60,7 +60,6 @@ export default function SavedPosts() {
     useEffect(() => {
         const fetchRoomposts = async() =>{
             const res = await axios.get("http://localhost:5000/api/roompost/allroomposts/"+user._id);
-            console.log(res.data)
             setRoomposts(
                 res.data.sort((p1, p2) => {
                     return new Date(p2.createdAt) - new Date(p1.createdAt);
@@ -174,28 +173,19 @@ export default function SavedPosts() {
             }
         }
     }
-    //Retourne la publication depuis son idenifiant
-    function post(thisId) {
-        for (let i=0;i<roomposts.length;i++){
-            if(roomposts[i]._id===thisId){
-                return(roomposts[i])
-            }
-        }
-    }
-    const savedroomposts = saved.map(x=>{
-        if(x.type==="roompost" && post(x.id)!==undefined){
+    const savedroomposts = roomposts.map(x=>{
             return(
                 <div className="saved-post">
-                    {post(x.id).photo !== ""
-                        ? <img src={"http://localhost:5000/images/" + post(x.id).photo} width={60}/>
-                        : (userImg(post(x.id).userId[0]) === "https://i.ibb.co/J25RQCT/profile.png"
-                            ? <img src={userImg(post(x.id).userId[0])} className="profileimage" />
-                            : <img src={"http://localhost:5000/images/" + userImg(post(x.id).userId[0])} className="profileimage" />
+                    {x.photo !== ""
+                        ? <img src={"http://localhost:5000/images/" + x.photo} width={60}/>
+                        : (userImg(x.userId[0]) === "https://i.ibb.co/J25RQCT/profile.png"
+                            ? <img src={userImg(x.userId[0])} className="profileimage" />
+                            : <img src={"http://localhost:5000/images/" + userImg(x.userId[0])} className="profileimage" />
                         )
                     }
                     <div className="savedpost-infos">
-                        <p className="overflow-saved">{post(x.id).desc !== "" ? post(x.id).desc : "No description"}</p>
-                        <b className="overflow-saved">{userName(post(x.id).userId[0])}</b>
+                        <p className="overflow-saved">{x.desc !== "" ? x.desc : "No description"}</p>
+                        <b className="overflow-saved">{userName(x.userId[0])}</b>
                         <small className="overflow-saved">Saved 11h ago</small>
                     </div>
                     <div className="saved-edit-buttons">
@@ -205,8 +195,7 @@ export default function SavedPosts() {
                 </div>
             )
         }
-    })
-
+    )
     //Retourne la publication depuis son idenifiant
     function post(thisId) {
         for (let i=0;i<posts.length;i++){
