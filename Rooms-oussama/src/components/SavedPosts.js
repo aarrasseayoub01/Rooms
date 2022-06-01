@@ -209,28 +209,27 @@ export default function SavedPosts() {
       const allpostsSaved = allposts.map(x=>{
         return(
           <div className="saved-post">
-                    {x.photo !== ""
-                        ? <img src={"http://localhost:5000/images/" + x.photo} width={60}/>
-                        : (Array.isArray(x.userId)
-                            ? userImg(x.userId[0]) === "https://i.ibb.co/J25RQCT/profile.png"
-                            : userImg(x.userId) === "https://i.ibb.co/J25RQCT/profile.png"
-                        )
-                        ? <img src={Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId)} className="profileimage" />
-                        : <img src={"http://localhost:5000/images/" + (Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId))} className="profileimage" />
-                      }
-                    <div className="savedpost-infos">
-                        <p className="overflow-saved">{x.desc !== "" ? x.desc : "No description"}</p>
-                        <span className="overflow-saved">posted by <b>{userName(Array.isArray(x.userId) ? x.userId[0] : x.userId)}</b></span>
-                        <small className="overflow-saved">Saved {dateTime(x.saveDate)} ago</small>
-                    </div>
-                    <div className="saved-edit-buttons">
-                        <Link to={Array.isArray(x.userId) ? "../roompost/"+x._id : "../posts/"+x._id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
-                        <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x._id)} />
-                    </div>
-                </div>
-            )
-        }
-      )
+              {x.photo !== ""
+                  ? <img src={"http://localhost:5000/images/" + x.photo} width={60}/>
+                  : (Array.isArray(x.userId)
+                      ? userImg(x.userId[0]) === "https://i.ibb.co/J25RQCT/profile.png"
+                      : userImg(x.userId) === "https://i.ibb.co/J25RQCT/profile.png"
+                  )
+                  ? <img src={Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId)} className="profileimage" />
+                  : <img src={"http://localhost:5000/images/" + (Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId))} className="profileimage" />
+              }
+              <div className="savedpost-infos">
+                  <p className="overflow-saved">{x.desc !== "" ? x.desc : "No description"}</p>
+                  <span className="overflow-saved">posted by <b>{userName(Array.isArray(x.userId) ? x.userId[0] : x.userId)}</b></span>
+                  <small className="overflow-saved">Saved {dateTime(x.saveDate)} ago</small>
+              </div>
+              <div className="saved-edit-buttons">
+                  <Link to={Array.isArray(x.userId) ? "../roompost/"+x._id : "../posts/"+x._id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
+                  <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x._id)} />
+              </div>
+          </div>
+        )
+      })
     const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
     return(
         <>

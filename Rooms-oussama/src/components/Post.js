@@ -57,7 +57,7 @@ export default function Post(props) {
 
     //33-64 : Determiner le temps qui a passe depuis le moment du publication de poste et le temps actuel
    
-const dateTime = (date1) => {
+  const dateTime = (date1) => {
     const d1 = Date.now();
     const d2 = new Date(date1);
     var diff= Math.abs(d1-d2);
@@ -327,6 +327,10 @@ const dateTime = (date1) => {
                 await axios.delete(`http://localhost:5000/api/posts/${props.id}`, {data:{userId:props.userId}})
             }
         }
+        const savedUpdated = user.saved.filter(x=>x.id !== props.id);
+        dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: savedUpdated}});
+        localStorage.setItem("user", JSON.stringify({...user, saved: savedUpdated}));
+        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: savedUpdated})
         //Envoyer dans le "backend" une publication dans laquelles les commentaires sont modifees
         setDeleted(!deleted);
     }

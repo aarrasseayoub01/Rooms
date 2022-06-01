@@ -27,8 +27,16 @@ export const createPost = async (req, res) => {
 export const allPosts = async (req, res) => {
     try {
       const user = await User.findOne({_id:req.params.id})
-      const idListe = user.saved.map(p=>p.id)
-      const posts = await RoomPostMessage.find({_id:{$in:idListe}})
+      const SortedSaved = user.saved.sort((p1, p2)=>{
+        return (new Date(p2.saveDate) - new Date(p1.saveDate))
+      });
+      const idListe = SortedSaved.map(p=>p.id)
+      const posts=[];
+      for (let i=0;i<idListe.length;i++){
+        var post = await RoomPostMessage.findOne({_id: idListe[i]})
+        post["saveDate"] = SortedSaved[i].saveDate
+        posts.push(post)
+      }
       res.status(200).json(posts)
     } catch (err) {
       res.status(500).json(err);
