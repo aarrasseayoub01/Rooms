@@ -20,11 +20,9 @@ export default function SavedPosts() {
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
     const [users, setUsers] = useState([]);
-    const [rooms, setRooms] = useState([]);
     const [posts, setPosts] = useState([]);
     const [roomposts, setRoomposts] = useState([]);
     const {user, dispatch}  = useContext(AuthContext);
-    const [saved, setSaved] = useState(roomposts);
 
     //gerer la fenetre des notifications
     function handleNotif() {
@@ -54,8 +52,8 @@ export default function SavedPosts() {
         dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: savedUpdated}});
         localStorage.setItem("user", JSON.stringify({...user, saved: savedUpdated}));
         await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: savedUpdated})
-        setSaved(savedUpdated);
         setRoomposts(prev=>prev.filter(x=>x._id!==thisId))
+        setPosts(prev=>prev.filter(x=>x._id!==thisId))
     }
     //Amener tous les utilisateurs
     useEffect(() => {
@@ -64,17 +62,17 @@ export default function SavedPosts() {
           setRoomposts(
             res.data.sort((p1, p2) => {
               return new Date(p2.createdAt) - new Date(p1.createdAt);
-                })
-                )
-              }
-              fetchRoomposts();
-              const fetchPosts = async() =>{
-                const res = await axios.get("http://localhost:5000/api/posts/allposts");
-                setPosts(
-                  res.data.sort((p1, p2) => {
-                    return new Date(p2.createdAt) - new Date(p1.createdAt);
-                  })
-                  )
+            })
+          )
+        }
+        fetchRoomposts();
+        const fetchPosts = async() =>{
+          const res = await axios.get("http://localhost:5000/api/posts/allposts/"+user._id);
+          setPosts(
+            res.data.sort((p1, p2) => {
+              return new Date(p2.createdAt) - new Date(p1.createdAt);
+            })
+          )
         }
         fetchPosts();
         const fetchUsers = async () => {
@@ -86,14 +84,6 @@ export default function SavedPosts() {
             )
           };
           fetchUsers();
-          const fetchRooms = async () => {
-            const res = await axios.get("http://localhost:5000/api/room/allrooms");
-            setRooms(
-              res.data.sort((p1, p2) => {
-                return new Date(p2.createdAt) - new Date(p1.createdAt);
-              })
-              )};
-          fetchRooms();
           const fetchLikes = async () => {
             const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
             const likeNotif = []
@@ -174,61 +164,36 @@ export default function SavedPosts() {
           }
         }
       }
-      const savedroomposts = roomposts.map(x=>{
+      var allposts = roomposts.concat(posts)
+      allposts = allposts.sort((p1, p2) => {
+        return (p1.desc - p2.desc)
+      })
+
+      const allpostsSaved = allposts.map(x=>{
         return(
           <div className="saved-post">
                     {x.photo !== ""
                         ? <img src={"http://localhost:5000/images/" + x.photo} width={60}/>
-                        : (userImg(x.userId[0]) === "https://i.ibb.co/J25RQCT/profile.png"
-                        ? <img src={userImg(x.userId[0])} className="profileimage" />
-                        : <img src={"http://localhost:5000/images/" + userImg(x.userId[0])} className="profileimage" />
+                        : (Array.isArray(x.userId)
+                            ? userImg(x.userId[0]) === "https://i.ibb.co/J25RQCT/profile.png"
+                            : userImg(x.userId) === "https://i.ibb.co/J25RQCT/profile.png"
                         )
+                        ? <img src={Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId)} className="profileimage" />
+                        : <img src={"http://localhost:5000/images/" + (Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId))} className="profileimage" />
                       }
                     <div className="savedpost-infos">
                         <p className="overflow-saved">{x.desc !== "" ? x.desc : "No description"}</p>
-                        <b className="overflow-saved">{userName(x.userId[0])}</b>
+                        <b className="overflow-saved">{userName(Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId))}</b>
                         <small className="overflow-saved">Saved 11h ago</small>
                     </div>
                     <div className="saved-edit-buttons">
-                        <Link to={"../roompost/"+x._id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
+                        <Link to={Array.isArray(x.userId) ? "../roompost/"+x._id : "../posts/"+x._id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
                         <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x._id)} />
                     </div>
                 </div>
             )
         }
-    )
-    //Retourne la publication depuis son idenifiant
-    function post(thisId) {
-        for (let i=0;i<posts.length;i++){
-            if(posts[i]._id===thisId){
-                return(posts[i])
-            }
-        }
-    }
-    const savedposts = saved.map(x=>{
-        if(x.type==="post" && post(x.id)!==undefined){
-            return(
-                <div className="saved-post">
-                    {post(x.id).photo !== ""
-                        ? <img src={"http://localhost:5000/images/" + post(x.id).photo} width={60}/>
-                        : (userImg(post(x.id).userId) === "https://i.ibb.co/J25RQCT/profile.png"
-                            ? <img src={userImg(post(x.id).userId)} className="profileimage" />
-                            : <img src={"http://localhost:5000/images/" + userImg(post(x.id).userId)} className="profileimage" />
-                        )
-                    }
-                    <div className="savedpost-infos">
-                        <p className="overflow-saved">{post(x.id).desc !== "" ? post(x.id).desc : "No description"}</p>
-                        <span className="overflow-saved">posted by <b>{userName(post(x.id).userId)}</b></span>
-                        <small className="overflow-saved">Saved 11h ago</small>
-                    </div>
-                    <div className="saved-edit-buttons">
-                        <Link to={"../posts/"+x.id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
-                        <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x._id)} />
-                    </div>
-                </div>
-            )
-        }
-    })
+      )
     const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
     return(
         <>
@@ -265,9 +230,10 @@ export default function SavedPosts() {
 
             <div className="savedposts-banner"><h1>Saved Posts</h1></div>
             <div className="savedposts-panel">
-                {savedroomposts}
-                <h1>-----------</h1>
-                {savedposts}
+                {allpostsSaved.length !== 0 
+                  ? allpostsSaved
+                  : <h3>How Empty!</h3>
+                }
             </div>
         </>
     )

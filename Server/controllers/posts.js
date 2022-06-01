@@ -24,15 +24,15 @@ export const createPost = async (req, res) => {
 }
 
 export const allposts = async (req, res) => {
-    try {
-      // const user = await User.findOne({ username: req.params.username });
-      // const posts = await PostMessage.find({ userId: user._id });
-      const posts = await PostMessage.find();
-      res.status(200).json(posts);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  };
+  try {
+    const user = await User.findOne({_id:req.params.id})
+    const idListe = user.saved.map(p=>p.id)
+    const posts = await PostMessage.find({_id:{$in:idListe}})
+    res.status(200).json(posts)
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
   
 export const myPost = async (req, res) => {
     try {

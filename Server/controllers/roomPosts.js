@@ -27,10 +27,9 @@ export const createPost = async (req, res) => {
 export const allPosts = async (req, res) => {
     try {
       const user = await User.findOne({_id:req.params.id})
-      const posts = user.saved.map(p=>p.id)
-      const posts1 = await RoomPostMessage.find({_id:{$in:posts}})
-      console.log(posts1)
-      res.status(200).json(posts1)
+      const idListe = user.saved.map(p=>p.id)
+      const posts = await RoomPostMessage.find({_id:{$in:idListe}})
+      res.status(200).json(posts)
     } catch (err) {
       res.status(500).json(err);
     }
