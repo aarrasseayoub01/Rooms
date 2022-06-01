@@ -293,7 +293,7 @@ const dateTime = (date1) => {
             setSaved(true);
             dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "roompost", id: props.id}]}});
             localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "roompost", id: props.id}]}));
-            await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: [...user.saved, {type: "roompost", id: props.id}]})
+            await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: [...user.saved, {type: "roompost", id: props.id, saveDate: new Date()}]})
         } else{
             setSaved(false)
             const savedUpdated = user.saved.filter(x=>x.id !== props.id);

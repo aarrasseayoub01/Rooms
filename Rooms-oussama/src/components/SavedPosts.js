@@ -24,6 +24,43 @@ export default function SavedPosts() {
     const [roomposts, setRoomposts] = useState([]);
     const {user, dispatch}  = useContext(AuthContext);
 
+    //27-62 : Determiner le temps qui a passe depuis le moment du publication de poste et le temps actuel
+    const dateTime = (date1) => {
+      const d1 = Date.now();
+      const d2 = new Date(date1);
+      var diff= Math.abs(d1-d2);
+      var date = 0;
+      var dateStr = "";
+      if (diff >= (1000*3600*24*365)){
+          date = diff/(1000 * 3600 * 24 * 365)
+          dateStr = Math.floor(date).toString() + " y"
+      } else {
+          if(diff >= (1000*3600*24*30)){
+              date = diff/(1000*3600*24*30)
+              dateStr = Math.floor(date).toString() + " m"
+          } else{
+              if(diff >= (1000*3600*24)){
+                  date = diff/(1000*3600*24)
+                  dateStr = Math.floor(date).toString() + " d"
+              } else {
+                  if(diff >= (1000*3600)){
+                      date = diff/(1000*3600)
+                      dateStr = Math.floor(date).toString() + " h"
+                  } else{
+                      if(diff >= (1000*60)){
+                          date = diff/(1000*60)
+                          dateStr = Math.floor(date).toString() + " min"
+                      } else {
+                          date = diff/(1000)
+                          dateStr = Math.floor(date).toString() + " s"
+                      }
+                  }
+              }
+          }
+      }
+      return dateStr
+  }
+
     //gerer la fenetre des notifications
     function handleNotif() {
       setIsNotifClicked(prev=>!prev)
@@ -183,8 +220,8 @@ export default function SavedPosts() {
                       }
                     <div className="savedpost-infos">
                         <p className="overflow-saved">{x.desc !== "" ? x.desc : "No description"}</p>
-                        <b className="overflow-saved">{userName(Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId))}</b>
-                        <small className="overflow-saved">Saved 11h ago</small>
+                        <span className="overflow-saved">posted by <b>{userName(Array.isArray(x.userId) ? x.userId[0] : x.userId)}</b></span>
+                        <small className="overflow-saved">Saved {dateTime(x.saveDate)} ago</small>
                     </div>
                     <div className="saved-edit-buttons">
                         <Link to={Array.isArray(x.userId) ? "../roompost/"+x._id : "../posts/"+x._id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>

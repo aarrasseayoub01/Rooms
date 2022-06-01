@@ -34,6 +34,7 @@ const postSchema = new mongoose.Schema({
     shareDesc: String,
     sharedPost: String, 
     shareDate: Date,
+    saveDate: Date
 });
 
 const PostMessage = mongoose.model('PostMessage', postSchema);

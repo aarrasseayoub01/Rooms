@@ -11,7 +11,6 @@ import { BsThreeDots } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import styled from "styled-components";
-import { MdAdd } from "react-icons/md";
 
 
 
@@ -297,9 +296,9 @@ const dateTime = (date1) => {
     const handleSavePost = async () => {
         if (!saved){
             setSaved(true);
-            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "post", id: props.id}]}});
-            localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "post", id: props.id}]}));
-            await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: [...user.saved, {type: "post", id: props.id}]})
+            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "post", id: props.id, saveDate: new Date()}]}});
+            localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "post", id: props.id, saveDate: new Date()}]}));
+            await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: [...user.saved, {type: "post", id: props.id, saveDate: new Date()}]})
         } else{
             setSaved(false)
             const savedUpdated = user.saved.filter(x=>x.id !== props.id);
