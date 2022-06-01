@@ -17,7 +17,7 @@ export default function AddRoom() {
   const [isNotifClicked, setIsNotifClicked] = useState(false);
   const [isMsgClicked, setIsMsgClicked] = useState(false);
   const [isChatClicked, setIsChatClicked] = useState(false);
-  const [coverPic, setCoverPic] = useState("post1.jpg");
+  const [coverPic, setCoverPic] = useState("https://i.ibb.co/J25RQCT/profile.png");
   const [chatId, setChatId] = useState([]);
   const [posts, setPosts] = useState({});
   const [likeNotes, setLikeNotes] = useState([]);
@@ -246,7 +246,7 @@ export default function AddRoom() {
                     <div className="modal-form">
                         <div className="flex-row" style={{justifyContent :"center"}}>
                             <h3 style={{width: "200px"}}>Cover :</h3>
-                            {coverPic !== null && <img src={"http://localhost:5000/images/" +coverPic} width="100px" alt="Cover image"/>}
+                            {coverPic !== null && <img src={coverPic!=="https://i.ibb.co/MVjMppt/cover.jpg" ? "http://localhost:5000/images/" +coverPic : "https://i.ibb.co/MVjMppt/cover.jpg"} width="100px" alt="Cover image"/>}
                             <label>
                                 <BsCardImage className="upload-image"/>
                                 <input type="file" style={{display: "none"}} name="myImage" onChange={(e) =>  handleUpload(e)}/>

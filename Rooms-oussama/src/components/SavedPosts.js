@@ -202,9 +202,8 @@ export default function SavedPosts() {
         }
       }
       var allposts = roomposts.concat(posts)
-      allposts = allposts.sort((p1, p2) => {
-        return (p1.desc - p2.desc)
-      })
+      console.log(posts)
+      console.log(roomposts)
 
       const allpostsSaved = allposts.map(x=>{
         return(
