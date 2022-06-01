@@ -96,6 +96,7 @@ export default function SavedPosts() {
     useEffect(() => {
         const fetchRoomposts = async() =>{
           const res = await axios.get("http://localhost:5000/api/roompost/allroomposts/"+user._id);
+          console.log(res.data)
           setRoomposts(
             res.data.sort((p1, p2) => {
               return new Date(p2.createdAt) - new Date(p1.createdAt);
@@ -202,8 +203,7 @@ export default function SavedPosts() {
         }
       }
       var allposts = roomposts.concat(posts)
-      console.log(posts)
-      console.log(roomposts)
+      
 
       const allpostsSaved = allposts.map(x=>{
         return(

@@ -33,8 +33,10 @@ export const allposts = async (req, res) => {
     const posts =[];
     for (let i=0;i<idListe.length;i++){
       var post = await PostMessage.findOne({_id: idListe[i]})
-      post["saveDate"] = SortedSaved[i].saveDatey
+      if(post!==null){
+      post.saveDate = SortedSaved[i].saveDatey
       posts.push(post)
+      }
     }
     res.status(200).json(posts)
   } catch (err) {
