@@ -16,15 +16,12 @@ import { MdAdd } from "react-icons/md";
 
 
 export default function Post(props) {
-    const showStyle = {display: "flex"}
-    const hideStyle = {display: "none"}
     const [users, setUsers] = useState([]);
     const [vote, setVote] = useState(props.like.length-props.disLike.length);
     const [roomers, setRoomers] = useState(props.like.length+props.disLike.length);
     const [comment, setComment] = useState(false);
-    const [editClicked, setEditClicked] = useState(true);
+    const [editClicked, setEditClicked] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [style, setStyle] = useState(hideStyle);
     const [descValue,setDescValue] = useState(props.desc);
     const [sharerDescValue,setSharerDescValue] = useState(props.shareDesc);
     const [description,setDescription] = useState(props.desc);
@@ -52,7 +49,6 @@ export default function Post(props) {
 
     function openModal() {
         setIsOpen(true); //Ouvrir le Modal
-        setStyle(hideStyle)
     }
 
     function closeModal() {
@@ -258,18 +254,14 @@ const dateTime = (date1) => {
         setComment(true)
     }
 
-
+    function handleCloseDropdown(){
+        setEditClicked(false)
+    }
     function handleDropwdown() {
-        setEditClicked(prev=>!prev);
-        if(editClicked){
-            setStyle(showStyle) //Changer la valeur de "state" pour afficher le code
-        }else{
-            setStyle(hideStyle) //Changer la valeur de "state" pour cacher le code
-        }
+        setEditClicked(true)
     }
     function handleEditTrue() {
         setIsEdit(true) //Activer le mode de modification de texte de la pubication
-        setStyle(hideStyle) //Changer la valeur de "state" pour afficher le code
     }
     function handleEditFalse() {
         setIsEdit(false) //Desactiver le mode de modification de texte de la pubication
@@ -429,13 +421,9 @@ const dateTime = (date1) => {
                         {(user._id === props.userId || user._id===props.sharer) && 
                             <div className="post-edit">
                                 <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
-                                <div style={style} className="post-edit-buttons">
+                                <div className="post-edit-buttons">
                                     <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
                                     <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
-                                    {saved 
-                                        ? <AiFillSave style={{cursor: "pointer"}} onClick={handleSavePost} />
-                                        : <AiOutlineSave style={{cursor: "pointer"}} onClick={handleSavePost} />
-                                    }
                                 </div>
                             </div>
                         }
@@ -479,19 +467,26 @@ const dateTime = (date1) => {
                         {/* <h5><b>{props.room} -</b> <small>{userName(props.userId)}</small></h5> */}
                         <p><small>{dateTime(props.date)}</small></p>
                     </div>
-                    {user._id === props.userId && 
-                        <div className="post-edit">
-                            {props.sharer!==undefined && props.sharer.length===0 && 
-                                <>
-                                    <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
-                                    <div style={style} className="post-edit-buttons">
-                                        <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
-                                        <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                        {props.sharer!==undefined && props.sharer.length===0 && 
+                            (<div className="post-edit">
+                                {!editClicked 
+                                    ? <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
+                                    : <div className="post-edit-buttons">
+                                        <AiOutlineClose onClick={handleCloseDropdown} style={{cursor: "pointer"}} />
+                                    {user._id === props.userId && 
+                                        <>
+                                            <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
+                                            <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                                        </>
+                                    }
+                                        {saved 
+                                            ? <AiFillSave style={{cursor: "pointer"}} onClick={handleSavePost} />
+                                            : <AiOutlineSave style={{cursor: "pointer"}} onClick={handleSavePost} />
+                                        }
                                     </div>
-                                </>
-                            }
-                        </div>
-                    }
+                                }
+                            </div>)
+                        }
                 </div>
                 {props.sharer!==undefined && props.sharer.length===0 
                 ?(

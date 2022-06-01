@@ -10,7 +10,7 @@ router.get("/timeline/:userId", feedPosts)
 router.get("/profile1/:userId", profilePosts)
 router.get("/:postId", myPost);
 router.get("/allposts", allposts);
-router.post('/', createPost);
+router.post('/', createPost); 
 router.put("/:id", updatePost)
 router.delete("/:id", deletePost)
 export default router;

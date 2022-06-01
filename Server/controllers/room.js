@@ -1,6 +1,7 @@
 import Room from '../models/rooms.js'
 import bcrypt from "bcrypt" //Sert a rendre les mots de passe crypte dans la base des donnees.
 import RoomsPostMessage from '../models/roomsPostMessage.js';
+import PostMessage from '../models/postMessage.js';
 
 //Les fonctions qu'on executera lorsqu'on accedera a un url dans le fichier ./routes/users.js
 
@@ -28,14 +29,6 @@ export const create = async (req, res) => {
     }
 }
 
-export const allRooms = async(req, res) => {
-  try{
-    const allrooms = await RoomsPostMessage.find();
-    res.status(200).json(allrooms);
-  } catch(err){
-    res.status(500).json(err);
-  }
-}
 
 export const myRoom = async (req, res) => {
     try {

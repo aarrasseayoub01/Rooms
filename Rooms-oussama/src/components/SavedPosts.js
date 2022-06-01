@@ -59,7 +59,7 @@ export default function SavedPosts() {
     //Amener tous les utilisateurs
     useEffect(() => {
         const fetchRoomposts = async() =>{
-            const res = await axios.get("http://localhost:5000/api/room/allrooms");
+            const res = await axios.get("http://localhost:5000/api/roompost/allroomposts");
             setRoomposts(
                 res.data.sort((p1, p2) => {
                     return new Date(p2.createdAt) - new Date(p1.createdAt);
@@ -68,7 +68,7 @@ export default function SavedPosts() {
         }
         fetchRoomposts();
         const fetchPosts = async() =>{
-            const res = await axios.get("http://localhost:5000/api/room/allrooms");
+            const res = await axios.get("http://localhost:5000/api/posts/allposts");
             setPosts(
                 res.data.sort((p1, p2) => {
                     return new Date(p2.createdAt) - new Date(p1.createdAt);
@@ -173,7 +173,7 @@ export default function SavedPosts() {
             }
         }
     }
-    //Detetmine l'image de la publication depuis son idenifiant
+    //Retourne la publication depuis son idenifiant
     function post(thisId) {
         for (let i=0;i<roomposts.length;i++){
             if(roomposts[i]._id===thisId){
@@ -182,7 +182,7 @@ export default function SavedPosts() {
         }
     }
     const savedroomposts = saved.map(x=>{
-        if(post(x.id)!==undefined){
+        if(x.type==="roompost" && post(x.id)!==undefined){
             return(
                 <div className="saved-post">
                     {post(x.id).photo !== ""
@@ -199,6 +199,39 @@ export default function SavedPosts() {
                     </div>
                     <div className="saved-edit-buttons">
                         <Link to={"../roompost/"+x.id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
+                        <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x.id)} />
+                    </div>
+                </div>
+            )
+        }
+    })
+
+    //Retourne la publication depuis son idenifiant
+    function post(thisId) {
+        for (let i=0;i<posts.length;i++){
+            if(posts[i]._id===thisId){
+                return(posts[i])
+            }
+        }
+    }
+    const savedposts = saved.map(x=>{
+        if(x.type==="post" && post(x.id)!==undefined){
+            return(
+                <div className="saved-post">
+                    {post(x.id).photo !== ""
+                        ? <img src={"http://localhost:5000/images/" + post(x.id).photo} width={60}/>
+                        : (userImg(post(x.id).userId) === "https://i.ibb.co/J25RQCT/profile.png"
+                            ? <img src={userImg(post(x.id).userId)} className="profileimage" />
+                            : <img src={"http://localhost:5000/images/" + userImg(post(x.id).userId)} className="profileimage" />
+                        )
+                    }
+                    <div className="savedpost-infos">
+                        <p className="overflow-saved">{post(x.id).desc !== "" ? post(x.id).desc : "No description"}</p>
+                        <span className="overflow-saved">posted by <b>{userName(post(x.id).userId)}</b></span>
+                        <small className="overflow-saved">Saved 11h ago</small>
+                    </div>
+                    <div className="saved-edit-buttons">
+                        <Link to={"../posts/"+x.id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
                         <AiFillDelete style={{cursor: "pointer"}} onClick={()=>handleDelete(x.id)} />
                     </div>
                 </div>
@@ -242,6 +275,8 @@ export default function SavedPosts() {
             <div className="savedposts-banner"><h1>Saved Posts</h1></div>
             <div className="savedposts-panel">
                 {savedroomposts}
+                <h1>-----------</h1>
+                {savedposts}
             </div>
         </>
     )
