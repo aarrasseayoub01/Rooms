@@ -285,8 +285,8 @@ const dateTime = (date1) => {
     const handleSavePost = async () => {
         if (!saved){
             setSaved(true);
-            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "roompost", id: props.id}]}});
-            localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "roompost", id: props.id}]}));
+            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "roompost", id: props.id, saveDate: new Date()}]}});
+            localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "roompost", id: props.id, saveDate: new Date()}]}));
             await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: [...user.saved, {type: "roompost", id: props.id, saveDate: new Date()}]})
         } else{
             setSaved(false)
