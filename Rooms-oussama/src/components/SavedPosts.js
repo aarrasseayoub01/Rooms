@@ -98,18 +98,14 @@ export default function SavedPosts() {
           const res = await axios.get("http://localhost:5000/api/roompost/allroomposts/"+user._id);
           console.log(res.data)
           setRoomposts(
-            res.data.sort((p1, p2) => {
-              return new Date(p2.createdAt) - new Date(p1.createdAt);
-            })
+            res.data
           )
         }
         fetchRoomposts();
         const fetchPosts = async() =>{
           const res = await axios.get("http://localhost:5000/api/posts/allposts/"+user._id);
           setPosts(
-            res.data.sort((p1, p2) => {
-              return new Date(p2.createdAt) - new Date(p1.createdAt);
-            })
+            res.data
           )
         }
         fetchPosts();
@@ -202,7 +198,9 @@ export default function SavedPosts() {
           }
         }
       }
-      var allposts = roomposts.concat(posts)
+      var allposts = (roomposts.concat(posts)).sort((p1, p2) => {
+        return new Date(p2.date) - new Date(p1.date);
+      })
       
 
       const allpostsSaved = allposts.map(x=>{
@@ -220,7 +218,7 @@ export default function SavedPosts() {
               <div className="savedpost-infos">
                   <p className="overflow-saved">{x.desc !== "" ? x.desc : "No description"}</p>
                   <span className="overflow-saved">posted by <b>{userName(Array.isArray(x.userId) ? x.userId[0] : x.userId)}</b></span>
-                  <small className="overflow-saved">Saved {dateTime(x.saveDate)} ago</small>
+                  <small className="overflow-saved">Saved {dateTime(x.date)} ago</small>
               </div>
               <div className="saved-edit-buttons">
                   <Link to={Array.isArray(x.userId) ? "../roompost/"+x._id : "../posts/"+x._id}><AiOutlineEye style={{cursor: "pointer"}}/></Link>
