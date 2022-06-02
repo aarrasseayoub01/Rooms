@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck, AiFillSave, AiOutlineSave} from "react-icons/ai"
-import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
 import RoomComment from "./RoomComment";
 import { AuthContext } from "../Context/authContext";
@@ -8,7 +7,6 @@ import AddRoomComment from "./AddRoomComment";
 import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
-import Modal from "react-modal";
 import styled from "styled-components";
 
 
@@ -35,21 +33,17 @@ export default function RoomPost(props) {
     }
     const [saved, setSaved] = useState(isSaved);
 
-    const desc = useRef();
+    // const desc = useRef();
     const history = useNavigate()
     
     // let subtitle;
-    const [modalIsOpen, setIsOpen] = useState(false); //Modal pour le changement des donnees d'utilisateur
+    // const [modalIsOpen, setIsOpen] = useState(false); //Modal pour le changement des donnees d'utilisateur
 
     
 
-    function openModal() {
-        setIsOpen(true); //Ouvrir le Modal
-    }
-
-    function closeModal() {
-        setIsOpen(false); //Fermer le Modal
-    }
+    // function closeModal() {
+    //     setIsOpen(false); //Fermer le Modal
+    // }
 
 
     //33-64 : Determiner le temps qui a passe depuis le moment du publication de poste et le temps actuel
@@ -306,7 +300,7 @@ const dateTime = (date1) => {
     if(!deleted){
     return(
           <div className="post">
-                              
+{/*                               
 
                <Modal
                     isOpen={modalIsOpen}
@@ -371,7 +365,7 @@ const dateTime = (date1) => {
               </motion.dev>
               </AnimatePresence>
                 </StyledModal>
-              </Modal>
+              </Modal> */}
 
             
             <div>
@@ -385,8 +379,8 @@ const dateTime = (date1) => {
                 <div className="post-grid">
                     <Link className="comment-username" to={"../"+props.userId[0]}> 
                         {userImg(props.userId[0])==="https://i.ibb.co/J25RQCT/profile.png" 
-                            ? <img className="profileimage" src={userImg(props.userId[0])} />
-                            : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId[0])} />
+                            ? <img className="profileimage" src={userImg(props.userId[0])} alt="user" />
+                            : <img className="profileimage" src={"http://localhost:5000/images/" + userImg(props.userId[0])} alt="user" />
                         }
                     </Link>
                     <div className="post-room-name">
@@ -431,7 +425,7 @@ const dateTime = (date1) => {
                 
                 
                 <div>
-                    {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post image" />}
+                    {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post" />}
                 </div>
             </div>
             
@@ -485,28 +479,28 @@ const dateTime = (date1) => {
             return null
         }
 }   
-const StyledModal = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// const StyledModal = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
 
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-`;
-const ModalContent = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   bottom: 0;
+//   right: 0;
+// `;
+// const ModalContent = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   flex-direction: column;
 
-  background-color: #eeeeee;
-  width: 50%;
-  min-height: 50vh;
-  padding: 30px;
-  box-shadow: 0px 3px 6px #00000029;
-  overflow-y: auto;
-  max-height: calc(100vh - 100px);
-`;
+//   background-color: #eeeeee;
+//   width: 50%;
+//   min-height: 50vh;
+//   padding: 30px;
+//   box-shadow: 0px 3px 6px #00000029;
+//   overflow-y: auto;
+//   max-height: calc(100vh - 100px);
+// `;

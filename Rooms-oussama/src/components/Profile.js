@@ -61,7 +61,7 @@ export default function Profile() {
     //cacher les fenetres de chat
     function ShutChat(id){
       setChatId(prev=>{
-        const prev2 = prev.filter(x=>x!=id)
+        const prev2 = prev.filter(x=>x!==id)
         return prev2
       })
       if(chatId.length === 0) setIsChatClicked(false)
@@ -302,8 +302,8 @@ export default function Profile() {
                         <div className="flex-row">
                             <h3 style={{width: "200px"}}>Profile :</h3>
                             {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                                ? <img className="profileimage" src={user.picture} alt="Profile image"/>
-                                : <img className="profileimage" src={"http://localhost:5000/images/" + (profPic1!==""?profPic1:user.picture)} alt="Profile image"/>
+                                ? <img className="profileimage" src={user.picture} alt="Profile"/>
+                                : <img className="profileimage" src={"http://localhost:5000/images/" + (profPic1!==""?profPic1:user.picture)} alt="Profile"/>
                             }
                             <label>
                                 <BsCardImage className="upload-image"/>
@@ -314,8 +314,8 @@ export default function Profile() {
                             <h3 style={{width: "200px"}}>Cover :</h3>
                             {/* <img src={"http://localhost:5000/images/" +(coverPic1!==""?coverPic1:user.cover)} alt="Cover Image" width="100px" /> */}
                             {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                                ? <img src={user.cover} width="100px" alt="Cover image"/>
-                                : <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:user.cover)} width="100px" alt="Cover image"/>
+                                ? <img src={user.cover} width="100px" alt="Cover"/>
+                                : <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:user.cover)} width="100px" alt="Cover"/>
                             }
                             <label>
                                 <BsCardImage className="upload-image"/>
@@ -351,12 +351,12 @@ export default function Profile() {
             <div className="profile-card">
                 <div className="profile-images">
                     {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                        ? <img className="profile-cover" src={user.cover} alt="Cover image"/>
-                        : <img className="profile-cover" src={"http://localhost:5000/images/" + user.cover} alt="Cover image"/>
+                        ? <img className="profile-cover" src={user.cover} alt="Cover"/>
+                        : <img className="profile-cover" src={"http://localhost:5000/images/" + user.cover} alt="Cover"/>
                     }
                     {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                        ? <img className="profile-pic" src={user.picture} alt="Profile image"/>
-                        : <img className="profile-pic" src={"http://localhost:5000/images/" + user.picture} alt="Profile image"/>
+                        ? <img className="profile-pic" src={user.picture} alt="Profile"/>
+                        : <img className="profile-pic" src={"http://localhost:5000/images/" + user.picture} alt="Profile"/>
                     }
                 </div>
                 <div className="profile-name1">

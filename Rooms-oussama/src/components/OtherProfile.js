@@ -41,7 +41,7 @@ export default function OtherProfile(props) {
       }
       function ShutChat(id){
         setChatId(prev=>{
-          const prev2 = prev.filter(x=>x!=id)
+          const prev2 = prev.filter(x=>x!==id)
           return prev2
         })
         if(chatId.length === 0) setIsChatClicked(false)
@@ -137,7 +137,7 @@ export default function OtherProfile(props) {
             );
           };
           fetchComments();
-    }, []);
+    }, [user._id]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
@@ -283,12 +283,12 @@ export default function OtherProfile(props) {
             <div className="profile-card">
                 <div className="profile-images">
                     {userCover(props.userId)==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                        ? <img className="profile-cover" src={userCover(props.userId)} alt="Cover image"/>
-                        : <img className="profile-cover" src={"http://localhost:5000/images/" + userCover(props.userId)} alt="Cover image"/>
+                        ? <img className="profile-cover" src={userCover(props.userId)} alt="Cover"/>
+                        : <img className="profile-cover" src={"http://localhost:5000/images/" + userCover(props.userId)} alt="Cover"/>
                     }
                     {userImg(props.userId)==="https://i.ibb.co/J25RQCT/profile.png" 
-                        ? <img className="profile-pic" src={userImg(props.userId)} alt="Profile image"/>
-                        : <img className="profile-pic" src={"http://localhost:5000/images/" + userImg(props.userId)} alt="Profile image"/>
+                        ? <img className="profile-pic" src={userImg(props.userId)} alt="Profile"/>
+                        : <img className="profile-pic" src={"http://localhost:5000/images/" + userImg(props.userId)} alt="Profile"/>
                     }
                 </div>
                 <div className="profile-name">

@@ -6,7 +6,7 @@ import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import axios from "axios";
 
 export default function SearchedRoom(props) {
-    const {user, dispatch} = useContext(AuthContext)
+    const {user} = useContext(AuthContext)
     const [rooms, setRooms] = useState([]);
     const [followed, setFollowed] = useState(props.followers.includes(user._id));
 
@@ -37,21 +37,6 @@ export default function SearchedRoom(props) {
         
         await axios.put(`http://localhost:5000/api/room/${props.id}`, {...props.x, followers: followersList})
        
-    } 
-    function checkFriendship(id, List1, List2){
-        if(List1.includes(id)){
-            if(List2.includes(id)){
-                return "Friend"
-            } else {
-                return "Followed"
-            }
-        } else {
-            if(List2.includes(id)){
-                return "Follower"
-            } else {
-                return "Not friend"
-            }
-        }
     }
     //Affiche les utlisateurs trouve avec le meme nom recherche
     return(

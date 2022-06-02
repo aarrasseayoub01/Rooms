@@ -1,8 +1,6 @@
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiFillCloseCircle, AiOutlineSend } from "react-icons/ai";
-import { setAppElement } from "react-modal";
-import { useSearchParams } from "react-router-dom";
 import { AuthContext } from "../Context/authContext";
 import ChatMessage from "./ChatMessage";
 import { Link } from "react-router-dom";

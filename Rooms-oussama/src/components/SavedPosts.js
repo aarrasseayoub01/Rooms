@@ -79,7 +79,7 @@ export default function SavedPosts() {
     //cacher les fenetres de chat
     function ShutChat(id){
       setChatId(prev=>{
-        const prev2 = prev.filter(x=>x!=id)
+        const prev2 = prev.filter(x=>x!==id)
         return prev2
       })
       if(chatId.length === 0) setIsChatClicked(false)
@@ -209,13 +209,13 @@ export default function SavedPosts() {
         return(
           <div className="saved-post">
               {x.photo !== ""
-                  ? <img src={"http://localhost:5000/images/" + x.photo} width={60}/>
+                  ? <img src={"http://localhost:5000/images/" + x.photo} width={60} alt="user" />
                   : (Array.isArray(x.userId)
                       ? userImg(x.userId[0]) === "https://i.ibb.co/J25RQCT/profile.png"
                       : userImg(x.userId) === "https://i.ibb.co/J25RQCT/profile.png"
                   )
-                  ? <img src={Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId)} className="profileimage" />
-                  : <img src={"http://localhost:5000/images/" + (Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId))} className="profileimage" />
+                  ? <img src={Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId)} className="profileimage" alt="user" />
+                  : <img src={"http://localhost:5000/images/" + (Array.isArray(x.userId) ? userImg(x.userId[0]) : userImg(x.userId))} className="profileimage" alt="user" />
               }
               <div className="savedpost-infos">
                   <p className="overflow-saved">{x.desc !== "" ? x.desc : "No description"}</p>

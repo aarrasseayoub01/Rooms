@@ -5,7 +5,7 @@ import { AuthContext } from "../Context/authContext";
 import axios from "axios";
 
 export default function MiniSearchedUser(props) {
-    const {user, dispatch} = useContext(AuthContext)
+    const {user} = useContext(AuthContext)
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -20,28 +20,6 @@ export default function MiniSearchedUser(props) {
         fetchUsers();
     }, []);
 
-
-    function getUser(thisId){
-        // const res = await axios.get("http://localhost:5000/api/user/"+thisId);
-        // return res;
-
-        for (let i=0;i<users.length;i++){
-            if(users[i]._id===thisId){
-                return users[i]
-            }
-        }
-    }
-
-    //Detetmine le nom d'utilisateur depuis son idetifiant
-    // function userName(thisId){
-    //     // const res = await axios.get("http://localhost:5000/api/user/"+thisId);
-    //     // return res.username;
-    //     for (let i=0;i<users.length;i++){
-    //         if(users[i]._id==thisId){
-    //             return(users[i].username)
-    //         }
-    //     }
-    // }
     
     function checkFriendship(id, List1, List2){
         if(List1.includes(id)){

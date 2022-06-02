@@ -28,7 +28,7 @@ export default function Comment(props) {
           setPosts(res.data)
         };
         fetchPosts();
-    }, [user._id, deleted, editClicked, style, commentVote]);
+    }, [user._id, deleted, editClicked, style, commentVote, props.post._id]);
     
     //34-65 : Determiner le temps qui a passe depuis le moment du publication de poste et le temps actuel
     const d1 = Date.now();

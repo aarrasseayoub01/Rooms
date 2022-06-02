@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/authContext";
 import axios from "axios"
-import { setAppElement } from "react-modal";
-import { Link } from "react-router-dom";
 
 
 export default function Message(props) {

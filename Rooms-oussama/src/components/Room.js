@@ -13,7 +13,7 @@ import Modal from 'react-modal';
 import { BsCardImage } from "react-icons/bs"
 // import { CSSTransition } from 'react-transition-group';
 import styled from "styled-components";
-import { MdAdd, MdNotificationsActive, MdOutlineAdd } from "react-icons/md"
+import { MdNotificationsActive } from "react-icons/md"
 import Notification from "./Notification"
 import Message from "./Message"
 import Chatbox from "./Chatbox"
@@ -27,7 +27,7 @@ export default function Room(props) {
     const [isChatClicked, setIsChatClicked] = useState(false);
     const [chatId, setChatId] = useState([]);
     const [posts, setPosts] = useState([]);
-    const { user, dispatch } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [profPic, setProfPic] = useState(null);
     const [coverPic, setCoverPic] = useState(null);
     const [profPic1, setProfPic1] = useState("");
