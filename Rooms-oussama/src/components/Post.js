@@ -322,9 +322,15 @@ export default function Post(props) {
     const handleDeletePost = async () => {
         if(user._id===props.userId){
         await axios.delete(`http://localhost:5000/api/posts/${props.id}`, {data:{userId:user._id}})
+        dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: user.saved.filter(x=>x.id===props.id)}});
+        localStorage.setItem("user", JSON.stringify({...user, saved: user.saved.filter(x=>x.id===props.id)}));
+        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: user.saved.filter(x=>x.id===props.id)})
         } else{
             if(user._id===props.sharer){
                 await axios.delete(`http://localhost:5000/api/posts/${props.id}`, {data:{userId:props.userId}})
+                dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: user.saved.filter(x=>x.id===props.id)}});
+        localStorage.setItem("user", JSON.stringify({...user, saved: user.saved.filter(x=>x.id===props.id)}));
+        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: user.saved.filter(x=>x.id===props.id)})
             }
         }
         const savedUpdated = user.saved.filter(x=>x.id !== props.id);
