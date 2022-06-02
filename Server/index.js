@@ -11,11 +11,12 @@ import roomPostRoutes from './routes/roomPosts.js';
 import multer from "multer"
 import path from "path";
 import {fileURLToPath} from 'url';
+import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 //__dirname sert a donne le path au root en dependant sur la machine locale dont on execute ce code.
 const __dirname = path.dirname(__filename);
-// dotenv.config();
+dotenv.config();
 
 const app = express();
 app.use("/images", express.static(path.join(__dirname, "public/images")));//pour donner l'acces aux images apartir du backend.
