@@ -49,7 +49,7 @@ app.use("/api/room", roomRoutes)
 app.use("/api/roompost", roomPostRoutes)
 
 const CONNECTION_URL = process.env.MONGO_URI;
-const PORT = process.env.port || 5000;
+const PORT = process.env.PORT || 5000;
 //Se connecter a la base de donner puis rendre le serveur de backend accessible.
 mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true}).then(()=> app.listen(PORT, ()=> console.log(`Server running on port ${PORT}`))).catch((error) => console.log(error.message));
 
