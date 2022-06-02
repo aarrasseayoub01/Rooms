@@ -42,7 +42,7 @@ export default function Searching(props) {
     //cacher les fenetres de chat
     function ShutChat(id){
       setChatId(prev=>{
-        const prev2 = prev.filter(x=>x!=id)
+        const prev2 = prev.filter(x=>x!==id)
         return prev2
       })
       if(chatId.length === 0) setIsChatClicked(false)
@@ -105,7 +105,7 @@ export default function Searching(props) {
             );
           };
           fetchComments();
-    }, []);
+    }, [user._id]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {

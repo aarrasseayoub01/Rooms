@@ -13,7 +13,7 @@ export default function AddComment(props) {
           setPosts(res.data) //Changer la valeur de "state" des postes
         };
         fetchPosts();
-      }, [user._id, props.post.comments]); //Re-amener les postes a l'echange des id ou les commentaires
+      }, [user._id, props.post.comments, props.post._id]); //Re-amener les postes a l'echange des id ou les commentaires
     const handleComment = async (e)=>{
         e.preventDefault()
         const res = await axios.get("http://localhost:5000/api/posts/" + props.post._id);
@@ -29,8 +29,8 @@ export default function AddComment(props) {
             <form>
                 <div className="add-comment">
                     {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                        ? <img className="profileimage" src={user.picture} />
-                        : <img className="profileimage" src={"http://localhost:5000/images/" + user.picture} />
+                        ? <img className="profileimage" src={user.picture} alt="User" />
+                        : <img className="profileimage" src={"http://localhost:5000/images/" + user.picture} alt="User" />
                     }
                     <div className="add-comment-text">
                         <textarea type='textarea' className="add-comment-textarea" placeholder="New Comment" ref={content} />

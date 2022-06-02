@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import {motion, AnimatePresence} from 'framer-motion'
 import Navbar from "./Navbar";
-import Post from "./Post";
 // import { postCall } from "../apiCalls";
 import axios from "axios"
 import { AuthContext } from "../Context/authContext";
@@ -246,7 +245,7 @@ export default function AddRoom() {
                     <div className="modal-form">
                         <div className="flex-row" style={{justifyContent :"center"}}>
                             <h3 style={{width: "200px"}}>Cover :</h3>
-                            {coverPic !== null && <img src={coverPic!=="https://i.ibb.co/MVjMppt/cover.jpg" ? "http://localhost:5000/images/" +coverPic : "https://i.ibb.co/MVjMppt/cover.jpg"} width="100px" alt="Cover image"/>}
+                            {coverPic !== null && <img src={coverPic!=="https://i.ibb.co/MVjMppt/cover.jpg" ? "http://localhost:5000/images/" +coverPic : "https://i.ibb.co/MVjMppt/cover.jpg"} width="100px" alt="Cover"/>}
                             <label>
                                 <BsCardImage className="upload-image"/>
                                 <input type="file" style={{display: "none"}} name="myImage" onChange={(e) =>  handleUpload(e)}/>
