@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": "16.15.0"
+    "node": "v16.15.0",
+    "npm": "8.5.5"
+
   },
   "scripts": {
     "start": "node index.js"
