@@ -15,7 +15,7 @@
     "heroku-postbuild": "npm run install-back && npm run install-front && npm run build",
     "dev": "cd Server && node server.js && cd-",
     "front": "cd Rooms-oussama && npm start",
-    "start": "concurrently -n 'Rooms-oussama,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"npm run front\""
+    "start": "concurrently -n 'Rooms-oussama,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"cd Rooms-oussama && npm start && cd-\""
   },
   "author": "",
   "license": "ISC",
