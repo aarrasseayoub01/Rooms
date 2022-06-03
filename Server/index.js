@@ -52,7 +52,7 @@ const CONNECTION_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const PORT = process.env.PORT || 5000;
 
 if(process.env.NODE_ENV === 'production'){
-  app.use(express.static('client/build'));
+  app.use(express.static('Rooms-oussama/build'));
 }
 
 //Se connecter a la base de donner puis rendre le serveur de backend accessible.

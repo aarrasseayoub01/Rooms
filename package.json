@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently -n 'Rooms-oussama,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"cd Rooms-oussama && npm start && cd-\"",
+    "start": "concurrently -n 'Rooms-oussama,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"cd Rooms-oussama && npm start && cd-\"",
     "build": "cd Rooms-oussama && npm run build",
     "install-front": "cd Rooms-oussama && npm install",
     "front": "cd Rooms-oussama && npm start",
     "heroku-postbuild": "npm run install-front && npm run build",
-    "start": "cd Server && node index.js && cd-"
+    "dev": "cd Server && node index.js && cd-"
   },
   "author": "",
   "license": "ISC",
