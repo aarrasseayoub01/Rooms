@@ -129,7 +129,7 @@ export default function Searching(props) {
               x={x}
             />
       )})
-    const searchedUsers = users.map(x=>{
+    var searchedUsers = users.map(x=>{
         return(x.username.toLowerCase().includes(props.userId.toLowerCase()) //Rendre le recherche insensible au majuscules et miniscules
             ?(<AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
@@ -138,7 +138,8 @@ export default function Searching(props) {
             </AnimatePresence>):null)
         }
     )
-    const searchedRooms = rooms.map(x=>{
+    searchedUsers = searchedUsers.filter(x=>x)
+    var searchedRooms = rooms.map(x=>{
       return(x.title.toLowerCase().includes(props.userId.toLowerCase()) //Rendre le recherche insensible au majuscules et miniscules
             ?(<AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
@@ -154,6 +155,7 @@ export default function Searching(props) {
                 </motion.dev>
             </AnimatePresence>):null)
     })
+    searchedRooms = searchedRooms.filter(x=>x)
     const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
     return(
         <>
@@ -190,11 +192,17 @@ export default function Searching(props) {
             <div className="post">
                 <h2 className="search-title">People</h2>
                 <div className="search-div">
-                    {searchedUsers}
+                    {searchedUsers.length !==0
+                      ? searchedUsers
+                      : <h3>Nothing Found !</h3>
+                    }
                 </div>
                 <h2 className="search-title">Rooms</h2>
                 <div className="search-div">
-                    {searchedRooms}
+                    {searchedRooms.length !==0
+                      ? searchedRooms
+                      : <h3 style={{paddingBottom: "20px"}}>Nothing Found !</h3>
+                    }
                 </div>
             </div>
         </>

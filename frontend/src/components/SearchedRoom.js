@@ -52,9 +52,12 @@ export default function SearchedRoom(props) {
                     <p>{(props.admins.includes(user._id)
                         ? "Your Room"
                         // : checkFriendship(props.id, user.following, user.followers)
-                        : "Not your room"
+                        : (props.followers.includes(user._id)
+                            ? "Followed"
+                            : "Not Followed"
+                        )
                         )}</p>
-                    <small>23 mutual friends</small>
+                    <small>23 of your friends followed</small>
                 </div>
                 <div className="searched-flex">
                     {!(user._id === props.id) &&

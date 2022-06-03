@@ -34,6 +34,7 @@ const postSchema = new mongoose.Schema({
     shareDesc: String,
     sharedPost: String, 
     shareDate: Date,
+    originalId: String,
     saveDate: Date
 });
 

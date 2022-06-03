@@ -34,6 +34,7 @@ export default function Profile() {
     const [likeNotes, setLikeNotes] = useState([]);
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
+    const [rooms, setRooms] = useState();
     const userName = useRef();
     const email = useRef();
     const password = useRef();
@@ -74,36 +75,18 @@ export default function Profile() {
         setIsOpen(false); //Fermer le Modal
     }
        
-           
-    const Rooms1 = Rooms.filter(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===user._id){
-                return(
-                    <RoomCard 
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
-    })
-    const roomCards = Rooms1.map(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===user._id){
-                return(
-                    <RoomCard 
-                        key={x.roomId}
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
-    })
+    const roomCards = rooms!==undefined && rooms.map(x=>{
+      return(
+        <RoomCard
+          id={x._id}
+          cover={x.cover}
+          title={x.title}
+          userId={x.userId}
+          followers={x.followers}
+        />
+      )
+    });
+    console.log(roomCards)
     
     const handleChange = async () => {
         dispatch({ type: "LOGIN_SUCCESS", payload: {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}});
@@ -155,46 +138,51 @@ export default function Profile() {
         );
         };
         fetchPosts();
-        
-          const fetchLikes = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const likeNotif = []
-            res.data.forEach(post=>{
-                 likeNotif.push(post.likes.map(x=>[...x, 'like']))
+        const fetchLikes = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const likeNotif = []
+          res.data.forEach(post=>{
+                likeNotif.push(post.likes.map(x=>[...x, 'like']))
+          })
+          setLikeNotes(
+            likeNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setLikeNotes(
-              likeNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchLikes();
-          const fetchDislikes = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const dislikeNotif = []
-            res.data.forEach(post=>{
-                 dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
+          );
+        };
+        fetchLikes();
+        const fetchDislikes = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const dislikeNotif = []
+          res.data.forEach(post=>{
+                dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
+          })
+          setDislikeNotes(
+            dislikeNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setDislikeNotes(
-              dislikeNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchDislikes();
-          const fetchComments = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const commentNotif = []
-            res.data.forEach(post=>{
-                 commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
+          );
+        };
+        fetchDislikes();
+        const fetchComments = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const commentNotif = []
+          res.data.forEach(post=>{
+                commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
+          })
+          setCommentNotes(
+            commentNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setCommentNotes(
-              commentNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchComments();
+          );
+        };
+        fetchComments();
+        const fetchRooms = async () => {
+          const res = await axios.get("http://localhost:5000/api/room/a/"+user._id);
+          console.log(res)
+          setRooms(res.data);
+        }
+        fetchRooms();
     }, [user._id, profPic, coverPic]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)

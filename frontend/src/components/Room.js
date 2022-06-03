@@ -3,9 +3,7 @@ import {motion, AnimatePresence} from 'framer-motion'
 
 import Navbar from "./Navbar"
 import { AiFillEdit, AiFillMessage, AiFillPlusCircle, AiOutlineClose, AiOutlinePlusCircle } from "react-icons/ai"
-import RoomCard from "./RoomCard"
 import RoomPost from "./RoomPost"
-import { Rooms } from "../dummyData"
 import axios from "axios"
 import { AuthContext } from "../Context/authContext"
 import AddPost from "./AddPost"
@@ -75,40 +73,15 @@ export default function Room(props) {
     function closeModal() {
         setIsOpen(false); //Fermer le Modal
     }
-       
-           
-    const Rooms1 = Rooms.filter(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===user._id){
-                return(
-                    <RoomCard 
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                        userId={'6287a76fd99dfbd74943b195'}
-                    />
-                )
-            }
-        }
-    })
-    const roomCards = Rooms1.map(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===user._id){
-                return(
-                    <RoomCard 
-                        key={x.roomId}
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        userId={x.userId}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
-    })
     
+    const roomCards = (room._id !== undefined && room.followers.map(x=>{
+        return(
+            <RoomerCard 
+                key={x.roomId}
+                id={x}
+            />
+        )
+    }))
 
     
     const handleChange = async () => {
@@ -249,13 +222,15 @@ export default function Room(props) {
                 img={x.photo}
                 date={x.date}
                 userId={x.userId}
-                room={x.room}
+                roomId={x.room}
                 like={x.likes}
                 disLike={x.dislikes}
                 roomers={x.roomers}
                 vote={x.likeCount}
                 comments={x.comments}
                 post={x}
+                followers={room.followers}
+                admins={room.userId}
                 
           />
     )})
@@ -267,7 +242,7 @@ export default function Room(props) {
     return (
       <RoomerCard 
           title={room.title}
-          userId={user}
+          id={user}
       />
     )})}
 
@@ -280,11 +255,9 @@ export default function Room(props) {
         var index = followersList.indexOf(user._id)
         followersList.splice(index,1)
     }
-    
     await axios.put(`http://localhost:5000/api/room/${room._id}`, {...room, followers: followersList})
  }
- 
-  return(
+return(
         <>
         {/* <Navbar handleNotif={handleNotif}/> */} 
         <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
@@ -411,10 +384,8 @@ export default function Room(props) {
                     <div className="room-followers">
                         <div className="room-admin-card"><h3>Roomers</h3></div>
                         <div className="profile-room-grid">
-                            {roomCards.length===0
-                                ? (
-                                    <div></div>
-                                )
+                            {roomCards.length!==0
+                                ? roomCards
                                 : <h1 className="how-empty">How Empty</h1>
                             }
                         </div>

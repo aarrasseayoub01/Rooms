@@ -42,8 +42,18 @@ export const allposts = async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-};
-  
+}; 
+
+export const isPostExist = async (req, res) => {
+  try {
+    const post = await PostMessage.findOne({_id: req.params.PostId});
+    console.log(post)
+    res.status(200).json(post);
+  } catch(err){
+    res.status(500).json(err);
+  }
+}
+
 export const myPost = async (req, res) => {
   try {
     const posts = await PostMessage.findOne({ _id: req.params.postId });

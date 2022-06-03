@@ -1,5 +1,6 @@
 import {React, useState, useEffect } from "react";
 import axios from "axios"
+import { Link } from "react-router-dom";
 
 export default function RoomerCard(props) {
     const [title, setTitle] = useState("");
@@ -7,7 +8,7 @@ export default function RoomerCard(props) {
 
     useEffect(() => {
         const title = async () => {
-              const res = await axios.get("http://localhost:5000/api/user/"+props.userId)
+              const res = await axios.get("http://localhost:5000/api/user/"+props.id)
               setTitle(res.data.username)
               setPhoto(res.data.picture)
         }
@@ -17,15 +18,14 @@ export default function RoomerCard(props) {
 
     return(
         <div className="roomer-card">
-            <div>
+            <Link to={"../"+props.id}>
                 {photo === "https://i.ibb.co/J25RQCT/profile.png"
                     ? <img className="room-cursor room-card-img" alt="" src={photo}/>
                     : <img className="room-cursor room-card-img" alt="" src={"http://localhost:5000/images/" + photo }/>
                 }
-            </div>
+            </Link>
             <div className="room-card-text">
-                <h3 className="room-cursor" style={{padding: "0px"}}>{title}</h3>
-                {/* <p style={{padding: "0px"}}>{props.roomers.length} Roomers</p> */}
+            <Link to={"../room/"+props.id} className="text-decoration"><h3 className="room-cursor" style={{padding: "0px"}}>{title}</h3></Link>
             </div>
         </div>
     )

@@ -69,7 +69,6 @@ fetchConv();
         setMsg1(e.target.value)
     }
 
-
     const chatMsg = msgs.map(msg=>{
         return(
             <>

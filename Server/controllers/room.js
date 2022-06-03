@@ -1,7 +1,5 @@
 import Room from '../models/rooms.js'
 import bcrypt from "bcrypt" //Sert a rendre les mots de passe crypte dans la base des donnees.
-import RoomsPostMessage from '../models/roomsPostMessage.js';
-import PostMessage from '../models/postMessage.js';
 
 //Les fonctions qu'on executera lorsqu'on accedera a un url dans le fichier ./routes/users.js
 
@@ -39,6 +37,14 @@ export const myRoom = async (req, res) => {
     }
   };
 
+export const allRooms = async (req, res) => {
+    try {
+      const room = await Room.find();
+      res.status(200).json(room);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+};
   
 export const getRooms = async (req, res) => {
     try {
@@ -50,22 +56,18 @@ export const getRooms = async (req, res) => {
         for(let j=0;j<res1[i].userId.length;j++){
 
         if(res1[i].userId[j]===req.params.userId){
-          
-
           room = await Room.find({userId:res1[i].userId});
           room1=[...room1, ...room]
         }
         for(let j=0;j<res1[i].followers.length;j++){
 
         if(res1[i].followers[j]===req.params.userId){
-          
-
           room = await Room.find({followers:res1[i].followers});
           room1=[...room1, ...room]
         }
       }
     }
-  }
+  } 
       res.status(200).json(room1);
 
     } catch (err) {
