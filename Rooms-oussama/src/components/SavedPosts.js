@@ -23,7 +23,7 @@ export default function SavedPosts() {
     const [posts, setPosts] = useState([]);
     const [roomposts, setRoomposts] = useState([]);
     const {user, dispatch}  = useContext(AuthContext);
-
+    //27 - 62 : Code Exterieur (Index : 1 dans le Benchmarking)
     //27-62 : Determiner le temps qui a passe depuis le moment du publication de poste et le temps actuel
     const dateTime = (date1) => {
       const d1 = Date.now();
@@ -187,7 +187,7 @@ export default function SavedPosts() {
         )
       })
       //Detetmine le nom d'utilisateur depuis son idenifiant
-    function userName(thisId) {
+      function userName(thisId) {
         for (let i=0;i<users.length;i++){
           if(users[i]._id===thisId){
             return(users[i].username)
