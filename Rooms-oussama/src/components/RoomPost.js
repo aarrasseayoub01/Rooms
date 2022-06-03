@@ -278,6 +278,9 @@ const dateTime = (date1) => {
     const handleDeletePost = async () => {
         if(props.userId.includes(user._id)){
             await axios.delete(`http://localhost:5000/api/roompost/${props.id}`, {data:{userId:user._id}})
+            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: user.saved.filter(x=>x.id===props.id)}});
+        localStorage.setItem("user", JSON.stringify({...user, saved: user.saved.filter(x=>x.id===props.id)}));
+        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: user.saved.filter(x=>x.id===props.id)})
         } 
         //Envoyer dans le "backend" une publication dans laquelles les commentaires sont modifees
         setDeleted(!deleted);
@@ -285,8 +288,8 @@ const dateTime = (date1) => {
     const handleSavePost = async () => {
         if (!saved){
             setSaved(true);
-            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "roompost", id: props.id}]}});
-            localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "roompost", id: props.id}]}));
+            dispatch({ type: "LOGIN_SUCCESS", payload: {...user, saved: [...user.saved, {type: "roompost", id: props.id, saveDate: new Date()}]}});
+            localStorage.setItem("user", JSON.stringify({...user, saved: [...user.saved, {type: "roompost", id: props.id, saveDate: new Date()}]}));
             await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: [...user.saved, {type: "roompost", id: props.id, saveDate: new Date()}]})
         } else{
             setSaved(false)
