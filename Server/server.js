@@ -48,7 +48,7 @@ app.use("/api/conv", convRoutes)
 app.use("/api/room", roomRoutes)
 app.use("/api/roompost", roomPostRoutes)
 
-const CONNECTION_URL = process.env.MONGODB_URI2;
+const CONNECTION_URL = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 5000;
 
 if(process.env.NODE_ENV === 'production'){
