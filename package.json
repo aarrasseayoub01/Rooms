@@ -10,7 +10,7 @@
     "install-front": "cd Rooms-oussama && npm install",
     "front": "cd Rooms-oussama && npm start",
     "heroku-postbuild": "npm run install-front && npm run build",
-    "start": "cd Server && node index.js && cd-"
+    "start": "cd Rooms-oussama && node server.js && cd-"
   },
   "author": "",
   "license": "ISC",
