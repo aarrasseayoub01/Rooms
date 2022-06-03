@@ -13,9 +13,9 @@
     "install-front": "cd Rooms-oussama && npm install",
     "install-back": "cd Server && npm install",
     "heroku-postbuild": "npm run install-back && npm run install-front && npm run build",
-    "start": "cd Server && node server.js && cd-",
+    "dev": "cd Server && node server.js && cd-",
     "front": "cd Rooms-oussama && npm start",
-    "dev": "concurrently -n 'Rooms-oussama,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"npm run front\""
+    "start": "concurrently -n 'Rooms-oussama,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"npm run front\""
   },
   "author": "",
   "license": "ISC",
