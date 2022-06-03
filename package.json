@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "v16.15.0",
+    "npm": "8.5.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently -n 'Rooms-oussama,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"cd Rooms-oussama && npm start\"",
+    "start": "concurrently -n 'Rooms-oussama,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"cd Rooms-oussama && npm start\"",
     "build": "cd Rooms-oussama && npm run build",
     "install-front": "cd Rooms-oussama && npm install",
     "front": "cd Rooms-oussama && npm start",
     "heroku-postbuild": "npm run install-front && npm run build",
-    "start": "cd Rooms-oussama && node server.js && cd-"
+    "dev": "cd Rooms-oussama && node server.js && cd-"
   },
   "author": "",
   "license": "ISC",
