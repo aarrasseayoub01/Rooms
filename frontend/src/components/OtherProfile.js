@@ -213,6 +213,7 @@ export default function OtherProfile(props) {
                 sharer={x.sharer}
                 shareDesc={x.shareDesc}
                 shareDate={x.shareDate}
+                originalId={x.originalId}
                 />
     )})
     const handleFollow =  async () => {

@@ -228,6 +228,7 @@ export default function Profile() {
                 sharer={x.sharer}
                 shareDesc={x.shareDesc}
                 shareDate={x.shareDate}
+                originalId={x.originalId}
                 />
     )})
 
