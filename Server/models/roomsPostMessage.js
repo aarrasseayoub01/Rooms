@@ -11,7 +11,7 @@ const roomsPostSchema = new mongoose.Schema({
         type: String,
         default:'',
       },
-    // selectedFile: String, 
+    // selectedFile: String,
     likes: {
         type: Array,
         default: []
@@ -30,13 +30,7 @@ const roomsPostSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    sharer: {
-        type: String,
-        default: ""
-    },
-    shareDesc: String,
-    sharedPost: String, 
-    shareDate: Date,
+    
 });
 
 const RoomsPostMessage = mongoose.model('RoomsPostMessage', roomsPostSchema);
