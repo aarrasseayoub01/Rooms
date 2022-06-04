@@ -38,6 +38,9 @@ export default function SearchedRoom(props) {
         await axios.put(`http://localhost:5000/api/room/${props.id}`, {...props.x, followers: followersList})
        
     }
+    const myFriends = user.following.filter(x=>user.followers.includes(x));
+    const Roomers = props.followers.concat(props.admins);
+    const mutualFriends = Roomers.filter(x=>myFriends.includes(x));
     //Affiche les utlisateurs trouve avec le meme nom recherche
     return(
         <div >
@@ -57,7 +60,7 @@ export default function SearchedRoom(props) {
                             : "Not Followed"
                         )
                         )}</p>
-                    <small>23 of your friends followed</small>
+                    <small>{mutualFriends.length} of your friends followed</small>
                 </div>
                 <div className="searched-flex">
                     {!(user._id === props.id) &&

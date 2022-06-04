@@ -170,6 +170,7 @@ export default function PostPage(props) {
               sharer={""}
               shareDesc={""}
               singlepost={true}
+              originalId={posts.originalId}
             //   shareDate={x.shareDate}
           />
             </div>

@@ -78,6 +78,7 @@ export default function Profile() {
     const roomCards = rooms!==undefined && rooms.map(x=>{
       return(
         <RoomCard
+          key={x._id}
           id={x._id}
           cover={x.cover}
           title={x.title}
@@ -86,7 +87,6 @@ export default function Profile() {
         />
       )
     });
-    console.log(roomCards)
     
     const handleChange = async () => {
         dispatch({ type: "LOGIN_SUCCESS", payload: {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}});
@@ -179,7 +179,6 @@ export default function Profile() {
         fetchComments();
         const fetchRooms = async () => {
           const res = await axios.get("http://localhost:5000/api/room/a/"+user._id);
-          console.log(res)
           setRooms(res.data);
         }
         fetchRooms();
@@ -279,9 +278,9 @@ export default function Profile() {
               <StyledModal onClick={() => setIsOpen(false)}>
 
                 <ModalContent
-            className="modalContent"
-            onClick={(e) => e.stopPropagation()}
-          >
+                  className="modalContent"
+                  onClick={(e) => e.stopPropagation()}
+                >
                 <div className="profile-modal">
                     <div className="modal-close">
                         <AiOutlineClose onClick={closeModal} className="modal-close-btn" />
@@ -372,10 +371,6 @@ export default function Profile() {
                         : <h1 className="how-empty">How Empty</h1>
                     }
                 </div>
-                {roomCards.length!==0
-                    ? <div><button className="allrooms-button">See all Rooms</button></div>
-                    : <div><button className="allrooms-button">See new Rooms</button></div>
-                }
             </div>
             <AddPost />
             {myPosts}

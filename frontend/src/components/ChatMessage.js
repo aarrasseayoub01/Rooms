@@ -40,11 +40,11 @@ export default function ChatMessage(props) {
         return dateStr
     }
     if(props.msg!==undefined){
-    if(props.msg.sender===user.username){    
+    if(props.msg.sender!==user.username){    
         return(
             <div className="sender-message">
                 <span className="sender-message-content">{props.msg.text}</span>
-                <small>{dateTime(props.msg.date)}</small>
+                <small>{dateTime(props.msg.date)}hh</small>
             </div>
         )
     }else{

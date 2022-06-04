@@ -797,11 +797,17 @@ code {
   align-items: center;
   gap: 5px;
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-decoration: none;
+}
+.my-rooms:hover{
+  overflow: visible;
 }
 .mini-room{
   display: flex;
-  justify-content: center;
+  justify-content: flex-start ;
   align-items: center;
   padding: 10px;
   border-radius: 10px;
@@ -811,6 +817,7 @@ code {
   color: #000000;
   text-decoration: none;
   gap: 15px;
+  width: 150px;
 }
 .mini-room:hover{
   background-color: #93e5be;
@@ -830,8 +837,9 @@ code {
 .feed{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  width: 100%;
 }
 .comment-add{
   background-color: #FFFFFF;
@@ -998,7 +1006,8 @@ code {
 }
 .shared-img-wrapper{
   overflow: auto;
-  height: 200px;
+  height: 100%;
+  max-height: 200px;
 }
 .shared-img{
   height: 200%;

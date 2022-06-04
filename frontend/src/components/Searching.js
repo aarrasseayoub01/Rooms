@@ -133,7 +133,7 @@ export default function Searching(props) {
         return(x.username.toLowerCase().includes(props.userId.toLowerCase()) //Rendre le recherche insensible au majuscules et miniscules
             ?(<AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
-                <SearchedUser key={x._id} id={x._id} username={x.username} image={x.picture} />
+                <SearchedUser key={x._id} id={x._id} username={x.username} image={x.picture} followers={x.followers} following={x.following} />
                 </motion.dev>
             </AnimatePresence>):null)
         }

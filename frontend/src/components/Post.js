@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck, AiFillSave, AiOutlineSave} from "react-icons/ai"
 import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
-import { FiCornerDownLeft, FiShare } from "react-icons/fi"
+import { FiShare } from "react-icons/fi"
 import Comment from "./Comment";
 import { AuthContext } from "../Context/authContext";
 import AddComment from "./AddComment";
@@ -141,8 +141,7 @@ export default function Post(props) {
         const fetchPost = async () => {
             var res;
             props.originalId!==undefined && (res = await axios.get("http://localhost:5000/api/posts/isPostExist/"+props.originalId));
-            console.log(res)
-            res && setOrigDeleted(true);
+            setOrigDeleted(res.data);
         }
         fetchPost();
     }, []);
@@ -479,7 +478,7 @@ export default function Post(props) {
                 <div style={postStyle}>
                 <div className="orig-post">
                     {!props.singlepost 
-                        ? <Link className="post-username" to={"../posts/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>
+                        ? (!origDeleted && <Link className="post-username" to={"../posts/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>)
                         : <small onClick={() => history(-1)} className="orig-post-btn">Return</small>
                     }
                 </div>

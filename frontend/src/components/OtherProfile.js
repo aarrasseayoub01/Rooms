@@ -26,6 +26,7 @@ export default function OtherProfile(props) {
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
     const {user, dispatch}  = useContext(AuthContext);
+    const [rooms, setRooms] = useState([]);
     
     function handleNotif() {
         setIsNotifClicked(prev=>!prev)
@@ -137,6 +138,12 @@ export default function OtherProfile(props) {
             );
           };
           fetchComments();
+          
+          const fetchRooms = async () => {
+            const res = await axios.get("http://localhost:5000/api/room/a/"+props.userId);
+            setRooms(res.data);
+          }
+          fetchRooms();
     }, [user._id]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
@@ -161,34 +168,17 @@ export default function OtherProfile(props) {
               x={x}
             />
       )})
-    const Rooms1 = Rooms.filter(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===props.userId){
-                return(
-                    <RoomCard 
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
-    })
-    const roomCards = Rooms1.map(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===props.userId){
-                return(
-                    <RoomCard 
-                        key={x.roomId}
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
+    const roomCards = rooms!==undefined && rooms.map(x=>{
+        return(
+            <RoomCard 
+              key={x._id}
+              id={x._id}
+              cover={x.cover}
+              title={x.title}
+              userId={x.userId}
+              followers={x.followers}
+            />
+        )
     })
     
     //Amener les postes depuis le "backend"
@@ -313,10 +303,6 @@ export default function OtherProfile(props) {
                         : <h1 className="how-empty">How Empty</h1>
                     }
                 </div>
-                {roomCards.length!==0
-                    ? <div><button className="allrooms-button">See all Rooms</button></div>
-                    : <div><button className="allrooms-button">See new Rooms</button></div>
-                }
             </div>
             {otherPosts}
         </div>

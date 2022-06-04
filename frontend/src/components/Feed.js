@@ -163,7 +163,7 @@ export default function Feed() {
               sharer={x.sharer}
               shareDesc={x.shareDesc}
               shareDate={x.shareDate}
-              // handleA={handleA}
+              originalId={x.originalId}
 
           />
       )
