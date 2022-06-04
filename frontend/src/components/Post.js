@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck, AiFillSave, AiOutlineSave} from "react-icons/ai"
 import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
-import { FiShare } from "react-icons/fi"
+import { FiCornerDownLeft, FiShare } from "react-icons/fi"
 import Comment from "./Comment";
 import { AuthContext } from "../Context/authContext";
 import AddComment from "./AddComment";
@@ -27,7 +27,8 @@ export default function Post(props) {
     const [sharerDescription,setSharerDescription] = useState(props.shareDesc);
     const [likeState, setLikeState] = useState(props.post.likes)
     const [dislikeState, setDislikeState] = useState(props.post.dislikes)
-    const [deleted, setDeleted] = useState(false)
+    const [deleted, setDeleted] = useState(false);
+    const [origDeleted, setOrigDeleted] = useState(false);
 
     const {user, dispatch} = useContext(AuthContext);
     var isSaved = false;
@@ -137,8 +138,15 @@ export default function Post(props) {
         );
         };
         fetchUsers();
+        const fetchPost = async () => {
+            var res;
+            props.originalId!==undefined && (res = await axios.get("http://localhost:5000/api/posts/isPostExist/"+props.originalId));
+            console.log(res)
+            res && setOrigDeleted(true);
+        }
+        fetchPost();
     }, []);
-
+    
     const isLiked = likeState.flat().includes(user.username) //Etat de boutton de "like"
     const isDisliked = dislikeState.flat().includes(user.username) //Etat de boutton de "dislike"
     //Clique sur le button de "like" declenche ce code ci-dessous
@@ -277,7 +285,7 @@ export default function Post(props) {
         
         setIsEdit(false)
         //Definir une liste constitues des elements precedents sauf de changement de la valeur de texte du commentaire
-        if(user._id===props.userId){
+        if(props.sharer==="" && user._id===props.userId){
             setDescription(descValue)
             await axios.put(
                 `http://localhost:5000/api/posts/${props.id}`,
@@ -309,7 +317,7 @@ export default function Post(props) {
     }
 
     const sharePost = async (e) => {
-        const post = {desc:props.desc, userId:props.userId, date: props.date, photo: props.img,room:props.room, sharer:user._id, shareDate:new Date(), shareDesc:desc.current.value}
+        const post = {desc:props.desc, userId:props.userId, date: props.date, photo: props.img,room:props.room, sharer:user._id, shareDate:new Date(), shareDesc:desc.current.value, originalId: props.id}
         try{
             await axios.post("http://localhost:5000/api/posts",post);
             //Envoyer le poste vers le "backend", et recharger la page pour que le poste s'affiche
@@ -386,8 +394,8 @@ export default function Post(props) {
                             <div className="modal-desc">
                                 <p className="description-content">{description}</p>
                             </div>
-                            <div>
-                                {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post" />}
+                            <div className="shared-img-wrapper">
+                                {props.img && <img src={"http://localhost:5000/images/" + props.img} className="shared-img" alt="Post" />}
                             </div>
                             <div className="post-interact">
                                 <div className="modal-rating">
@@ -429,11 +437,22 @@ export default function Post(props) {
                         </div>
                         {(user._id === props.userId || user._id===props.sharer) && 
                             <div className="post-edit">
-                                <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
-                                <div className="post-edit-buttons">
-                                    <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
-                                    <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
-                                </div>
+                                {!editClicked 
+                                    ? <button onClick={handleDropwdown} className="dots-button"><BsThreeDots /></button>
+                                    : <div className="post-edit-buttons">
+                                        <AiOutlineClose onClick={handleCloseDropdown} style={{cursor: "pointer"}} />
+                                        {user._id === props.sharer && 
+                                        <>
+                                            <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
+                                            <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                                        </>
+                                    }
+                                        {saved 
+                                            ? <AiFillSave style={{cursor: "pointer"}} onClick={handleSavePost} />
+                                            : <AiOutlineSave style={{cursor: "pointer"}} onClick={handleSavePost} />
+                                        }
+                                    </div>
+                                }
                             </div>
                         }
                     </div>
@@ -498,7 +517,7 @@ export default function Post(props) {
                         }
                 </div>
                 {props.sharer!==undefined && props.sharer.length===0 
-                ?(
+                  ?(
                     <div className="post-desc">
                         {isEdit && (
                             <div className="edit-desc">
@@ -513,13 +532,15 @@ export default function Post(props) {
                         )}
                         {!isEdit && <p className="description-content">{description}</p>}
                     </div>
-                )
-                :(
-                    <p className="description-content">{props.desc}</p>
-                )}
+                  )
+                  :(!origDeleted
+                        ? <p className="description-content">{props.desc}</p>
+                        : <p>Cette publication est supprimé par son autheur.</p>
+                  )}
                 <div>
-                    {props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post" />}
-                    {/* <img src="https://i.ibb.co/J25RQCT/profile.png" /> */}
+                    {!(props.sharer!==undefined && props.sharer.length!==0 && origDeleted) &&
+                        props.img && <img src={"http://localhost:5000/images/" + props.img} width="100%" alt="Post" />
+                    }
                 </div>
             </div>
                 <div className="post-interact">

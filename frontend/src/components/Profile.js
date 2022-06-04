@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import {motion, AnimatePresence} from 'framer-motion'
 
 import Navbar from "./Navbar"
-import { AiFillEdit, AiFillMessage, AiFillPlusCircle, AiOutlineClose, AiOutlinePlusCircle } from "react-icons/ai"
+import { AiFillEdit, AiFillMessage, AiOutlineClose } from "react-icons/ai"
 import RoomCard from "./RoomCard"
-import RoomPost from "./RoomPost"
+import Post from "./Post"
 import { Rooms } from "../dummyData"
 import axios from "axios"
 import { AuthContext } from "../Context/authContext"
@@ -17,17 +17,16 @@ import { MdNotificationsActive } from "react-icons/md"
 import Notification from "./Notification"
 import Message from "./Message"
 import Chatbox from "./Chatbox"
-import RoomerCard from "./RoomerCard"
 
 //Presque le meme que "Feed.js"
 
-export default function Room(props) {
+export default function Profile() {
     const [isNotifClicked, setIsNotifClicked] = useState(false);
     const [isMsgClicked, setIsMsgClicked] = useState(false);
     const [isChatClicked, setIsChatClicked] = useState(false);
     const [chatId, setChatId] = useState([]);
     const [posts, setPosts] = useState([]);
-    const { user } = useContext(AuthContext);
+    const { user, dispatch } = useContext(AuthContext);
     const [profPic, setProfPic] = useState(null);
     const [coverPic, setCoverPic] = useState(null);
     const [profPic1, setProfPic1] = useState("");
@@ -35,10 +34,10 @@ export default function Room(props) {
     const [likeNotes, setLikeNotes] = useState([]);
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
-    const [room, setRoom] = useState({})
-    const [followed, setFollowed] = useState([])
-    const [a, setA] = useState(1)
-    const title = useRef();
+    const [rooms, setRooms] = useState();
+    const userName = useRef();
+    const email = useRef();
+    const password = useRef();
     const desc = useRef();
 
     
@@ -76,58 +75,27 @@ export default function Room(props) {
         setIsOpen(false); //Fermer le Modal
     }
        
-           
-    const Rooms1 = Rooms.filter(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===user._id){
-                return(
-                    <RoomCard 
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                        userId={'6287a76fd99dfbd74943b195'}
-                    />
-                )
-            }
-        }
-    })
-    const roomCards = Rooms1.map(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===user._id){
-                return(
-                    <RoomCard 
-                        key={x.roomId}
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        userId={x.userId}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
-    })
-    
-
+    const roomCards = rooms!==undefined && rooms.map(x=>{
+      return(
+        <RoomCard
+          id={x._id}
+          cover={x.cover}
+          title={x.title}
+          userId={x.userId}
+          followers={x.followers}
+        />
+      )
+    });
+    console.log(roomCards)
     
     const handleChange = async () => {
-      if(room._id!==undefined){
-
-        await axios.put(`http://localhost:5000/api/room/${room._id}`, {...room, cover:(coverPic1!==""?coverPic1:room.cover),title:(title.current.value!==""?title.current.value:room.title), desc:(desc.current.value!==""?desc.current.value:room.desc)})
-      }
+        dispatch({ type: "LOGIN_SUCCESS", payload: {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}});
+        localStorage.setItem("user", JSON.stringify({...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}));
+        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)})
         //Modifier les donnees d'utilisateur
     }
     //Manipuler le changement des photo de profil ou de couverture
     useEffect(() => {
-        const fetchRoom = async () => {
-          const res = await axios.get("http://localhost:5000/api/room/"+props.id)
-          setRoom(res.data)
-          setA(0)
-        }
-        if(a===1){
-          fetchRoom()
-        }
         const changeProfPic = async () => {
         if (profPic) {
             const data = new FormData();
@@ -161,17 +129,15 @@ export default function Room(props) {
         }
         changeCoverPic();
         const fetchPosts = async () => {
-        const res = await axios.get("http://localhost:5000/api/roompost/posts/" + room._id);
+        const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
         setPosts(
             res.data.sort((p1, p2) => {
               // return new Date(p2.date) - new Date(p1.date);
-              return (new Date(p2.date) - new Date(p1.date));
+              return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
             })
         );
         };
-        if(room._id!==undefined){
         fetchPosts();
-        }
         const fetchLikes = async () => {
           const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
           const likeNotif = []
@@ -211,10 +177,15 @@ export default function Room(props) {
           );
         };
         fetchComments();
-        setFollowed(room.followers!==undefined && room.followers.includes(user._id))
-    }, [user._id, profPic, coverPic, room, a, props.id]);
-    const notif=likeNotes.concat(dislikeNotes);
-    const notiff=notif.concat(commentNotes);
+        const fetchRooms = async () => {
+          const res = await axios.get("http://localhost:5000/api/room/a/"+user._id);
+          console.log(res)
+          setRooms(res.data);
+        }
+        fetchRooms();
+    }, [user._id, profPic, coverPic]);
+    const notif=likeNotes.concat(dislikeNotes)
+    const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
       if(Array.isArray(p1) && Array.isArray(p2)) {
         return new Date(p2[2]) - new Date(p1[2])
@@ -229,7 +200,6 @@ export default function Room(props) {
         return new Date(p2[2]) - new Date(p1.date)
       }
     })
-
   const notif2 = notif1.map(x=>{
     return(
           <Notification 
@@ -242,7 +212,7 @@ export default function Room(props) {
         Array.isArray(x)?x=x[0]:x=x
 
         return(
-          <RoomPost 
+           <Post 
                 key={x._id}
                 id={x._id}
                 desc={x.desc}
@@ -256,34 +226,13 @@ export default function Room(props) {
                 vote={x.likeCount}
                 comments={x.comments}
                 post={x}
-                
-          />
+                sharer={x.sharer}
+                shareDesc={x.shareDesc}
+                shareDate={x.shareDate}
+                />
     )})
 
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
-  let admins =[]
-  if(room.userId!==undefined){
-    admins = room.userId.map(user=>{
-    return (
-      <RoomerCard 
-          title={room.title}
-          userId={user}
-      />
-    )})}
-
- const handleFollow = async ()=>{
-    setFollowed(prev=>!prev)
-    const followersList = room.followers;
-    if(!followersList.includes(user._id)){
-        followersList.push(user._id)
-    } else {
-        var index = followersList.indexOf(user._id)
-        followersList.splice(index,1)
-    }
-    
-    await axios.put(`http://localhost:5000/api/room/${room._id}`, {...room, followers: followersList})
- }
- 
   return(
         <>
         {/* <Navbar handleNotif={handleNotif}/> */} 
@@ -339,10 +288,22 @@ export default function Room(props) {
                     </div>
                     <div className="modal-form"> 
                         <div className="flex-row">
+                            <h3 style={{width: "200px"}}>Profile :</h3>
+                            {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
+                                ? <img className="profileimage" src={user.picture} alt="Profile"/>
+                                : <img className="profileimage" src={"http://localhost:5000/images/" + (profPic1!==""?profPic1:user.picture)} alt="Profile"/>
+                            }
+                            <label>
+                                <BsCardImage className="upload-image"/>
+                                <input type="file" style={{display: "none"}} name="myImage" onChange={(e) => setProfPic(e.target.files[0])}/>
+                            </label>
+                        </div>
+                        <div className="flex-row">
                             <h3 style={{width: "200px"}}>Cover :</h3>
-                            {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                                ? <img src={"http://localhost:5000/images/" +room.cover} width="100px" alt="Cover"/>
-                                : room.cover!==undefined && <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:room.cover)} width="100px" alt="Cover"/>
+                            {/* <img src={"http://localhost:5000/images/" +(coverPic1!==""?coverPic1:user.cover)} alt="Cover Image" width="100px" /> */}
+                            {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
+                                ? <img src={user.cover} width="100px" alt="Cover"/>
+                                : <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:user.cover)} width="100px" alt="Cover"/>
                             }
                             <label>
                                 <BsCardImage className="upload-image"/>
@@ -353,8 +314,16 @@ export default function Room(props) {
                     <h2>Edit Profile</h2>
                     <form className="modal-form">
                         <div className="flex-row">
-                            <h3 style={{width: "250px"}}>Room Name :</h3>
-                            <input className="login-input" placeholder={room.title} ref={title} />
+                            <h3 style={{width: "200px"}}>Username :</h3>
+                            <input className="login-input" placeholder={user.username} ref={userName} />
+                        </div>
+                        <div className="flex-row">
+                            <h3 style={{width: "200px"}}>Email :</h3>
+                            <input className="login-input" placeholder={user.email} ref={email} />
+                        </div>
+                        <div className="flex-row">
+                            <h3 style={{width: "200px"}}>Password :</h3>
+                            <input className="login-input" type="password" placeholder="Password" ref={password} />
                         </div>
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Description :</h3>
@@ -369,60 +338,46 @@ export default function Room(props) {
             
             <div className="profile-card">
                 <div className="profile-images">
-                    {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                        ? <img className="profile-cover" src={room.cover} alt="Cover"/>
-                        : room.cover!==undefined && <img className="profile-cover" src={"http://localhost:5000/images/" + room.cover} alt="Cover"/>
+                    {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
+                        ? <img className="profile-cover" src={user.cover} alt="Cover"/>
+                        : <img className="profile-cover" src={"http://localhost:5000/images/" + user.cover} alt="Cover"/>
+                    }
+                    {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
+                        ? <img className="profile-pic" src={user.picture} alt="Profile"/>
+                        : <img className="profile-pic" src={"http://localhost:5000/images/" + user.picture} alt="Profile"/>
                     }
                 </div>
                 <div className="profile-name1">
-                    <h1>{room.title}</h1>
-                    {(room.userId!==undefined && !room.userId.includes(user._id)) 
-                      ? followed
-                        ? <button className="follow-room-btn" onClick={handleFollow}><AiFillPlusCircle size={30} style={{cursor: "pointer"}} /></button>
-                        : <button className="follow-room-btn" onClick={handleFollow}><AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} /></button>
-                      
-                      : (<label>
-                            <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
-                         </label>
-                    )}
+                    <h1>{user.username}</h1>
                 </div>
                 <div className="profile-desc">
-                    {room.desc 
+                    {user.desc 
                         ? <div className="edit-desc">
-                            <p>{room.desc}</p>
+                            <p>{user.desc}</p>
                           </div>
-                        : ((room.userId !== undefined && room.userId.includes(user._id)) &&
-                            (<div className="div-submit" style={{marginBottom: "10px"}}>
-                              <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
-                            </div>))
+                        : <div className="div-submit" style={{marginBottom: "10px"}}>
+                            <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
+                          </div> 
                     }
                 </div>
-                
+                <label>
+                    <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
+                </label>
             </div>
             <div className="profile-rooms">
-                <h1 className="rooms-title">Roomers</h1>
-                <div className="rooms-section">
-                    <div className="room-admin">
-                        <div className="room-admin-card"><h3>Admin</h3></div>
-                        <div className="profile-room-grid">
-                          {admins}
-                        </div>
-                    </div>
-                    <div className="room-followers">
-                        <div className="room-admin-card"><h3>Roomers</h3></div>
-                        <div className="profile-room-grid">
-                            {roomCards.length===0
-                                ? (
-                                    <div></div>
-                                )
-                                : <h1 className="how-empty">How Empty</h1>
-                            }
-                        </div>
-                    </div>
+                <h1 className="rooms-title">Rooms</h1>
+                <div className="profile-room-grid">
+                    {roomCards.length!==0
+                        ? roomCards
+                        : <h1 className="how-empty">How Empty</h1>
+                    }
                 </div>
+                {roomCards.length!==0
+                    ? <div><button className="allrooms-button">See all Rooms</button></div>
+                    : <div><button className="allrooms-button">See new Rooms</button></div>
+                }
             </div>
-            {(room.userId !== undefined) && (room.userId.includes(user._id)) &&
-            <AddPost a={"a"} room={room._id}/>}
+            <AddPost />
             {myPosts}
         </div>
         </motion.dev>
@@ -430,7 +385,6 @@ export default function Room(props) {
          </>
     )
 } 
-
 const StyledModal = styled.div`
   display: flex;
   justify-content: center;

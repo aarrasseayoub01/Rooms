@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck, AiFillSave, AiOutlineSave} from "react-icons/ai"
 import { BiComment } from "react-icons/bi"
 import RoomComment from "./RoomComment";
@@ -7,7 +7,6 @@ import AddRoomComment from "./AddRoomComment";
 import axios from "axios";
 import { BsThreeDots } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
 
 
 
@@ -387,8 +386,7 @@ const dateTime = (date1) => {
                         }
                     </Link>
                     <div className="post-room-name">
-                        <Link className="post-username" to={"../"+props.userId[0]}> <b>{userName(props.userId[0])}</b></Link>
-                        {/* <h5><b>{props.room} -</b> <small>{userName(props.userId)}</small></h5> */}
+                        <Link className="post-username" to={"../"+props.userId[0]}><b>{userName(props.userId[0])}</b></Link>
                         <p><small>{dateTime(props.date)}</small></p>
                     </div>
                         <div className="post-edit">
@@ -441,27 +439,27 @@ const dateTime = (date1) => {
                         <small>{roomers} Roomers</small>
                         <small style={{width: "120%"}}>{props.comments.length} comments</small>
                     </div>
-                    
-                    <div className="post-rate">
-                        <div>
-                            {isLiked
-                                ? <AiFillLike onClick={()=>upvote()} className="post-like"/>
-                                : <AiOutlineLike onClick={()=>upvote()} className="post-like"/>
-                            }
-                            <small>{vote}</small>
-                            {isDisliked
-                                ? <AiFillDislike onClick={()=>downvote()} className="post-like"/>
-                                : <AiOutlineDislike onClick={()=>downvote()} className="post-like"/>
-                            }
-                        </div>
-                        <div onClick={handlecomment}>
-                            <div style={{cursor: "pointer"}} className="hover-background">
-                                <BiComment />
-                                <small className="hidable" style={{marginLeft:"5px"}}> comments</small>
+                    {(props.admins.includes(user._id) || props.followers.includes(user._id)) &&
+                        <div className="post-rate">
+                            <div>
+                                {isLiked
+                                    ? <AiFillLike onClick={()=>upvote()} className="post-like"/>
+                                    : <AiOutlineLike onClick={()=>upvote()} className="post-like"/>
+                                }
+                                <small>{vote}</small>
+                                {isDisliked
+                                    ? <AiFillDislike onClick={()=>downvote()} className="post-like"/>
+                                    : <AiOutlineDislike onClick={()=>downvote()} className="post-like"/>
+                                }
+                            </div>
+                            <div onClick={handlecomment}>
+                                <div style={{cursor: "pointer"}} className="hover-background">
+                                    <BiComment />
+                                    <small className="hidable" style={{marginLeft:"5px"}}> comments</small>
+                                </div>
                             </div>
                         </div>
-                        
-                    </div>
+                    }
                     
                 </div>
                 </div>

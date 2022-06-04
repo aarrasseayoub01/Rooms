@@ -252,9 +252,9 @@ export default function Feed() {
                     </div>
                   }
                   <div>
-                    <Link to={"../savedposts"} >
+                    <Link to={"../savedposts"} className="text-decoration">
                       <div className="saved-banner">
-                        <h3 className="text-decoration">Saved</h3>
+                        <h3>Saved</h3>
                       </div>
                     </Link>
                   </div>

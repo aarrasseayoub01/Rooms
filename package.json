@@ -3,8 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "v16.15.0",
+    "npm": "8.5.5"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd frontend && npm run build",
+    "install-front": "cd frontend && npm install",
+    "install-back": "cd Server && npm install",
+    "install-both": "npm run install-back && npm run install-front",
+    "heroku-postbuild": "npm run install-both && npm run build",
+    "start": "cd Server && node server.js && cd-",
+    "front": "cd frontend && npm start",
+    "dev": "concurrently -n 'frontend,Server' -c 'red,green' \"cd Server && npm start && cd-\" \"npm run front\""
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +24,8 @@
     "framer-motion": "^6.3.3",
     "react-dropdown": "^1.10.0",
     "react-modal": "^3.15.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.1"
   }
 }

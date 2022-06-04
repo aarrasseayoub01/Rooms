@@ -16,7 +16,7 @@ export default function AddRoom() {
   const [isNotifClicked, setIsNotifClicked] = useState(false);
   const [isMsgClicked, setIsMsgClicked] = useState(false);
   const [isChatClicked, setIsChatClicked] = useState(false);
-  const [coverPic, setCoverPic] = useState("https://i.ibb.co/J25RQCT/profile.png");
+  const [coverPic, setCoverPic] = useState("https://i.ibb.co/MVjMppt/cover.jpg");
   const [chatId, setChatId] = useState([]);
   const [posts, setPosts] = useState({});
   const [likeNotes, setLikeNotes] = useState([]);

@@ -2,10 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import {motion, AnimatePresence} from 'framer-motion'
 
 import Navbar from "./Navbar"
-import { AiFillEdit, AiFillMessage, AiOutlineClose } from "react-icons/ai"
-import RoomCard from "./RoomCard"
-import Post from "./Post"
-import { Rooms } from "../dummyData"
+import { AiFillEdit, AiFillMessage, AiFillPlusCircle, AiOutlineClose, AiOutlinePlusCircle } from "react-icons/ai"
+import RoomPost from "./RoomPost"
 import axios from "axios"
 import { AuthContext } from "../Context/authContext"
 import AddPost from "./AddPost"
@@ -17,16 +15,17 @@ import { MdNotificationsActive } from "react-icons/md"
 import Notification from "./Notification"
 import Message from "./Message"
 import Chatbox from "./Chatbox"
+import RoomerCard from "./RoomerCard"
 
 //Presque le meme que "Feed.js"
 
-export default function Profile() {
+export default function Room(props) {
     const [isNotifClicked, setIsNotifClicked] = useState(false);
     const [isMsgClicked, setIsMsgClicked] = useState(false);
     const [isChatClicked, setIsChatClicked] = useState(false);
     const [chatId, setChatId] = useState([]);
     const [posts, setPosts] = useState([]);
-    const { user, dispatch } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [profPic, setProfPic] = useState(null);
     const [coverPic, setCoverPic] = useState(null);
     const [profPic1, setProfPic1] = useState("");
@@ -34,9 +33,10 @@ export default function Profile() {
     const [likeNotes, setLikeNotes] = useState([]);
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
-    const userName = useRef();
-    const email = useRef();
-    const password = useRef();
+    const [room, setRoom] = useState({})
+    const [followed, setFollowed] = useState([])
+    const [a, setA] = useState(1)
+    const title = useRef();
     const desc = useRef();
 
     
@@ -73,46 +73,34 @@ export default function Profile() {
     function closeModal() {
         setIsOpen(false); //Fermer le Modal
     }
-       
-           
-    const Rooms1 = Rooms.filter(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===user._id){
-                return(
-                    <RoomCard 
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
-    })
-    const roomCards = Rooms1.map(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===user._id){
-                return(
-                    <RoomCard 
-                        key={x.roomId}
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
-    })
+    
+    const roomCards = (room._id !== undefined && room.followers.map(x=>{
+        return(
+            <RoomerCard 
+                key={x.roomId}
+                id={x}
+            />
+        )
+    }))
+
     
     const handleChange = async () => {
-        dispatch({ type: "LOGIN_SUCCESS", payload: {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}});
-        localStorage.setItem("user", JSON.stringify({...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}));
-        await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)})
+      if(room._id!==undefined){
+
+        await axios.put(`http://localhost:5000/api/room/${room._id}`, {...room, cover:(coverPic1!==""?coverPic1:room.cover),title:(title.current.value!==""?title.current.value:room.title), desc:(desc.current.value!==""?desc.current.value:room.desc)})
+      }
         //Modifier les donnees d'utilisateur
     }
     //Manipuler le changement des photo de profil ou de couverture
     useEffect(() => {
+        const fetchRoom = async () => {
+          const res = await axios.get("http://localhost:5000/api/room/"+props.id)
+          setRoom(res.data)
+          setA(0)
+        }
+        if(a===1){
+          fetchRoom()
+        }
         const changeProfPic = async () => {
         if (profPic) {
             const data = new FormData();
@@ -146,58 +134,60 @@ export default function Profile() {
         }
         changeCoverPic();
         const fetchPosts = async () => {
-        const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+        const res = await axios.get("http://localhost:5000/api/roompost/posts/" + room._id);
         setPosts(
             res.data.sort((p1, p2) => {
               // return new Date(p2.date) - new Date(p1.date);
-              return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
+              return (new Date(p2.date) - new Date(p1.date));
             })
         );
         };
+        if(room._id!==undefined){
         fetchPosts();
-        
-          const fetchLikes = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const likeNotif = []
-            res.data.forEach(post=>{
-                 likeNotif.push(post.likes.map(x=>[...x, 'like']))
+        }
+        const fetchLikes = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const likeNotif = []
+          res.data.forEach(post=>{
+                likeNotif.push(post.likes.map(x=>[...x, 'like']))
+          })
+          setLikeNotes(
+            likeNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setLikeNotes(
-              likeNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchLikes();
-          const fetchDislikes = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const dislikeNotif = []
-            res.data.forEach(post=>{
-                 dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
+          );
+        };
+        fetchLikes();
+        const fetchDislikes = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const dislikeNotif = []
+          res.data.forEach(post=>{
+                dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
+          })
+          setDislikeNotes(
+            dislikeNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setDislikeNotes(
-              dislikeNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchDislikes();
-          const fetchComments = async () => {
-            const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
-            const commentNotif = []
-            res.data.forEach(post=>{
-                 commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
+          );
+        };
+        fetchDislikes();
+        const fetchComments = async () => {
+          const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
+          const commentNotif = []
+          res.data.forEach(post=>{
+                commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
+          })
+          setCommentNotes(
+            commentNotif.flat().sort((p1, p2) => {
+              return new Date(p2[1]) - new Date(p1[1]);
             })
-            setCommentNotes(
-              commentNotif.flat().sort((p1, p2) => {
-                return new Date(p2[1]) - new Date(p1[1]);
-              })
-            );
-          };
-          fetchComments();
-    }, [user._id, profPic, coverPic]);
-    const notif=likeNotes.concat(dislikeNotes)
-    const notiff=notif.concat(commentNotes)
+          );
+        };
+        fetchComments();
+        setFollowed(room.followers!==undefined && room.followers.includes(user._id))
+    }, [user._id, profPic, coverPic, room, a, props.id]);
+    const notif=likeNotes.concat(dislikeNotes);
+    const notiff=notif.concat(commentNotes);
     const notif1 = notiff.sort((p1, p2) => {
       if(Array.isArray(p1) && Array.isArray(p2)) {
         return new Date(p2[2]) - new Date(p1[2])
@@ -212,6 +202,7 @@ export default function Profile() {
         return new Date(p2[2]) - new Date(p1.date)
       }
     })
+
   const notif2 = notif1.map(x=>{
     return(
           <Notification 
@@ -224,28 +215,49 @@ export default function Profile() {
         Array.isArray(x)?x=x[0]:x=x
 
         return(
-           <Post 
+          <RoomPost 
                 key={x._id}
                 id={x._id}
                 desc={x.desc}
                 img={x.photo}
                 date={x.date}
                 userId={x.userId}
-                room={x.room}
+                roomId={x.room}
                 like={x.likes}
                 disLike={x.dislikes}
                 roomers={x.roomers}
                 vote={x.likeCount}
                 comments={x.comments}
                 post={x}
-                sharer={x.sharer}
-                shareDesc={x.shareDesc}
-                shareDate={x.shareDate}
-                />
+                followers={room.followers}
+                admins={room.userId}
+                
+          />
     )})
 
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
-  return(
+  let admins =[]
+  if(room.userId!==undefined){
+    admins = room.userId.map(user=>{
+    return (
+      <RoomerCard 
+          title={room.title}
+          id={user}
+      />
+    )})}
+
+ const handleFollow = async ()=>{
+    setFollowed(prev=>!prev)
+    const followersList = room.followers;
+    if(!followersList.includes(user._id)){
+        followersList.push(user._id)
+    } else {
+        var index = followersList.indexOf(user._id)
+        followersList.splice(index,1)
+    }
+    await axios.put(`http://localhost:5000/api/room/${room._id}`, {...room, followers: followersList})
+ }
+return(
         <>
         {/* <Navbar handleNotif={handleNotif}/> */} 
         <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
@@ -300,22 +312,10 @@ export default function Profile() {
                     </div>
                     <div className="modal-form"> 
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Profile :</h3>
-                            {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                                ? <img className="profileimage" src={user.picture} alt="Profile"/>
-                                : <img className="profileimage" src={"http://localhost:5000/images/" + (profPic1!==""?profPic1:user.picture)} alt="Profile"/>
-                            }
-                            <label>
-                                <BsCardImage className="upload-image"/>
-                                <input type="file" style={{display: "none"}} name="myImage" onChange={(e) => setProfPic(e.target.files[0])}/>
-                            </label>
-                        </div>
-                        <div className="flex-row">
                             <h3 style={{width: "200px"}}>Cover :</h3>
-                            {/* <img src={"http://localhost:5000/images/" +(coverPic1!==""?coverPic1:user.cover)} alt="Cover Image" width="100px" /> */}
-                            {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                                ? <img src={user.cover} width="100px" alt="Cover"/>
-                                : <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:user.cover)} width="100px" alt="Cover"/>
+                            {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
+                                ? <img src={"http://localhost:5000/images/" +room.cover} width="100px" alt="Cover"/>
+                                : room.cover!==undefined && <img src={"http://localhost:5000/images/" + (coverPic1!==""?coverPic1:room.cover)} width="100px" alt="Cover"/>
                             }
                             <label>
                                 <BsCardImage className="upload-image"/>
@@ -326,16 +326,8 @@ export default function Profile() {
                     <h2>Edit Profile</h2>
                     <form className="modal-form">
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Username :</h3>
-                            <input className="login-input" placeholder={user.username} ref={userName} />
-                        </div>
-                        <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Email :</h3>
-                            <input className="login-input" placeholder={user.email} ref={email} />
-                        </div>
-                        <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Password :</h3>
-                            <input className="login-input" type="password" placeholder="Password" ref={password} />
+                            <h3 style={{width: "250px"}}>Room Name :</h3>
+                            <input className="login-input" placeholder={room.title} ref={title} />
                         </div>
                         <div className="flex-row">
                             <h3 style={{width: "250px"}}>Description :</h3>
@@ -350,46 +342,58 @@ export default function Profile() {
             
             <div className="profile-card">
                 <div className="profile-images">
-                    {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
-                        ? <img className="profile-cover" src={user.cover} alt="Cover"/>
-                        : <img className="profile-cover" src={"http://localhost:5000/images/" + user.cover} alt="Cover"/>
-                    }
-                    {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                        ? <img className="profile-pic" src={user.picture} alt="Profile"/>
-                        : <img className="profile-pic" src={"http://localhost:5000/images/" + user.picture} alt="Profile"/>
+                    {room.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
+                        ? <img className="profile-cover" src={room.cover} alt="Cover"/>
+                        : room.cover!==undefined && <img className="profile-cover" src={"http://localhost:5000/images/" + room.cover} alt="Cover"/>
                     }
                 </div>
                 <div className="profile-name1">
-                    <h1>{user.username}</h1>
+                    <h1>{room.title}</h1>
+                    {(room.userId!==undefined && !room.userId.includes(user._id)) 
+                      ? followed
+                        ? <button className="follow-room-btn" onClick={handleFollow}><AiFillPlusCircle size={30} style={{cursor: "pointer"}} /></button>
+                        : <button className="follow-room-btn" onClick={handleFollow}><AiOutlinePlusCircle size={30} style={{cursor: "pointer"}} /></button>
+                      
+                      : (<label>
+                            <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
+                         </label>
+                    )}
                 </div>
                 <div className="profile-desc">
-                    {user.desc 
+                    {room.desc 
                         ? <div className="edit-desc">
-                            <p>{user.desc}</p>
+                            <p>{room.desc}</p>
                           </div>
-                        : <div className="div-submit" style={{marginBottom: "10px"}}>
-                            <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
-                          </div> 
+                        : ((room.userId !== undefined && room.userId.includes(user._id)) &&
+                            (<div className="div-submit" style={{marginBottom: "10px"}}>
+                              <button onClick={openModal} className="add-submit"><b>Add Description</b></button>
+                            </div>))
                     }
                 </div>
-                <label>
-                    <AiFillEdit onClick={openModal} className="profile-pic-edit"/>
-                </label>
+                
             </div>
             <div className="profile-rooms">
-                <h1 className="rooms-title">Rooms</h1>
-                <div className="profile-room-grid">
-                    {roomCards.length!==0
-                        ? roomCards
-                        : <h1 className="how-empty">How Empty</h1>
-                    }
+                <h1 className="rooms-title">Roomers</h1>
+                <div className="rooms-section">
+                    <div className="room-admin">
+                        <div className="room-admin-card"><h3>Admin</h3></div>
+                        <div className="profile-room-grid">
+                          {admins}
+                        </div>
+                    </div>
+                    <div className="room-followers">
+                        <div className="room-admin-card"><h3>Roomers</h3></div>
+                        <div className="profile-room-grid">
+                            {roomCards.length!==0
+                                ? roomCards
+                                : <h1 className="how-empty">How Empty</h1>
+                            }
+                        </div>
+                    </div>
                 </div>
-                {roomCards.length!==0
-                    ? <div><button className="allrooms-button">See all Rooms</button></div>
-                    : <div><button className="allrooms-button">See new Rooms</button></div>
-                }
             </div>
-            <AddPost />
+            {(room.userId !== undefined) && (room.userId.includes(user._id)) &&
+            <AddPost a={"a"} room={room._id}/>}
             {myPosts}
         </div>
         </motion.dev>
@@ -397,6 +401,7 @@ export default function Profile() {
          </>
     )
 } 
+
 const StyledModal = styled.div`
   display: flex;
   justify-content: center;
