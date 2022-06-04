@@ -315,7 +315,6 @@ export default function Post(props) {
             await axios.put(`http://localhost:5000/api/user/${user._id}`, {...user, saved: savedUpdated})
         }
     }
-
     const sharePost = async (e) => {
         const post = {desc:props.desc, userId:props.userId, date: props.date, photo: props.img,room:props.room, sharer:user._id, shareDate:new Date(), shareDesc:desc.current.value, originalId: props.id}
         try{
@@ -327,6 +326,7 @@ export default function Post(props) {
         setIsOpen(false)
         
     }
+    console.log(props)
     const handleDeletePost = async () => {
         if(user._id===props.userId){
         await axios.delete(`http://localhost:5000/api/posts/${props.id}`, {data:{userId:user._id}})
