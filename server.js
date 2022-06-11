@@ -20,6 +20,7 @@ dotenv.config();
 
 const app = express();
 app.use("/images", express.static(path.join(__dirname, "public/images")));//pour donner l'acces aux images apartir du backend.
+app.use(express.static(path.resolve(__dirname, "./frontend/build")));
 
 app.use(bodyParser.json({limit: "30mb", extended: true}));//Pour rendre app capable d'analyser les "json bodies"
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));//Pour rendre app capable d'analyser les "urlencoded bodies"
@@ -47,6 +48,10 @@ app.use("/api/msg", msgRoutes)
 app.use("/api/conv", convRoutes)
 app.use("/api/room", roomRoutes)
 app.use("/api/roompost", roomPostRoutes)
+
+app.get("*",(req, res)=>{
+  res.sendFile(path.resolve(__dirname, "./frontend/build", "index.html"))
+})
 
 const CONNECTION_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const PORT = process.env.PORT || 5000;
