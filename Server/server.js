@@ -52,7 +52,7 @@ const CONNECTION_URL = process.env.MONGODB_URI;
 const PORT = process.env.PORT;
 
 if(process.env.NODE_ENV === 'production'){
-  app.use(express.static('Rooms-oussama/build'));
+  app.use(express.static('frontend/build'));
 }
 
 //Se connecter a la base de donner puis rendre le serveur de backend accessible.
