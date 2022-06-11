@@ -48,8 +48,8 @@ app.use("/api/conv", convRoutes)
 app.use("/api/room", roomRoutes)
 app.use("/api/roompost", roomPostRoutes)
 
-const CONNECTION_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const PORT = process.env.PORT || 5000;
+const CONNECTION_URL = process.env.MONGODB_URI;
+const PORT = process.env.PORT;
 
 if(process.env.NODE_ENV === 'production'){
   app.use(express.static('Rooms-oussama/build'));
