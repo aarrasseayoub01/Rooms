@@ -5,7 +5,6 @@ import Navbar from "./Navbar"
 import { AiFillEdit, AiFillMessage, AiOutlineClose } from "react-icons/ai"
 import RoomCard from "./RoomCard"
 import Post from "./Post"
-import { Rooms } from "../dummyData"
 import axios from "axios"
 import { AuthContext } from "../Context/authContext"
 import AddPost from "./AddPost"
@@ -78,6 +77,7 @@ export default function Profile() {
     const roomCards = rooms!==undefined && rooms.map(x=>{
       return(
         <RoomCard
+          key={x._id}
           id={x._id}
           cover={x.cover}
           title={x.title}
@@ -86,7 +86,6 @@ export default function Profile() {
         />
       )
     });
-    console.log(roomCards)
     
     const handleChange = async () => {
         dispatch({ type: "LOGIN_SUCCESS", payload: {...user, picture:(profPic1!==""?profPic1:user.picture),cover:(coverPic1!==""?coverPic1:user.cover),username:(userName.current.value!==""?userName.current.value:user.username), email:(email.current.value!==""?email.current.value:user.email), password:(password.current.value!==""?password.current.value:user.password), desc:(desc.current.value!==""?desc.current.value:user.desc)}});
@@ -179,7 +178,6 @@ export default function Profile() {
         fetchComments();
         const fetchRooms = async () => {
           const res = await axios.get("http://localhost:5000/api/room/a/"+user._id);
-          console.log(res)
           setRooms(res.data);
         }
         fetchRooms();
@@ -187,18 +185,20 @@ export default function Profile() {
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
+      var a;
       if(Array.isArray(p1) && Array.isArray(p2)) {
-        return new Date(p2[2]) - new Date(p1[2])
+        a = new Date(p2[2]) - new Date(p1[2])
       }
       if(Array.isArray(p1) && !Array.isArray(p2)) {
-        return new Date(p2.date) - new Date(p1[2])
+        a = new Date(p2.date) - new Date(p1[2])
       }
       if(!Array.isArray(p1) && !Array.isArray(p2)) {
-        return new Date(p2.date) - new Date(p1.date)
+        a = new Date(p2.date) - new Date(p1.date)
       }
       if(!Array.isArray(p1) && Array.isArray(p2)) {
-        return new Date(p2[2]) - new Date(p1.date)
+        a = new Date(p2[2]) - new Date(p1.date)
       }
+      return a;
     })
   const notif2 = notif1.map(x=>{
     return(
@@ -209,7 +209,8 @@ export default function Profile() {
     )
   })
     const myPosts = posts.map(x=>{
-        Array.isArray(x)?x=x[0]:x=x
+        const a = x;
+        Array.isArray(x)?x=x[0]:x=a
 
         return(
            <Post 
@@ -229,6 +230,7 @@ export default function Profile() {
                 sharer={x.sharer}
                 shareDesc={x.shareDesc}
                 shareDate={x.shareDate}
+                originalId={x.originalId}
                 />
     )})
 
@@ -279,9 +281,9 @@ export default function Profile() {
               <StyledModal onClick={() => setIsOpen(false)}>
 
                 <ModalContent
-            className="modalContent"
-            onClick={(e) => e.stopPropagation()}
-          >
+                  className="modalContent"
+                  onClick={(e) => e.stopPropagation()}
+                >
                 <div className="profile-modal">
                     <div className="modal-close">
                         <AiOutlineClose onClick={closeModal} className="modal-close-btn" />
@@ -372,10 +374,6 @@ export default function Profile() {
                         : <h1 className="how-empty">How Empty</h1>
                     }
                 </div>
-                {roomCards.length!==0
-                    ? <div><button className="allrooms-button">See all Rooms</button></div>
-                    : <div><button className="allrooms-button">See new Rooms</button></div>
-                }
             </div>
             <AddPost />
             {myPosts}

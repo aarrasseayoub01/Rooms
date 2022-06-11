@@ -37,9 +37,15 @@ export default function Login() {
                 <div className="rooms"><h1>Rooms</h1></div>
                 <div> 
                     <form className="login-form">
-                        <input className="login-input" placeholder="Email Adress" ref={email}/>
+                        <div className="register-row">
+                            <input className="login-input" placeholder="Email Adress" ref={email}/>
+                            <b style={{color: "red"}}>*</b>
+                        </div>
                         {wrongEmail && <div style={{color: "red"}}>Email not found</div>}
-                        <input className="login-input" type="password" placeholder="Password" ref={password} />
+                        <div className="register-row">
+                            <input className="login-input" type="password" placeholder="Password" ref={password} />
+                            <b style={{color: "red"}}>*</b>
+                        </div>
                         {!wrongEmail && wrongPassword && <div style={{color: "red"}}>Wrong password</div>}
                         <input className="login-submit" value="Login" type="submit" onClick={handleLogin}/>
                     </form>

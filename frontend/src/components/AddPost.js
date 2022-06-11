@@ -7,12 +7,12 @@ import { AuthContext } from "../Context/authContext";
 export default function AddPost(props) {
     const desc = useRef()
     const {user} = useContext(AuthContext)
-    const [file, setFile] = useState(null); //Mettre un objet null vide dans le "state"
+    // const [file, setFile] = useState(null); //Mettre un objet null vide dans le "state"
     const [picture, setPicture] = useState(''); //Mettre une chaine de charactere vide dans le "state"
 
     const handleUpload = async (e) => {
         const pic=e.target.files[0]; //Initialiser "pic" avec l'image telecharger depuis la machine
-        setFile(e.target.files[0])
+        // setFile(e.target.files[0])
         const data = new FormData(); //Initialiser "data" par une Forme de donnes
         const fileName = Date.now() + pic.name; //Initialiser "fileName" par le nom de fichier telecharge
         data.append("name", fileName);

@@ -18,11 +18,10 @@ export default function AddRoom() {
   const [isChatClicked, setIsChatClicked] = useState(false);
   const [coverPic, setCoverPic] = useState("https://i.ibb.co/MVjMppt/cover.jpg");
   const [chatId, setChatId] = useState([]);
-  const [posts, setPosts] = useState({});
   const [likeNotes, setLikeNotes] = useState([]);
   const [dislikeNotes, setDislikeNotes] = useState([]);
   const [commentNotes, setCommentNotes] = useState([]);
-  const [file,setFile]=useState()
+  // const [file,setFile]=useState()
   const [admin, setAdmin] = useState([]);
   const title = useRef()
   const desc = useRef()
@@ -67,16 +66,16 @@ export default function AddRoom() {
   //radio
   const [radioCheck, setRadioCheck] = useState("page");
 
-  function handleChange(event) {
+  function handleChange() {
     // const {value, type, checked} = event.target
     setRadioCheck(prev=>(prev==="page" ? "group" : "page"))
   }
   const handleSubmit = async () => {
-  const room = await axios.post("http://localhost:5000/api/room/",{userId:[user._id, ...admin], cover:coverPic, title: title.current.value, desc:desc.current.value, type:radioCheck})
+  await axios.post("http://localhost:5000/api/room/",{userId:[user._id, ...admin], cover:coverPic, title: title.current.value, desc:desc.current.value, type:radioCheck})
 
   }
   //Ajouter un autre admin
-  const [addAdmin,setAddAdmin] = useState([<input className="login-input" value={user.username} />]);
+  const [addAdmin,setAddAdmin] = useState([<input style={{backgroundColor: "#dddddd"}} className="login-input" value={user.username} disabled/>]);
   const [admins, setAdmins] = useState([user._id]);
   const [input, setInput] = useState("");
 
@@ -86,11 +85,7 @@ export default function AddRoom() {
 
   //Amener tous les publications du "backend"
   useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await axios.get("http://localhost:5000/api/posts/" + user._id);
-      setPosts(res.data);
-    };
-    fetchPosts();
+    
     const fetchLikes = async () => {
       const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
       const likeNotif = []
@@ -134,18 +129,20 @@ export default function AddRoom() {
   const notif=likeNotes.concat(dislikeNotes)
   const notiff=notif.concat(commentNotes)
   const notif1 = notiff.sort((p1, p2) => {
+    var a;
     if(Array.isArray(p1) && Array.isArray(p2)) {
-      return new Date(p2[1]) - new Date(p1[1])
+      a = new Date(p2[1]) - new Date(p1[1])
     }
     if(Array.isArray(p1) && !Array.isArray(p2)) {
-      return new Date(p2.date) - new Date(p1[1])
+      a = new Date(p2.date) - new Date(p1[1])
     }
     if(!Array.isArray(p1) && !Array.isArray(p2)) {
-      return new Date(p2.date) - new Date(p1.date)
+      a = new Date(p2.date) - new Date(p1.date)
     }
     if(!Array.isArray(p1) && Array.isArray(p2)) {
-      return new Date(p2[1]) - new Date(p1.date)
+      a = new Date(p2[1]) - new Date(p1.date)
     }
+    return a;
   })
   const notif2 = notif1.map(x=>{
     return(
@@ -190,7 +187,7 @@ export default function AddRoom() {
   )
   const handleUpload = async (e) => {
     const pic=e.target.files[0]; //Initialiser "pic" avec l'image telecharger depuis la machine
-    setFile(e.target.files[0])
+    // setFile(e.target.files[0])
     const data = new FormData(); //Initialiser "data" par une Forme de donnes
     const fileName = Date.now() + pic.name; //Initialiser "fileName" par le nom de fichier telecharge
     data.append("name", fileName);
@@ -263,7 +260,7 @@ export default function AddRoom() {
                               <div className="room-admin-make">
                                 {radioCheck === "group" 
                                   ? addAdmin
-                                  : <input className="login-input" value={user.username} />
+                                  : <input style={{backgroundColor: "#dddddd"}} className="login-input" value={user.username} disabled/>
                                 }
                                 {radioCheck === "group" && <div className="room-admins">
                                   <div className="room-admins" style={{flexDirection: "column"}}>

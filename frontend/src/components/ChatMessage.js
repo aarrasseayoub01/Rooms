@@ -40,7 +40,7 @@ export default function ChatMessage(props) {
         return dateStr
     }
     if(props.msg!==undefined){
-    if(props.msg.sender===user.username){    
+    if(props.msg.sender!==user.username){    
         return(
             <div className="sender-message">
                 <span className="sender-message-content">{props.msg.text}</span>

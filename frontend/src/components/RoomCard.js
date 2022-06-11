@@ -1,17 +1,7 @@
-import axios from "axios";
-import {React, useState, useEffect } from "react";
+import {React } from "react";
 import { Link } from "react-router-dom";
 
 export default function RoomCard(props) {
-    // const [title, setTitle] = useState("")
-    // useEffect(() => {
-    //     const title = async () => {
-    //           const res = await axios.get("http://localhost:5000/api/user/"+props.id)
-    //           setTitle(res.data.username)
-    //     }
-    //     title()
-    // })
-    console.log(props)
     if(props.title!==""){
     return(
         <div className="room-card">

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { AiFillLike, AiFillDislike, AiOutlineLike, AiOutlineDislike, AiOutlineClose, AiFillDelete, AiFillEdit, AiOutlineCheck, AiFillSave, AiOutlineSave} from "react-icons/ai"
 import {motion, AnimatePresence} from 'framer-motion'
 import { BiComment } from "react-icons/bi"
-import { FiCornerDownLeft, FiShare } from "react-icons/fi"
+import { FiShare } from "react-icons/fi"
 import Comment from "./Comment";
 import { AuthContext } from "../Context/authContext";
 import AddComment from "./AddComment";
@@ -141,11 +141,10 @@ export default function Post(props) {
         const fetchPost = async () => {
             var res;
             props.originalId!==undefined && (res = await axios.get("http://localhost:5000/api/posts/isPostExist/"+props.originalId));
-            console.log(res)
-            res && setOrigDeleted(true);
+            setOrigDeleted(res.data);
         }
         fetchPost();
-    }, []);
+    }, [props.originalId]);
     
     const isLiked = likeState.flat().includes(user.username) //Etat de boutton de "like"
     const isDisliked = dislikeState.flat().includes(user.username) //Etat de boutton de "dislike"
@@ -348,6 +347,13 @@ export default function Post(props) {
         //Envoyer dans le "backend" une publication dans laquelles les commentaires sont modifees
         setDeleted(!deleted);
     }
+    function cancelDelete(){
+        setPopup(false)
+    }
+    const [popup, setPopup] = useState(false);
+    function checkDelete(){
+        setPopup(true)
+    }
     const postStyle = (props.sharer!==undefined && props.sharer.length!==0) ? {margin: "10px", padding : "20px", border: "1px solid black", borderRadius: "10px"} : {}
     if(!deleted){
     return(
@@ -420,6 +426,15 @@ export default function Post(props) {
               </Modal>
 
             <div>
+              {popup &&
+                <div className="deletecheck">
+                    <h3>This post will be deleted !</h3>
+                    <div className="delete-choice">
+                        <button className="delete-btn" onClick={handleDeletePost}>Confirm</button>
+                        <button className="delete-btn" onClick={cancelDelete}>Cancel</button>
+                    </div>
+                </div>
+              }
               {props.sharer!==undefined && props.sharer.length!==0 &&
                 (
                   <>
@@ -444,7 +459,7 @@ export default function Post(props) {
                                         {user._id === props.sharer && 
                                         <>
                                             <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
-                                            <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                                            <AiFillDelete style={{cursor: "pointer"}} onClick={checkDelete}/>
                                         </>
                                     }
                                         {saved 
@@ -479,7 +494,7 @@ export default function Post(props) {
                 <div style={postStyle}>
                 <div className="orig-post">
                     {!props.singlepost 
-                        ? <Link className="post-username" to={"../posts/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>
+                        ? (!origDeleted && <Link className="post-username" to={"../posts/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>)
                         : <small onClick={() => history(-1)} className="orig-post-btn">Return</small>
                     }
                 </div>
@@ -504,7 +519,7 @@ export default function Post(props) {
                                     {user._id === props.userId && 
                                         <>
                                             <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
-                                            <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                                            <AiFillDelete style={{cursor: "pointer"}} onClick={checkDelete}/>
                                         </>
                                     }
                                         {saved 

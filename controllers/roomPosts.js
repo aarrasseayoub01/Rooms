@@ -41,7 +41,6 @@ export const allPosts = async (req, res) => {
         posts.push(post)
         }
       } 
-      console.log(posts)
       res.status(200).json(posts)
     } catch (err) {
       res.status(500).json(err);

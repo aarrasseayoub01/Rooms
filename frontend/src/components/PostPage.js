@@ -96,18 +96,20 @@ export default function PostPage(props) {
   const notif=likeNotes.concat(dislikeNotes)
   const notiff=notif.concat(commentNotes)
   const notif1 = notiff.sort((p1, p2) => {
+    var a;
     if(Array.isArray(p1) && Array.isArray(p2)) {
-      return new Date(p2[1]) - new Date(p1[1])
+      a = new Date(p2[1]) - new Date(p1[1])
     }
     if(Array.isArray(p1) && !Array.isArray(p2)) {
-      return new Date(p2.date) - new Date(p1[1])
+      a = new Date(p2.date) - new Date(p1[1])
     }
     if(!Array.isArray(p1) && !Array.isArray(p2)) {
-      return new Date(p2.date) - new Date(p1.date)
+      a = new Date(p2.date) - new Date(p1.date)
     }
     if(!Array.isArray(p1) && Array.isArray(p2)) {
-      return new Date(p2[1]) - new Date(p1.date)
+      a = new Date(p2[1]) - new Date(p1.date)
     }
+    return a;
   })
   const notif2 = notif1.map(x=>{
     return(
@@ -170,6 +172,7 @@ export default function PostPage(props) {
               sharer={""}
               shareDesc={""}
               singlepost={true}
+              originalId={posts.originalId}
             //   shareDate={x.shareDate}
           />
             </div>

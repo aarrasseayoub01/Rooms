@@ -1,19 +1,23 @@
 import axios from "axios";
-import React, { useContext, useRef, useState, useEffect } from "react";
+import React, { useContext, useRef } from "react";
 import { AuthContext } from "../Context/authContext";
 
 export default function AddComment(props) {
     const content = useRef()
-    const [posts, setPosts] = useState([]) //Mettre les postes dans un Array vide de "state"
+    // const [posts, setPosts] = useState([]) //Mettre les postes dans un Array vide de "state"
     const { user } = useContext(AuthContext)
     //Amener les donnees des postes depuis le "backend"
-    useEffect(() => {
-        const fetchPosts = async () => {
-          const res = await axios.get("http://localhost:5000/api/posts/" + props.post._id);
-          setPosts(res.data) //Changer la valeur de "state" des postes
-        };
-        fetchPosts();
-      }, [user._id, props.post.comments, props.post._id]); //Re-amener les postes a l'echange des id ou les commentaires
+
+
+    // useEffect(() => {
+    //     const fetchPosts = async () => {
+    //       const res = await axios.get("http://localhost:5000/api/posts/" + props.post._id);
+    //       setPosts(res.data) //Changer la valeur de "state" des postes
+    //     };
+    //     fetchPosts();
+    //   }, [user._id, props.post.comments, props.post._id]); //Re-amener les postes a l'echange des id ou les commentaires
+
+    
     const handleComment = async (e)=>{
         e.preventDefault()
         const res = await axios.get("http://localhost:5000/api/posts/" + props.post._id);

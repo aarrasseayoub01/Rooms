@@ -28,7 +28,7 @@ export default function Room(props) {
     const { user } = useContext(AuthContext);
     const [profPic, setProfPic] = useState(null);
     const [coverPic, setCoverPic] = useState(null);
-    const [profPic1, setProfPic1] = useState("");
+    // const [profPic1, setProfPic1] = useState("");
     const [coverPic1, setCoverPic1] = useState("");
     const [likeNotes, setLikeNotes] = useState([]);
     const [dislikeNotes, setDislikeNotes] = useState([]);
@@ -113,7 +113,7 @@ export default function Room(props) {
             } catch (err) {
                 console.log(err)
             }
-            setProfPic1(fileName)
+            setProfPic(fileName)
           }
         }
         changeProfPic();
@@ -189,18 +189,20 @@ export default function Room(props) {
     const notif=likeNotes.concat(dislikeNotes);
     const notiff=notif.concat(commentNotes);
     const notif1 = notiff.sort((p1, p2) => {
+      var a;
       if(Array.isArray(p1) && Array.isArray(p2)) {
-        return new Date(p2[2]) - new Date(p1[2])
+        a = new Date(p2[2]) - new Date(p1[2])
       }
       if(Array.isArray(p1) && !Array.isArray(p2)) {
-        return new Date(p2.date) - new Date(p1[2])
+        a = new Date(p2.date) - new Date(p1[2])
       }
       if(!Array.isArray(p1) && !Array.isArray(p2)) {
-        return new Date(p2.date) - new Date(p1.date)
+        a = new Date(p2.date) - new Date(p1.date)
       }
       if(!Array.isArray(p1) && Array.isArray(p2)) {
-        return new Date(p2[2]) - new Date(p1.date)
+        a = new Date(p2[2]) - new Date(p1.date)
       }
+      return a;
     })
 
   const notif2 = notif1.map(x=>{
@@ -212,7 +214,8 @@ export default function Room(props) {
     )
   })
     const myPosts = posts.map(x=>{
-        Array.isArray(x)?x=x[0]:x=x
+        const a = x;
+        Array.isArray(x)?x=x[0]:x=a
 
         return(
           <RoomPost 

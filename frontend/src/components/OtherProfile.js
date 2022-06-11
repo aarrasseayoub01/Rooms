@@ -3,10 +3,9 @@ import {motion, AnimatePresence} from 'framer-motion'
 
 import Navbar from "./Navbar"
 // import cover from "../images/post1.jpg"
-import { AiFillEdit, AiFillMessage, AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { AiFillMessage, AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import RoomCard from "./RoomCard"
 import Post from "./Post"
-import { Rooms } from "../dummyData"
 import axios from "axios"
 import { AuthContext } from "../Context/authContext"
 import { MdNotificationsActive } from "react-icons/md"
@@ -26,6 +25,7 @@ export default function OtherProfile(props) {
     const [dislikeNotes, setDislikeNotes] = useState([]);
     const [commentNotes, setCommentNotes] = useState([]);
     const {user, dispatch}  = useContext(AuthContext);
+    const [rooms, setRooms] = useState([]);
     
     function handleNotif() {
         setIsNotifClicked(prev=>!prev)
@@ -137,22 +137,30 @@ export default function OtherProfile(props) {
             );
           };
           fetchComments();
-    }, [user._id]);
+          
+          const fetchRooms = async () => {
+            const res = await axios.get("http://localhost:5000/api/room/a/"+props.userId);
+            setRooms(res.data);
+          }
+          fetchRooms();
+    }, [user._id, props.userId]);
     const notif=likeNotes.concat(dislikeNotes)
     const notiff=notif.concat(commentNotes)
     const notif1 = notiff.sort((p1, p2) => {
+      var a;
       if(Array.isArray(p1) && Array.isArray(p2)) {
-        return new Date(p2[2]) - new Date(p1[2])
+        a = new Date(p2[2]) - new Date(p1[2])
       }
       if(Array.isArray(p1) && !Array.isArray(p2)) {
-        return new Date(p2.date) - new Date(p1[2])
+        a = new Date(p2.date) - new Date(p1[2])
       }
       if(!Array.isArray(p1) && !Array.isArray(p2)) {
-        return new Date(p2.date) - new Date(p1.date)
+        a = new Date(p2.date) - new Date(p1.date)
       }
       if(!Array.isArray(p1) && Array.isArray(p2)) {
-        return new Date(p2[2]) - new Date(p1.date)
+        a = new Date(p2[2]) - new Date(p1.date)
       }
+      return a;
     })
     const notif2 = notif1.map(x=>{
       return(
@@ -161,34 +169,17 @@ export default function OtherProfile(props) {
               x={x}
             />
       )})
-    const Rooms1 = Rooms.filter(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===props.userId){
-                return(
-                    <RoomCard 
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
-    })
-    const roomCards = Rooms1.map(x=>{
-        for(let i=0;i<x.roomers.length;i++){
-            if(x.roomers[i].id===props.userId){
-                return(
-                    <RoomCard 
-                        key={x.roomId}
-                        img={x.roomImg}
-                        title={x.roomTitle}
-                        roomers={x.roomers}
-                        className="profile-col"
-                    />
-                )
-            }
-        }
+    const roomCards = rooms!==undefined && rooms.map(x=>{
+        return(
+            <RoomCard 
+              key={x._id}
+              id={x._id}
+              cover={x.cover}
+              title={x.title}
+              userId={x.userId}
+              followers={x.followers}
+            />
+        )
     })
     
     //Amener les postes depuis le "backend"
@@ -223,6 +214,7 @@ export default function OtherProfile(props) {
                 sharer={x.sharer}
                 shareDesc={x.shareDesc}
                 shareDate={x.shareDate}
+                originalId={x.originalId}
                 />
     )})
     const handleFollow =  async () => {
@@ -313,10 +305,6 @@ export default function OtherProfile(props) {
                         : <h1 className="how-empty">How Empty</h1>
                     }
                 </div>
-                {roomCards.length!==0
-                    ? <div><button className="allrooms-button">See all Rooms</button></div>
-                    : <div><button className="allrooms-button">See new Rooms</button></div>
-                }
             </div>
             {otherPosts}
         </div>

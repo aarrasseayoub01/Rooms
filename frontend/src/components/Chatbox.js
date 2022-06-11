@@ -7,37 +7,34 @@ import { Link } from "react-router-dom";
 
 
 export default function Chatbox(props) {
-const [conv, setConv] =useState([]);
+// const [conv, setConv] =useState([]);
 const [msgs, setMsgs] =useState([]);
 const [msg1, setMsg1] =useState([]);
 const [users, setUsers] = useState([]);
-    const { user } = useContext(AuthContext); 
+const { user } = useContext(AuthContext); 
    
-    useEffect( () => {
-        const fetchConv = async () => {
-            const conv = await axios.get("http://localhost:5000/api/conv/find/"+props.username+"/"+user.username);
-            setConv(conv.data)
-            const msg = await axios.get("http://localhost:5000/api/msg/"+conv.data._id);
-            setMsgs(msg.data)
-   
-}
-    
-fetchConv();
+useEffect( () => {
+    const fetchConv = async () => {
+        const conv = await axios.get("http://localhost:5000/api/conv/find/"+props.username+"/"+user.username);
+        // setConv(conv.data)
+        const msg = await axios.get("http://localhost:5000/api/msg/"+conv.data._id);
+        setMsgs(msg.data)
+    }
+    fetchConv();
+}, [user, msg1, props.username])
 
-}, [user, msg1])
-
-    //Amener tous les utilisateurs
-    useEffect(() => {
-        const fetchUsers = async () => {
+//Amener tous les utilisateurs
+useEffect(() => {
+    const fetchUsers = async () => {
         const res = await axios.get("http://localhost:5000/api/user/allusers");
         setUsers(
             res.data.sort((p1, p2) => {
-              return new Date(p2.createdAt) - new Date(p1.createdAt);
+            return new Date(p2.createdAt) - new Date(p1.createdAt);
             })
         );
-        };
-        fetchUsers();
-    }, []);
+    };
+    fetchUsers();
+}, []);
 
     //Detetmine le nom d'utilisateur depuis son idetifiant
     function userId(thisId) {
@@ -61,7 +58,7 @@ fetchConv();
 
     const handleSend = async ()=>{
         const conv = await axios.get("http://localhost:5000/api/conv/find/"+props.username+"/"+user.username);
-        await axios.post("http://localhost:5000/api/msg/", {conversationId:conv.data._id,sender:props.username,text:msg1, date:new Date()});
+        await axios.post("http://localhost:5000/api/msg/", {conversationId:conv.data._id,sender:user.username,text:msg1, date:new Date()});
         setMsg1("")
     }
 
@@ -99,7 +96,7 @@ fetchConv();
                 <AiFillCloseCircle onClick={()=>props.ShutChat(props.username)} size={20} style={{cursor:"pointer"}}/>
             </div>
             <div className="chatbox-message">
-                {chatMsg}
+                {chatMsg.length!==0 ? chatMsg : "Soyez le prmeier a envoyer un message"}
             </div>
             <div className="add-message">
                 <textarea className="add-message-textarea" placeholder="Type your Message" onChange={handleChange} value={msg1}/>

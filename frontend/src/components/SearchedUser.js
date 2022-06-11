@@ -82,6 +82,9 @@ export default function SearchedUser(props) {
             }
         }
     }
+    const userFriends = props.following.filter(x=>props.followers.includes(x));
+    const myFriends = user.following.filter(x=>user.followers.includes(x));
+    const mutualFriends = userFriends.filter(x=>myFriends.includes(x));
     //Affiche les utlisateurs trouve avec le meme nom recherche
     return(
         <div >
@@ -97,7 +100,9 @@ export default function SearchedUser(props) {
                         ? "Your profile"
                         : checkFriendship(props.id, user.following, user.followers)
                         )}</p>
-                    <small>23 mutual friends</small>
+                    {!(user._id===props.id) && (
+                        <small>{mutualFriends.length} mutual friends</small>
+                    )}
                 </div>
                 <div className="searched-flex">
                     {!(user._id === props.id) &&

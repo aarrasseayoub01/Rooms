@@ -47,8 +47,9 @@ export const allposts = async (req, res) => {
 export const isPostExist = async (req, res) => {
   try {
     const post = await PostMessage.findOne({_id: req.params.PostId});
-    console.log(post)
-    res.status(200).json(post);
+    var state;
+    post ? state = false : state = true;
+    res.status(200).json(state);
   } catch(err){
     res.status(500).json(err);
   }
