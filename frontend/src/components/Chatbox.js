@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 
 export default function Chatbox(props) {
-const [conv, setConv] =useState([]);
+// const [conv, setConv] =useState([]);
 const [msgs, setMsgs] =useState([]);
 const [msg1, setMsg1] =useState([]);
 const [users, setUsers] = useState([]);
@@ -16,12 +16,12 @@ const { user } = useContext(AuthContext);
 useEffect( () => {
     const fetchConv = async () => {
         const conv = await axios.get("http://localhost:5000/api/conv/find/"+props.username+"/"+user.username);
-        setConv(conv.data)
+        // setConv(conv.data)
         const msg = await axios.get("http://localhost:5000/api/msg/"+conv.data._id);
         setMsgs(msg.data)
     }
     fetchConv();
-}, [user, msg1])
+}, [user, msg1, props.username])
 
 //Amener tous les utilisateurs
 useEffect(() => {

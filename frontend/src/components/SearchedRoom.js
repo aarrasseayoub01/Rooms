@@ -1,26 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { AuthContext } from "../Context/authContext";
 import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import axios from "axios";
 
 export default function SearchedRoom(props) {
     const {user} = useContext(AuthContext)
-    const [rooms, setRooms] = useState([]);
+    // const [rooms, setRooms] = useState([]);
     const [followed, setFollowed] = useState(props.followers.includes(user._id));
 
-    useEffect(() => {
-        const fetchRooms = async () => {
-        const res = await axios.get("http://localhost:5000/api/room/allrooms");
-        setRooms(
-            res.data.sort((p1, p2) => {
-              return new Date(p2.createdAt) - new Date(p1.createdAt);
-            })
-        );
-        };
-        fetchRooms();
-    }, []);
+    // useEffect(() => {
+    //     const fetchRooms = async () => {
+    //     const res = await axios.get("http://localhost:5000/api/room/allrooms");
+    //     setRooms(
+    //         res.data.sort((p1, p2) => {
+    //           return new Date(p2.createdAt) - new Date(p1.createdAt);
+    //         })
+    //     );
+    //     };
+    //     fetchRooms();
+    // }, []);
 
 
 
@@ -46,8 +46,8 @@ export default function SearchedRoom(props) {
         <div >
             <div className="searched-user">
                 <Link to={"../room/"+props.id}>
-                {props.image==="https://i.ibb.co/J25RQCT/profile.png" 
-                    ? <img className="searchimage" src={props.image} alt="User Profile" />
+                {props.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
+                    ? <img className="searchimage" src={props.cover} alt="User Profile" />
                     : <img className="searchimage" src={"http://localhost:5000/images/" + props.cover} alt="User Profile" />
                 }</Link>
                 <div className="user-propreties">

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/authContext";
 
 export default function Messagebox(props){
-    const [conv, setConv] =useState([]);
+    // const [conv, setConv] =useState([]);
     const [msgs, setMsgs] =useState([]);
     const { user } = useContext(AuthContext);
 
@@ -46,12 +46,12 @@ export default function Messagebox(props){
     useEffect( () => {
         const fetchConv = async () => {
             const conv = await axios.get("http://localhost:5000/api/conv/find/"+props.username+"/"+user.username);
-            setConv(conv.data)
+            // setConv(conv.data)
             const msg = await axios.get("http://localhost:5000/api/msg/"+conv.data._id);
             setMsgs(msg.data)
         }
         fetchConv();
-    }, [user])
+    }, [user, props.username])
     const lastMsg = msgs.length!==0 && msgs[msgs.length-1]
     return(
         <div className="message-bodyy">
@@ -72,7 +72,7 @@ export default function Messagebox(props){
                 }
                 <div className="message-text">
                     <b className="message-sender">{props.username}</b>
-                    <span className="message-content"><small>{lastMsg ? lastMsg.sender+": "+lastMsg.text : "Soyez le prmeier a envoyer un message"}</small></span>
+                    <span className="message-content"><small>{lastMsg ? lastMsg.sender+": "+lastMsg.text : "Soyez le premier a envoyer un message"}</small></span>
                 </div>
                 <h5 className="msg-date">{lastMsg && dateTime(lastMsg.date)}</h5>
             </button>

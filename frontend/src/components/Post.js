@@ -144,7 +144,7 @@ export default function Post(props) {
             setOrigDeleted(res.data);
         }
         fetchPost();
-    }, []);
+    }, [props.originalId]);
     
     const isLiked = likeState.flat().includes(user.username) //Etat de boutton de "like"
     const isDisliked = dislikeState.flat().includes(user.username) //Etat de boutton de "dislike"
@@ -347,6 +347,13 @@ export default function Post(props) {
         //Envoyer dans le "backend" une publication dans laquelles les commentaires sont modifees
         setDeleted(!deleted);
     }
+    function cancelDelete(){
+        setPopup(false)
+    }
+    const [popup, setPopup] = useState(false);
+    function checkDelete(){
+        setPopup(true)
+    }
     const postStyle = (props.sharer!==undefined && props.sharer.length!==0) ? {margin: "10px", padding : "20px", border: "1px solid black", borderRadius: "10px"} : {}
     if(!deleted){
     return(
@@ -419,6 +426,15 @@ export default function Post(props) {
               </Modal>
 
             <div>
+              {popup &&
+                <div className="deletecheck">
+                    <h3>This post will be deleted !</h3>
+                    <div className="delete-choice">
+                        <button className="delete-btn" onClick={handleDeletePost}>Confirm</button>
+                        <button className="delete-btn" onClick={cancelDelete}>Cancel</button>
+                    </div>
+                </div>
+              }
               {props.sharer!==undefined && props.sharer.length!==0 &&
                 (
                   <>
@@ -443,7 +459,7 @@ export default function Post(props) {
                                         {user._id === props.sharer && 
                                         <>
                                             <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
-                                            <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                                            <AiFillDelete style={{cursor: "pointer"}} onClick={checkDelete}/>
                                         </>
                                     }
                                         {saved 
@@ -503,7 +519,7 @@ export default function Post(props) {
                                     {user._id === props.userId && 
                                         <>
                                             <AiFillEdit style={{cursor: "pointer"}} onClick={handleEditTrue}/>
-                                            <AiFillDelete style={{cursor: "pointer"}} onClick={handleDeletePost}/>
+                                            <AiFillDelete style={{cursor: "pointer"}} onClick={checkDelete}/>
                                         </>
                                     }
                                         {saved 

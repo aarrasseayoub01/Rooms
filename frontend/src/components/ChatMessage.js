@@ -44,7 +44,7 @@ export default function ChatMessage(props) {
         return(
             <div className="sender-message">
                 <span className="sender-message-content">{props.msg.text}</span>
-                <small>{dateTime(props.msg.date)}hh</small>
+                <small>{dateTime(props.msg.date)}</small>
             </div>
         )
     }else{

@@ -40,8 +40,7 @@ export default function Notification(props) {
         return dateStr
     }
     if(Array.isArray(props.x)){
-        switch(props.x[3]){
-            case "like":{  
+            if(props.x[3]==="like"){  
                 return(
                     <div className="notification-body">
                         <Link className="notification-body" to={"../posts/"+props.x[1]}>
@@ -54,7 +53,7 @@ export default function Notification(props) {
                     </div>
                 )
             }
-            case "dislike": {
+            if(props.x[3]==="dislike"){
                 return(
                     <div className="notification-body">
                         <Link className="notification-body" to={"../posts/"+props.x[1]}>
@@ -68,7 +67,6 @@ export default function Notification(props) {
                     </div>
                 )
             }
-        }
     } else {
         return(
             <div className="notification-body">

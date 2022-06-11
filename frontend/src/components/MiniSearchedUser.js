@@ -1,24 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../Context/authContext";
-import axios from "axios";
 
 export default function MiniSearchedUser(props) {
     const {user} = useContext(AuthContext)
-    const [users, setUsers] = useState([]);
+    // const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-        const res = await axios.get("http://localhost:5000/api/user/allusers");
-        setUsers(
-            res.data.sort((p1, p2) => {
-              return new Date(p2.createdAt) - new Date(p1.createdAt);
-            })
-        );
-        };
-        fetchUsers();
-    }, []);
+    // useEffect(() => {
+    //     const fetchUsers = async () => {
+    //     const res = await axios.get("http://localhost:5000/api/user/allusers");
+    //     setUsers(
+    //         res.data.sort((p1, p2) => {
+    //           return new Date(p2.createdAt) - new Date(p1.createdAt);
+    //         })
+    //     );
+    //     };
+    //     fetchUsers();
+    // }, []);
 
     
     function checkFriendship(id, List1, List2){

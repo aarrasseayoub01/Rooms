@@ -96,18 +96,20 @@ export default function RoomPostPage(props) {
   const notif=likeNotes.concat(dislikeNotes)
   const notiff=notif.concat(commentNotes)
   const notif1 = notiff.sort((p1, p2) => {
+    var a;
     if(Array.isArray(p1) && Array.isArray(p2)) {
-      return new Date(p2[1]) - new Date(p1[1])
+      a = new Date(p2[1]) - new Date(p1[1])
     }
     if(Array.isArray(p1) && !Array.isArray(p2)) {
-      return new Date(p2.date) - new Date(p1[1])
+      a = new Date(p2.date) - new Date(p1[1])
     }
     if(!Array.isArray(p1) && !Array.isArray(p2)) {
-      return new Date(p2.date) - new Date(p1.date)
+      a = new Date(p2.date) - new Date(p1.date)
     }
     if(!Array.isArray(p1) && Array.isArray(p2)) {
-      return new Date(p2[1]) - new Date(p1.date)
+      a = new Date(p2[1]) - new Date(p1.date)
     }
+    return a;
   })
   const notif2 = notif1.map(x=>{
     return(
@@ -117,7 +119,6 @@ export default function RoomPostPage(props) {
           />
     )
   })
-  console.log(posts)
   if(posts.likes!==undefined){
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   return(

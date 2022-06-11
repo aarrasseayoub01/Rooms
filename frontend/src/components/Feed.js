@@ -121,18 +121,20 @@ export default function Feed() {
   const notif=likeNotes.concat(dislikeNotes)
   const notiff=notif.concat(commentNotes)
   const notif1 = notiff.sort((p1, p2) => {
+    var a;
     if(Array.isArray(p1) && Array.isArray(p2)) {
-      return new Date(p2[2]) - new Date(p1[2])
+      a = new Date(p2[2]) - new Date(p1[2])
     }
     if(Array.isArray(p1) && !Array.isArray(p2)) {
-      return new Date(p2.date) - new Date(p1[2])
+      a = new Date(p2.date) - new Date(p1[2])
     }
     if(!Array.isArray(p1) && !Array.isArray(p2)) {
-      return new Date(p2.date) - new Date(p1.date)
+      a = new Date(p2.date) - new Date(p1.date)
     }
     if(!Array.isArray(p1) && Array.isArray(p2)) {
-      return new Date(p2[2]) - new Date(p1.date)
+      a = new Date(p2[2]) - new Date(p1.date)
     }
+    return a;
   })
   const notif2 = notif1.map(x=>{
     return(
@@ -195,7 +197,10 @@ export default function Feed() {
         <div className="my-rooms" key={room._id}>
           <Link className="my-rooms" to={"../room/"+room._id}>
             <div className="mini-room">
-              <img className="profileimage" src={"http://localhost:5000/images/" + room.cover} alt="" />
+              {room.cover === "https://i.ibb.co/MVjMppt/cover.jpg"
+                ? <img className="profileimage" src={room.cover} alt="" />
+                : <img className="profileimage" src={"http://localhost:5000/images/" + room.cover} alt="" />
+              }
               <h5 className="roomname-overflow">{room.title}</h5>
             </div>
           </Link>
