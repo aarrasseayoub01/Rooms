@@ -374,7 +374,7 @@ const dateTime = (date1) => {
                 <div style={postStyle}>
                 <div className="orig-post">
                     {!props.singlepost 
-                        ? <Link className="post-username" to={"../roompost/"+props.id}><small className="orig-post-btn">Visit the Original Post</small></Link>
+                        ? <Link className="post-username" to={"../roompost/"+props.id+'/'+props.roomId}><small className="orig-post-btn">Visit the Original Post</small></Link>
                         : <small onClick={() => history(-1)} className="orig-post-btn">Return</small>
                     }
                 </div>

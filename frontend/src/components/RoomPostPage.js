@@ -20,6 +20,7 @@ export default function RoomPostPage(props) {
   const [likeNotes, setLikeNotes] = useState([]);
   const [dislikeNotes, setDislikeNotes] = useState([]);
   const [commentNotes, setCommentNotes] = useState([]);
+  const [room, setRoom] = useState({})
   const { user } = useContext(AuthContext);
 
   //gerer la fenetre des notifications
@@ -53,12 +54,19 @@ export default function RoomPostPage(props) {
       setPosts(res.data);
     };
     fetchPosts();
+    const fetchRoom = async () => {
+      const res = await axios.get("http://localhost:5000/api/room/"+props.roomId)
+      setRoom(res.data)
+    }
+    
+      fetchRoom()
+    
+    
     const fetchLikes = async () => {
-      const res = await axios.get("http://localhost:5000/api/roompost/" + user._id);
+      const res = await axios.get("http://localhost:5000/api/roompost/" + props.id);
       const likeNotif = []
-      res.data.forEach(post=>{
-           likeNotif.push(post.likes.map(x=>[...x, 'like']))
-      })
+           likeNotif.push(res.data.likes.map(x=>[...x, 'like']))
+      
       setLikeNotes(
         likeNotif.flat().sort((p1, p2) => {
           return new Date(p2[1]) - new Date(p1[1]);
@@ -67,11 +75,11 @@ export default function RoomPostPage(props) {
     };
     fetchLikes();
     const fetchDislikes = async () => {
-      const res = await axios.get("http://localhost:5000/api/roompost/" + user._id);
+      const res = await axios.get("http://localhost:5000/api/roompost/" + props.id);
       const dislikeNotif = []
-      res.data.forEach(post=>{
-           dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
-      })
+      
+           dislikeNotif.push(res.data.dislikes.map(x=>[...x, 'dislike']))
+      
       setDislikeNotes(
         dislikeNotif.flat().sort((p1, p2) => {
           return new Date(p2[1]) - new Date(p1[1]);
@@ -80,11 +88,11 @@ export default function RoomPostPage(props) {
     };
     fetchDislikes();
     const fetchComments = async () => {
-      const res = await axios.get("http://localhost:5000/api/roompost/" + user._id);
+      const res = await axios.get("http://localhost:5000/api/roompost/" + props.id);
       const commentNotif = []
-      res.data.forEach(post=>{
-           commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
-      })
+     
+           commentNotif.push(res.data.comments.map(x=>{return {...x, type:'dislike'}}))
+      
       setCommentNotes(
         commentNotif.flat().sort((p1, p2) => {
           return new Date(p2[1]) - new Date(p1[1]);
@@ -119,7 +127,7 @@ export default function RoomPostPage(props) {
           />
     )
   })
-  if(posts.likes!==undefined){
+  if(posts.likes!==undefined && room.followers!==undefined){
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   return(
         <>
@@ -163,7 +171,7 @@ export default function RoomPostPage(props) {
               img={posts.photo}
               date={posts.date}
               userId={posts.userId}
-              room={posts.room}
+              roomId={posts.room}
               like={posts.likes}
               disLike={posts.dislikes}
               comments={posts.comments}
@@ -172,6 +180,10 @@ export default function RoomPostPage(props) {
               sharer={""}
               shareDesc={""}
               singlepost={true}
+
+                vote={posts.likeCount}
+                followers={room.followers}
+                admins={room.userId}
             //   shareDate={x.shareDate}
           />
             </div>
