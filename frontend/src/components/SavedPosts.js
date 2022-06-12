@@ -202,11 +202,15 @@ export default function SavedPosts() {
       var allposts = (roomposts.concat(posts)).sort((p1, p2) => {
         const a = user.saved.filter(x=>x.id===p1._id)
         const b = user.saved.filter(x=>x.id===p2._id)
+        if(a[0]!==undefined && b[0]!==undefined){
         return new Date(b[0].saveDate) - new Date(a[0].saveDate);
+        }
       })
       
       const allpostsSaved = allposts.map(x=>{
         const a = user.saved.filter(y=>y.id===x._id)
+        if(a[0]!==undefined){
+
         return(
           <div className="saved-post">
               {x.photo !== ""
@@ -229,6 +233,7 @@ export default function SavedPosts() {
               </div>
           </div>
         )
+            }
       })
     const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
     return(
