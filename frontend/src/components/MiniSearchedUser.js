@@ -53,7 +53,9 @@ export default function MiniSearchedUser(props) {
                         ? "Your profile"
                         : checkFriendship(props.id, user.following, user.followers)
                         )}</p>
-                    <small>{mutualFriends.length} mutual friends</small>
+                    {!(user._id===props.id) && (
+                        <small>{mutualFriends.length} mutual friends</small>
+                    )}
                 </div>
             </div>
         </div>
