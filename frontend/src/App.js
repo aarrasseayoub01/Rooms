@@ -42,8 +42,9 @@ export default function App() {
   }
   function HandleRoomPost() {
     let { id } = useParams();
+    let { id2 } = useParams();
     return(
-      <RoomPostPage id={id} />
+      <RoomPostPage id={id} roomId={id2} />
     )
   }
   function HandleRoom() {
@@ -70,7 +71,7 @@ export default function App() {
           <Route path="/posts/:id" element={user
               ? <HandlePost />
               : <Login />} />
-          <Route path="/roompost/:id" element={user
+          <Route path="/roompost/:id/:id2" element={user
               ? <HandleRoomPost />
               : <Login />} />
           <Route path="/room/:id" element={user

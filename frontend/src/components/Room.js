@@ -222,7 +222,7 @@ export default function Room(props) {
     const myPosts = posts.map(x=>{
         const a = x;
         Array.isArray(x)?x=x[0]:x=a
-
+       
         return(
           <RoomPost 
                 key={x._id}
