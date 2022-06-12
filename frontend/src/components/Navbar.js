@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import logo from ".http://localhost:5000/images/logo.png"
+import logo from "../images/logo.png";
 import { AiFillMessage, AiOutlineClose } from "react-icons/ai";
 import { MdNotificationsActive } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
