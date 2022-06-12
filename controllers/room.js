@@ -68,7 +68,15 @@ export const getRooms = async (req, res) => {
       }
     }
   } 
-      res.status(200).json(room1);
+  let uniqueId=[]
+  let uniqueRoom = [];
+room1.forEach((element) => {
+    if (!uniqueId.includes(element.title)) {
+        uniqueRoom.push(element);
+        uniqueId.push(element.title);
+    }
+});
+      res.status(200).json(uniqueRoom);
 
     } catch (err) {
       res.status(500).json(err);

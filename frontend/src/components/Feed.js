@@ -79,15 +79,20 @@ export default function Feed() {
     const fetchRooms = async () => {
       const res = await axios.get("http://localhost:5000/api/room/a/"+user._id)
       setRooms(res.data)
+      console.log(res.data)
       for(let i =0; i<res.data.length; i++){
          
         let a = await axios.get("http://localhost:5000/api/roompost/posts/"+res.data[i]._id)
         let b=a.data.map(post=>{
           return {...post, followers:res.data[i].followers, usersId:res.data[i].userId}
         })
-        console.log(b)
         res.data[i]=b
       }
+    
+      let c = res.data.flat()
+      c.sort((p1, p2) => {
+        return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
+      })
       setRoomPosts(res.data.flat())
       
     }
@@ -160,7 +165,9 @@ export default function Feed() {
   })
   
   //Envoyer les publications chacune a sa composante avec ses "props"
+  
   const myPosts1 = roomPosts.map(x=>{
+   
     const a = x;
     Array.isArray(x)?x=x[0]:x=a
     return(
@@ -228,6 +235,9 @@ export default function Feed() {
       }))
     }})
   const myPosts=myPosts1.concat(myPosts2)
+  myPosts.sort((p1, p2) => {
+    return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
+  })
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   const roomList = rooms.map(room=> {
     if(room!==[]){
