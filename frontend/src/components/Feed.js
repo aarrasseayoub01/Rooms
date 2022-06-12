@@ -79,7 +79,10 @@ export default function Feed() {
     const fetchRooms = async () => {
       const res = await axios.get("http://localhost:5000/api/room/a/"+user._id)
       setRooms(res.data)
-      console.log(res.data)
+    }
+    const fetchRoomPosts = async () => {
+      const res = await axios.get("http://localhost:5000/api/room/a/"+user._id)
+      
       for(let i =0; i<res.data.length; i++){
          
         let a = await axios.get("http://localhost:5000/api/roompost/posts/"+res.data[i]._id)
@@ -97,6 +100,7 @@ export default function Feed() {
       
     }
     fetchRooms();
+    fetchRoomPosts();
     const fetchLikes = async () => {
       const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
       const likeNotif = []
@@ -239,6 +243,7 @@ export default function Feed() {
     return (new Date(p2.shareDate ? p2.shareDate : p2.date) - new Date(p1.shareDate ? p1.shareDate : p1.date));
   })
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
+  console.log(rooms)
   const roomList = rooms.map(room=> {
     if(room!==[]){
       return(
