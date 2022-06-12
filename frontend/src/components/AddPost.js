@@ -56,8 +56,8 @@ export default function AddPost(props) {
             <form>
             <div className="add-post">
                 {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
-                    ? <img className="profileimage profile2" src={user.picture} alt="" style={{marginRight: "10px"}}/>
-                    : <img className="profileimage profile2" src={"http://localhost:5000/images/" + user.picture} alt="" style={{marginRight: "10px"}}/>
+                    ? <img className="profileimage profile2" src={user.picture} alt=""/>
+                    : <img className="profileimage profile2" src={"http://localhost:5000/images/" + user.picture} alt=""/>
                 }
 
                 <textarea className="add-post-textarea" type="textarea" placeholder="What's on your mind?" ref={desc}/>
@@ -67,7 +67,7 @@ export default function AddPost(props) {
                     <input type="file" style={{display: "none"}} name="myImage" onChange={(e) => handleUpload(e)}/>
                     </label>
 
-                    {picture!=='' && <img src={"http://localhost:5000/images/" + picture} width="100px" alt="" />} 
+                    {picture!=='' && <img className="uploadedimage" src={"http://localhost:5000/images/" + picture} width="100px" alt="" />} 
                 </div>
                 
             </div>

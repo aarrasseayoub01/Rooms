@@ -610,6 +610,12 @@ code {
   background-color: #B2FFDA;
 }
 .uploadimage{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.upload-image{
   width: 100px;
   margin-left: 10px;
 }
@@ -697,6 +703,8 @@ code {
   text-align: center;
 } 
 .post-add{
+  display: flex;
+  flex-direction: column;
   background-color: #FFFFFF;
   margin: 10px;
   border-radius: 9px;
@@ -709,7 +717,6 @@ code {
   display: flex;
   justify-content: space-between;
   align-items:baseline;
-  width: 600px;
   min-height: 100px;
   padding: 10px;
 }
@@ -723,13 +730,13 @@ code {
   box-sizing: border-box;
   padding-left: 5px;
   vertical-align: top;
-  width: 500px;
   min-height: 100px;
   background-color: #B2FFDA;
   border: 1px solid;
   font-size: 20px;
   resize: none;
 }
+
 .login-textarea{
   word-wrap: break-word;
   overflow: auto;
@@ -938,12 +945,17 @@ code {
   .post{
     margin: 2.5% 0;
   }
+  .add-post-textarea{
+    width: 425px;
+  }
 }
+
 @media only screen and (max-width: 800px) {
   .feed-rooms{
     display: none;
   }
 }
+
 @media only screen and (max-width: 630px) {
   
   .rooms{
@@ -997,23 +1009,9 @@ code {
     margin: 0;
     width: 200px;
   }
-}
-@media only screen and (max-width: 470px) {
-  .navbar-notice{
-    width: 30px;
-  }
-  .navbar-logo{
-    width: 45px;
-    padding: 0;
-  }
-  .navbar-name{
+  /* .profile2{
     display: none;
-  }
-}
-@media only screen and (max-width: 500px) {
-  .profile2{
-    display: none;
-  }
+  } */
   .add-post{
     width: 250px;
     padding: 0;
@@ -1028,6 +1026,31 @@ code {
     gap: 0;
     padding: 0;
     margin: 0;
+  }
+  .uploadimage{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+  }
+  .upload-image{
+    width: 10px;
+  }
+  .uploadedimage{
+    width: 30px;
+  }
+}
+@media only screen and (max-width: 470px) {
+  .navbar-notice{
+    width: 30px;
+  }
+  .navbar-logo{
+    width: 45px;
+    padding: 0;
+  }
+  .navbar-name{
+    display: none;
   }
 }
 
@@ -1045,9 +1068,7 @@ code {
   .add-post-textarea{
     width: 100%;
   }
-  .uploadimage{
-    width: 50%;
-  }
+  
   .post{
     margin: 2.5% 0;
   }
