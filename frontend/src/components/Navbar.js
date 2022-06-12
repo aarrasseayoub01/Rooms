@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import logo from "../images/logo.png"
+import logo from "../images/logo.png";
 import { AiFillMessage, AiOutlineClose } from "react-icons/ai";
 import { MdNotificationsActive } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
@@ -45,9 +45,11 @@ export default function Navbar(props) {
     const fetchUsers = async () => {
     const res = await axios.get("http://localhost:5000/api/user/allusers");
     setUsers(
+      Array.isArray(res.data) && (
         res.data.sort((p1, p2) => {
           return new Date(p2.createdAt) - new Date(p1.createdAt);
         })
+      )
     )};
     fetchUsers();
     }, [])
@@ -56,7 +58,7 @@ export default function Navbar(props) {
     return(thisValue!=="" && x.username.toLowerCase().includes(thisValue.toLowerCase()) //Rendre le recherche insensible au majuscules et miniscules
         ?(<AnimatePresence>
         <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
-            <MiniSearchedUser key={x._id} id={x._id} username={x.username} image={x.picture} />
+            <MiniSearchedUser key={x._id} id={x._id} username={x.username} image={x.picture} followers={x.followers} following={x.following}/>
             </motion.dev>
         </AnimatePresence>):null)
     }

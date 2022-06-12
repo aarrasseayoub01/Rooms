@@ -53,25 +53,31 @@ export default function Searching(props) {
         const fetchUsers = async () => {
         const res = await axios.get("http://localhost:5000/api/user/allusers");
         setUsers(
+          Array.isArray(res.data) && (
             res.data.sort((p1, p2) => {
               return new Date(p2.createdAt) - new Date(p1.createdAt);
             })
+          )
         )};
         fetchUsers();
         const fetchRooms = async () => {
           const res = await axios.get("http://localhost:5000/api/room/allrooms");
           setRooms(
+            Array.isArray(res.data) && (
               res.data.sort((p1, p2) => {
                 return new Date(p2.createdAt) - new Date(p1.createdAt);
               })
+            )
           )};
           fetchRooms();
         const fetchLikes = async () => {
             const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
             const likeNotif = []
-            res.data.forEach(post=>{
+            Array.isArray(res.data) && (
+              res.data.forEach(post=>{
                  likeNotif.push(post.likes.map(x=>[...x, 'like']))
-            })
+              })
+            )
             setLikeNotes(
               likeNotif.flat().sort((p1, p2) => {
                 return new Date(p2[1]) - new Date(p1[1]);
@@ -82,9 +88,11 @@ export default function Searching(props) {
           const fetchDislikes = async () => {
             const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
             const dislikeNotif = []
-            res.data.forEach(post=>{
+            Array.isArray(res.data) && (
+              res.data.forEach(post=>{
                  dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
-            })
+              })
+            )
             setDislikeNotes(
               dislikeNotif.flat().sort((p1, p2) => {
                 return new Date(p2[1]) - new Date(p1[1]);
@@ -95,9 +103,11 @@ export default function Searching(props) {
           const fetchComments = async () => {
             const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
             const commentNotif = []
-            res.data.forEach(post=>{
+            Array.isArray(res.data) && (
+              res.data.forEach(post=>{
                  commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
-            })
+              })
+            )
             setCommentNotes(
               commentNotif.flat().sort((p1, p2) => {
                 return new Date(p2[1]) - new Date(p1[1]);
@@ -141,7 +151,8 @@ export default function Searching(props) {
         }
     )
     searchedUsers = searchedUsers.filter(x=>x)
-    var searchedRooms = rooms.map(x=>{
+    var searchedRooms;
+    Array.isArray(rooms) && (searchedRooms = rooms.map(x=>{
       return(x.title.toLowerCase().includes(props.userId.toLowerCase()) //Rendre le recherche insensible au majuscules et miniscules
             ?(<AnimatePresence>
             <motion.dev initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
@@ -156,7 +167,7 @@ export default function Searching(props) {
                 />
                 </motion.dev>
             </AnimatePresence>):null)
-    })
+    }))
     searchedRooms = searchedRooms.filter(x=>x)
     const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
     return(

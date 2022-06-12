@@ -290,7 +290,7 @@ export default function Profile() {
                     </div>
                     <div className="modal-form"> 
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Profile :</h3>
+                            <h3 className="fit-label">Profile :</h3>
                             {user.picture==="https://i.ibb.co/J25RQCT/profile.png" 
                                 ? <img className="profileimage" src={user.picture} alt="Profile"/>
                                 : <img className="profileimage" src={"http://localhost:5000/images/" + (profPic1!==""?profPic1:user.picture)} alt="Profile"/>
@@ -301,7 +301,7 @@ export default function Profile() {
                             </label>
                         </div>
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Cover :</h3>
+                            <h3 className="fit-label">Cover :</h3>
                             {/* <img src={"http://localhost:5000/images/" +(coverPic1!==""?coverPic1:user.cover)} alt="Cover Image" width="100px" /> */}
                             {user.cover==="https://i.ibb.co/MVjMppt/cover.jpg" 
                                 ? <img src={user.cover} width="100px" alt="Cover"/>
@@ -316,20 +316,20 @@ export default function Profile() {
                     <h2>Edit Profile</h2>
                     <form className="modal-form">
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Username :</h3>
+                            <h3 className="fit-label">Username :</h3>
                             <input className="login-input" placeholder={user.username} ref={userName} />
                         </div>
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Email :</h3>
+                            <h3 className="fit-label">Email :</h3>
                             <input className="login-input" placeholder={user.email} ref={email} />
                         </div>
                         <div className="flex-row">
-                            <h3 style={{width: "200px"}}>Password :</h3>
+                            <h3 className="fit-label">Password :</h3>
                             <input className="login-input" type="password" placeholder="Password" ref={password} />
                         </div>
                         <div className="flex-row">
-                            <h3 style={{width: "250px"}}>Description :</h3>
-                            <input className="login-textarea" type="textarea" placeholder="Description" ref={desc}/>
+                            <h3 className="fit-label">Description :</h3>
+                            <textarea className="login-textarea" type="textarea" placeholder="Description" ref={desc}/>
                         </div>
                         <input type="submit" className="add-submit" onClick={handleChange}/>
                     </form>
@@ -408,4 +408,7 @@ const ModalContent = styled.div`
   box-shadow: 0px 3px 6px #00000029;
   overflow-y: auto;
   max-height: calc(100vh - 100px);
+  @media only screen and (max-width: 660px) {
+    width: 100%;
+  }
 `;

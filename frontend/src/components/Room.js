@@ -148,9 +148,11 @@ export default function Room(props) {
         const fetchLikes = async () => {
           const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
           const likeNotif = []
-          res.data.forEach(post=>{
+          Array.isArray(res.data) && (
+            res.data.forEach(post=>{
                 likeNotif.push(post.likes.map(x=>[...x, 'like']))
-          })
+            })
+          )
           setLikeNotes(
             likeNotif.flat().sort((p1, p2) => {
               return new Date(p2[1]) - new Date(p1[1]);
@@ -161,9 +163,11 @@ export default function Room(props) {
         const fetchDislikes = async () => {
           const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
           const dislikeNotif = []
-          res.data.forEach(post=>{
+          Array.isArray(res.data) && (
+            res.data.forEach(post=>{
                 dislikeNotif.push(post.dislikes.map(x=>[...x, 'dislike']))
-          })
+            })
+          )
           setDislikeNotes(
             dislikeNotif.flat().sort((p1, p2) => {
               return new Date(p2[1]) - new Date(p1[1]);
@@ -174,9 +178,11 @@ export default function Room(props) {
         const fetchComments = async () => {
           const res = await axios.get("http://localhost:5000/api/posts/profile1/" + user._id);
           const commentNotif = []
-          res.data.forEach(post=>{
+          Array.isArray(res.data) && (
+            res.data.forEach(post=>{
                 commentNotif.push(post.comments.map(x=>{return {...x, type:'dislike'}}))
-          })
+            })
+          )
           setCommentNotes(
             commentNotif.flat().sort((p1, p2) => {
               return new Date(p2[1]) - new Date(p1[1]);

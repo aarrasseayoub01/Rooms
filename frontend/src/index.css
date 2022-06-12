@@ -34,7 +34,7 @@ code {
   justify-content: center;
   align-items: center;
   gap: 10%;
-  margin: 10rem; 
+  margin: 10rem 0; 
   padding: 20px;
 }
 .addpost-minipic{
@@ -51,6 +51,16 @@ code {
   text-align: center;
   padding-right: 10% ;
   border-right: 11px solid #B2FFDA;
+}
+.rooms2{
+  display: none;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding-bottom: 5%;
+  margin-bottom: 5%;
+  border-bottom: 5px solid #B2FFDA;
 }
 .rooms h1{
   line-height: 113px;
@@ -73,9 +83,9 @@ code {
   box-sizing: border-box;
   border-radius: 21px;
   padding: 10px;
-  margin: 10px 10%;
+  margin: 10px 0;
   text-indent: 10px;
-  width: 250px;
+  max-width: 250px;
   box-sizing: border-box;
 }
 .login-submit{
@@ -99,6 +109,10 @@ code {
   line-height: 28px;
   letter-spacing: -0.02em;
   color: #B2FFDA;
+}
+.flex-box{
+  display: flex;
+  flex-direction: column;
 }
 .navbar{
   position: sticky;
@@ -556,7 +570,6 @@ code {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  align-self: center;
 }
 .modal-close{
   display: flex;
@@ -576,7 +589,7 @@ code {
 .flex-row{
   display: flex; 
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
 }
@@ -722,8 +735,9 @@ code {
   box-sizing: border-box;
   border-radius: 21px;
   padding: 10px;
-  margin: 10px 10%;
+  margin: 10px 0;
   width: 100%;
+  max-width: 200px;
   box-sizing: border-box;
 
 }
@@ -753,6 +767,8 @@ code {
   border-radius: 10px;
   box-shadow: 2px -2px 4px rgba(0, 0, 0, 0.25), -4px 4px 4px rgba(0, 0, 0, 0.25);
   gap: 5px;
+  width: 300px;
+  overflow-x: hidden;
 }
 .feed-rooms-button{
   display: flex;
@@ -763,9 +779,11 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 200px;
+  min-width: 100px;
   border-bottom: 1px solid;
   cursor: pointer;
+  overflow-x: hidden;
+  margin-left: -20px;
 }
 .add-rooms{
   display: flex;
@@ -904,20 +922,10 @@ code {
   display: flex;
   align-items: center;
 }
-
-@media only screen and (max-width: 1000px) {
-  .rooms{
-    display: none;
-  }
-  .feed-rooms{
-    max-width: 120px;
-  }
-  .mini-room{
-    max-width: 100px;
-  }
-  .rooms-banner{
-    max-width: 120px;
-  }
+@media only screen and (max-width: 850px) {
+  .add-post{
+    width: 300px;
+  } 
 }
 @media only screen and (max-width: 800px) {
   .feed-rooms{
@@ -925,14 +933,17 @@ code {
   }
 }
 @media only screen and (max-width: 630px) {
+  .rooms{
+    display: none;
+  }
+  .rooms2{
+    display: flex;
+  }
   .searchimage{
     display: none;
   }
   .navbar-search{
-    display: none;
-  }
-  .add-post{
-    width: 300px;
+    width: 50px;
   }
   .add-post-textarea{
     width: 200px;
@@ -946,20 +957,35 @@ code {
   .profile-room-grid{
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   }
+  .feed-sidebar{
+    width: 100px;
+  }
 }
-.navbar-notice{
-  display: flex;
-  gap: 5px;
+.fit-label{
+  width: 135px;
 }
-.navbar-notif{
-  cursor: pointer;
+@media only screen and (max-width: 500px) {
+  .flex-row{
+    overflow-y: hidden;
+    max-width: 300px;
+  }
+  .fit-label{
+    width: 155px;
+    font-size: 15px;
+  }
+  .add-room-page{
+    width: 100%;
+  }
+  .login-input{
+    margin: 0;
+    width: 180px;
+  }
+  .login-textarea{
+    margin: 0;
+    width: 200px;
+  }
 }
-.navbar-name{
-  width:max-content;
-  max-width: 100px;
-}
-@media only screen and (max-width: 430px) {
-  
+@media only screen and (max-width: 470px) {
   .navbar-notice{
     width: 30px;
   }
@@ -967,30 +993,61 @@ code {
     width: 45px;
     padding: 0;
   }
+  .navbar-name{
+    display: none;
+  }
 }
-@media only screen and (max-width: 330px){
+@media only screen and (max-width: 410px) {
+  .profile2{
+    display: none;
+  }
+  .add-post{
+    width: 250px;
+    padding: 0;
+  }
+  .feed-sidebar{
+    width: 80px;
+  }
+  .navbar-list{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 380px){
+  .hide370px{
+    display: none;
+  }
   .navbar-name{
     display: none;
   }
   .add-post{
-    width: 200px;
+    width: 100%;
+    padding: 0;
   }
   .add-post-textarea{
-    width: 100px;
+    width: 100%;
+  }
+  .uploadimage{
+    width: 50%;
   }
   .post{
     margin: 2.5% 0;
     width: 200px;
   }
-  .navbar-profileimage{
+  /* .navbar-profileimage{
     width: 20px;
     height: 20px;
-  }
-  .logout{
+  } */
+  /* .logout{
     width: 20px;
     height: 20px;
     font-size: 6px;
-  }
+  } */
   .hidable{
     display: none;
   }
@@ -1003,6 +1060,17 @@ code {
   .add-comment img{
     display: none;
   }
+}
+.navbar-notice{
+  display: flex;
+  gap: 5px;
+}
+.navbar-notif{
+  cursor: pointer;
+}
+.navbar-name{
+  width:max-content;
+  max-width: 100px;
 }
 .shared-img-wrapper{
   overflow: auto;
@@ -1373,7 +1441,6 @@ margin-left: 25px !important;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
 }
 .room-admins{
   display: flex;
@@ -1401,10 +1468,11 @@ margin-left: 25px !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 200px;
+  min-width: 100px;
   border-bottom: 1px solid black;
   cursor: pointer;
   text-decoration: none;
+  margin-left: -20px;
 }
 .text-decoration{
   text-decoration: none;

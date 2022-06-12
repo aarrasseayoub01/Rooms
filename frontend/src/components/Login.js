@@ -33,10 +33,11 @@ export default function Login() {
 
     return(
         <main>
-            <div className="login-card">
-                <div className="rooms"><h1>Rooms</h1></div>
+            <div className="login-card"> 
+                <div className="rooms"><h1>Rooms</h1></div> 
                 <div> 
                     <form className="login-form">
+                        <div className="rooms2"><h1>Rooms</h1></div> 
                         <div className="register-row">
                             <input className="login-input" placeholder="Email Adress" ref={email}/>
                             <b style={{color: "red"}}>*</b>
@@ -49,7 +50,7 @@ export default function Login() {
                         {!wrongEmail && wrongPassword && <div style={{color: "red"}}>Wrong password</div>}
                         <input className="login-submit" value="Login" type="submit" onClick={handleLogin}/>
                     </form>
-                    <h5 className="login-suggest">Don't have an account? <span><Link to="../Register">Register</Link></span></h5>
+                    <h5 className="login-suggest"><span className="hide370px">Don't have an account?</span><span><Link to="../Register">Register</Link></span></h5>
                 </div>
             </div>
         </main>

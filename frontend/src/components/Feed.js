@@ -212,11 +212,9 @@ export default function Feed() {
   }
     )
   return(
-        <>
+        <div className="flex-box">
             <Navbar handleNotif={handleNotif} handleMessage={handleMessage} />
             {isNotifClicked &&
-              
-             
                 <div className="notification">
                   <div className="notif-bell"><MdNotificationsActive /></div>
                   {notif2.length !==0 ? notif2 : <h5>How Empty!</h5>}
@@ -272,6 +270,6 @@ export default function Feed() {
             </div>
             </motion.dev>
             </AnimatePresence>
-        </>
+        </div>
     )
 }

@@ -252,11 +252,11 @@ export default function AddRoom() {
                     <h1>Room Data</h1>
                     <form className="modal-form">
                         <div className="flex-row">
-                            <h3 style={{width: "250px"}}>Room Name :</h3>
+                            <h3 className="fit-label">Room Name :</h3>
                             <input className="login-input" placeholder="Enter a Name for the Room" ref={title}/>
                         </div>
                         <div className="flex-row">
-                            <h3 style={{width: "250px"}}>Admin :</h3>
+                            <h3 className="fit-label">Admin :</h3>
                               <div className="room-admin-make">
                                 {radioCheck === "group" 
                                   ? addAdmin
@@ -271,7 +271,7 @@ export default function AddRoom() {
                              </div>
                         </div>
                         <div className="flex-row" style={{gap: "100px"}}>
-                            <h3 style={{width: "200px"}}>Type :</h3>
+                            <h3 className="fit-label">Type :</h3>
                             <div className="room-radio">
                                 <div className="room-radio-row">
                                     <input 
@@ -297,9 +297,9 @@ export default function AddRoom() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex-row" style={{gap: "50px"}}>
-                            <h3 style={{width: "250px"}}>Description :</h3>
-                            <input className="login-textarea" type="textarea" placeholder="Description" ref={desc}/>
+                        <div className="flex-row">
+                            <h3 className="fit-label">Description :</h3>
+                            <textarea className="login-textarea" type="textarea" placeholder="Description" ref={desc}/>
                         </div>
                         <input style={{backgroundColor:"white", cursor: "pointer"}} type="submit" value="Add Room" className="add-submit" onClick={handleSubmit}/>
                     </form>

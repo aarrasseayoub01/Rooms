@@ -141,7 +141,7 @@ export default function Post(props) {
         const fetchPost = async () => {
             var res;
             props.originalId!==undefined && (res = await axios.get("http://localhost:5000/api/posts/isPostExist/"+props.originalId));
-            setOrigDeleted(res.data);
+            res && setOrigDeleted(res.data);
         }
         fetchPost();
     }, [props.originalId]);
