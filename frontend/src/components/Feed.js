@@ -11,6 +11,7 @@ import Notification from "./Notification";
 import { AiFillMessage } from "react-icons/ai";
 import Message from "./Message";
 import Chatbox from "./Chatbox";
+import RoomPost from "./RoomPost"
 import { Link } from "react-router-dom";
 
 export default function Feed() {
@@ -23,6 +24,7 @@ export default function Feed() {
   const [likeNotes, setLikeNotes] = useState([]);
   const [dislikeNotes, setDislikeNotes] = useState([]);
   const [commentNotes, setCommentNotes] = useState([]);
+  const [roomPosts, setRoomPosts] = useState([])
   // const [a, setA]=useState(true)
   const [rooms, setRooms] = useState([])
 
@@ -64,6 +66,7 @@ export default function Feed() {
   }
   //Amener tous les publications du "backend"
   useEffect(() => {
+    
     const fetchPosts = async () => {
       const res = await axios.get("http://localhost:5000/api/posts/timeline/" + user._id);
       setPosts(
@@ -76,6 +79,17 @@ export default function Feed() {
     const fetchRooms = async () => {
       const res = await axios.get("http://localhost:5000/api/room/a/"+user._id)
       setRooms(res.data)
+      for(let i =0; i<res.data.length; i++){
+         
+        let a = await axios.get("http://localhost:5000/api/roompost/posts/"+res.data[i]._id)
+        let b=a.data.map(post=>{
+          return {...post, followers:res.data[i].followers, usersId:res.data[i].userId}
+        })
+        console.log(b)
+        res.data[i]=b
+      }
+      setRoomPosts(res.data.flat())
+      
     }
     fetchRooms();
     const fetchLikes = async () => {
@@ -146,7 +160,30 @@ export default function Feed() {
   })
   
   //Envoyer les publications chacune a sa composante avec ses "props"
-  const myPosts = posts.map(x=>{
+  const myPosts1 = roomPosts.map(x=>{
+    const a = x;
+    Array.isArray(x)?x=x[0]:x=a
+    return(
+      <RoomPost 
+            key={x._id}
+            id={x._id}
+            desc={x.desc}
+            img={x.photo}
+            date={x.date}
+            userId={x.userId}
+            roomId={x.room}
+            like={x.likes}
+            disLike={x.dislikes}
+            roomers={x.roomers}
+            vote={x.likeCount}
+            comments={x.comments}
+            post={x}
+             followers={x.followers}
+            admins={x.usersId}
+            
+      />
+)})
+  const myPosts2 = posts.map(x=>{
     if(!Array.isArray(x)){    
       return(
           <Post 
@@ -190,6 +227,7 @@ export default function Feed() {
         )
       }))
     }})
+  const myPosts=myPosts1.concat(myPosts2)
   const test = chatId.map(x=><Chatbox key={x} username={x} ShutChat={ShutChat} />)
   const roomList = rooms.map(room=> {
     if(room!==[]){
